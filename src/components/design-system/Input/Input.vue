@@ -4,13 +4,19 @@ interface Props {
   disabled?: boolean
   hintText?: string
   error?: boolean
+  modelValue?: string
 }
-
 withDefaults(defineProps<Props>(), {
   variant: 'contained',
   disabled: false,
   error: false,
+  modelValue: '',
 })
+const emit = defineEmits(['update:modelValue'])
+const updateValue = (event: Event) => {
+  const { value } = event.target as HTMLInputElement
+  emit('update:modelValue', value)
+}
 </script>
 
 <template>
@@ -18,7 +24,7 @@ withDefaults(defineProps<Props>(), {
     :class="['input', { 'input--disabled': disabled, 'input--error': error }]"
   >
     <slot name="leading" />
-    <input v-bind="$attrs" class="input__field" />
+    <input v-bind="$attrs" class="input__field" :value="modelValue" @input="updateValue" />
     <slot name="trailing" />
   </div>
   <span v-if="hintText" :class="['hint-text', { 'hint-text--error': error }]">

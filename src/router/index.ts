@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-export default createRouter({
+const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
@@ -15,3 +15,20 @@ export default createRouter({
     },
   ],
 })
+
+// router.beforeEach((to, from, next) => {
+//   if (to.matched.some(record => record.meta.requiresAuth)) { 
+//       if (!auth.loggedIn()) { 
+//           next({ 
+//               path: '/sign-in', 
+//               query: { redirect: to.fullPath } 
+//           }) 
+//       } else { 
+//           next() 
+//       } 
+//   } else {
+//       next() // make sure to always call next()! 
+//   } 
+// })
+
+export default router

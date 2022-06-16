@@ -1,6 +1,26 @@
 <script setup lang="ts">
 import { DLabel, DInput, DButton } from '../components/design-system'
 import GoogleIcon from '../assets/png/google-48.png'
+import { useForm } from '@evilkiwi/form'
+
+const { useField, handle, loading } = useForm<{
+  email: string
+  password: string
+}>({
+  defaults: {},
+})
+
+const email = useField('email', {
+  type: 'email',
+  required: true,
+})
+const password = useField('password', {
+  required: true,
+})
+
+const onSubmit = handle(async ({ email, password }) => {
+  alert(`Email: ${email} Password: ${password}`)
+})
 </script>
 
 <template>
@@ -10,20 +30,34 @@ import GoogleIcon from '../assets/png/google-48.png'
         <h1>Log in to your account</h1>
         <span>Welcome back! Please enter your details</span>
       </div>
-      <form class="sign-in__box__form">
+      <form @submit.prevent="onSubmit" class="sign-in__box__form">
         <div class="sign-in__box__form__row">
           <DLabel htmlFor="email">Email</DLabel>
-          <DInput id="email" placeholder="Enter your email" type="email" />
+          <DInput
+            id="email"
+            placeholder="Enter your email"
+            type="email"
+            v-model="email.value"
+            :error="Boolean(email.error)"
+            :hintText="email.error?.message"
+          />
         </div>
         <div class="sign-in__box__form__row">
           <DLabel htmlFor="password">Password</DLabel>
-          <DInput id="password" placeholder="••••••••••" type="password" />
+          <DInput
+            id="password"
+            placeholder="••••••••••"
+            type="password"
+            v-model="password.value"
+            :error="Boolean(password.error)"
+            :hintText="password.error?.message"
+          />
         </div>
         <div class="forgot-password">
           <router-link to="/forgot-password">Forgot password</router-link>
         </div>
         <div class="sign-in__box__form__button">
-          <DButton fullWidth>Sign in</DButton>
+          <DButton type="submit" fullWidth>Sign in</DButton>
         </div>
         <div class="sign-in__box__form__button">
           <DButton fullWidth variant="outlined">
