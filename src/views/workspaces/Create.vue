@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { DLabel, DInput, DButton } from '../../components/design-system'
-import GoogleIcon from '../../assets/png/google-48.png'
+import { DLabel, DCombobox, DButton } from '../../components/design-system'
 import { useForm } from '@evilkiwi/form'
 import { useLogin } from '../../composables'
-import { useUserStore } from '../../stores/useUserStore';
-import { watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { useUserStore } from '../../stores/useUserStore'
+import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { ComboboxItem } from '../../components/design-system/Input/Combobox.vue'
 
 const loginHook = useLogin()
 const userStore = useUserStore()
@@ -24,6 +24,13 @@ const password = useField('password', {
   required: true,
 })
 
+const comboboxOptions = ref<ComboboxItem[]>([
+  {
+    id: 1,
+    text: 'Psychologist',
+  },
+])
+
 const onSubmit = handle(async ({ email, password }) => {
   await loginHook.signInWithCredentials(email, password)
 })
@@ -31,13 +38,16 @@ const signInWithGoogle = async () => {
   await loginHook.signInWithGoogle()
 }
 
-watch(() => userStore.user?.hasWorkspace, () => {
-  if (userStore.user?.hasWorkspace) {
-    router.push('/w/123')
-  } else {
-    router.push('/w/create')
-  }
-})
+watch(
+  () => userStore.user?.hasWorkspace,
+  () => {
+    if (userStore.user?.hasWorkspace) {
+      router.push('/w/123')
+    } else {
+      router.push('/w/create')
+    }
+  },
+)
 </script>
 
 <template>
@@ -50,13 +60,10 @@ watch(() => userStore.user?.hasWorkspace, () => {
       <form @submit.prevent="onSubmit" class="workspaces-create__box__form">
         <div class="workspaces-create__box__form__row">
           <DLabel htmlFor="email">Area</DLabel>
-          <DInput
+          <DCombobox
             id="email"
             placeholder="Enter your email"
-            type="email"
-            v-model="email.value"
-            :error="Boolean(email.error)"
-            :hintText="email.error?.message"
+            :options="comboboxOptions"
           />
         </div>
         <div class="workspaces-create__box__form__button">
