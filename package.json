@@ -15,6 +15,7 @@
     "font-color-contrast": "^11.1.0",
     "make-color-accessible": "^1.2.0",
     "mosha-vue-toastify": "^1.0.23",
+    "pinia": "^2.0.14",
     "vue": "^3.2.25",
     "vue-query": "^1.25.0",
     "vue-router": "4"

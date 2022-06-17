@@ -8,6 +8,7 @@ const loginHook = useLogin()
 const { useField, handle, loading } = useForm<{
   email: string
   password: string
+  confirmPassword: string
 }>({
   defaults: {},
 })
@@ -17,6 +18,13 @@ const email = useField('email', {
 })
 const password = useField('password', {
   required: true,
+  min: 6,
+})
+const confirmPassword = useField('confirmPassword', {
+  required: true,
+  min: 6,
+  validator: (rule: unknown, value: unknown) => value === password.value,
+  message: 'Password does not match',
 })
 
 const onSubmit = handle(async ({ email, password }) =>
@@ -25,15 +33,15 @@ const onSubmit = handle(async ({ email, password }) =>
 </script>
 
 <template>
-  <div class="sign-in">
-    <div class="sign-in__box">
-      <div class="sign-in__box__title">
-        <h1>Log in to your account</h1>
-        <span>Welcome back! Please enter your details.</span>
+  <div class="sign-up">
+    <div class="sign-up__box">
+      <div class="sign-up__box__title">
+        <h1>Create an account</h1>
+        <span>Start your 30-day free trial.</span>
       </div>
-      <form @submit.prevent="onSubmit" class="sign-in__box__form">
-        <div class="sign-in__box__form__row">
-          <DLabel htmlFor="email">Email</DLabel>
+      <form @submit.prevent="onSubmit" class="sign-up__box__form">
+        <div class="sign-up__box__form__row">
+          <DLabel htmlFor="email">Email*</DLabel>
           <DInput
             id="email"
             placeholder="Enter your email"
@@ -43,8 +51,8 @@ const onSubmit = handle(async ({ email, password }) =>
             :hintText="email.error?.message"
           />
         </div>
-        <div class="sign-in__box__form__row">
-          <DLabel htmlFor="password">Password</DLabel>
+        <div class="sign-up__box__form__row">
+          <DLabel htmlFor="password">Password*</DLabel>
           <DInput
             id="password"
             placeholder="••••••••••"
@@ -54,26 +62,36 @@ const onSubmit = handle(async ({ email, password }) =>
             :hintText="password.error?.message"
           />
         </div>
-        <div class="forgot-password">
-          <router-link to="/forgot-password">Forgot password</router-link>
+        <div class="sign-up__box__form__row">
+          <DLabel htmlFor="confirmPassword">Confirm password*</DLabel>
+          <DInput
+            id="confirmPassword"
+            placeholder="••••••••••"
+            type="password"
+            v-model="confirmPassword.value"
+            :error="Boolean(confirmPassword.error)"
+            :hintText="
+              confirmPassword.error?.message ?? 'Must be at least 8 characters'
+            "
+          />
         </div>
-        <div class="sign-in__box__form__button">
-          <DButton type="submit" fullWidth>Sign in</DButton>
+        <div class="sign-up__box__form__button">
+          <DButton type="submit" fullWidth>Get started</DButton>
         </div>
-        <div class="sign-in__box__form__button">
+        <div class="sign-up__box__form__button">
           <DButton
             fullWidth
             variant="outlined"
             @click="loginHook.signInWithGoogle"
           >
             <img :src="GoogleIcon" alt="google" width="24" height="24" />
-            &nbsp; Sign in with Google
+            &nbsp; Sign up with Google
           </DButton>
         </div>
         <div class="dont-have-an-account">
-          Don't have an account? &nbsp;
-          <router-link to="/sign-up">
-            Sign up
+          Already have an account? &nbsp;
+          <router-link to="/sign-in">
+            Sign in
           </router-link>
         </div>
       </form>
@@ -82,7 +100,7 @@ const onSubmit = handle(async ({ email, password }) =>
 </template>
 
 <style lang="scss" scoped>
-.sign-in {
+.sign-up {
   @apply flex justify-center items-center min-h-screen;
   &__box {
     @apply max-w-[360px];
@@ -103,9 +121,6 @@ const onSubmit = handle(async ({ email, password }) =>
       }
       a {
         @apply text-blue-600 font-medium;
-      }
-      .forgot-password {
-        @apply flex justify-end text-sm;
       }
       .dont-have-an-account {
         @apply flex justify-center text-sm text-slate-500;

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { h } from 'vue'
 interface Props {
   variant?: 'contained' | 'outlined' | 'text'
   disabled?: boolean
@@ -11,10 +10,14 @@ withDefaults(defineProps<Props>(), {
   disabled: false,
   fullWidth: false,
 })
+defineEmits<{
+  (e: 'click', event: MouseEvent): void
+}>()
 </script>
 
 <template>
   <button
+    @click="$emit('click', $event)"
     :disabled="disabled"
     :class="[
       'button',

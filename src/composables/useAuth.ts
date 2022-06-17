@@ -1,30 +1,27 @@
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth'
-import { reactive, toRefs } from 'vue'
+import { storeToRefs } from 'pinia'
 import { auth } from '../firebase'
-
-type UseAuthState = {
-  user: FirebaseUser | null
-  loading: boolean
-  error: unknown
-};
+import { useAuthStore } from '../stores/useAuthStore';
 
 export const useAuth = () => {
-  const state = reactive<UseAuthState>({
-    user: null,
-    loading: true,
-    error: null,
-  })
+  const authStore = useAuthStore()
 
-  onAuthStateChanged(auth, (_user) => {
-    if (_user) {
-      state.user = _user
-    } else {
-      state.user = null
-    }
-    state.loading = false
-  })
+  const getCurrentUser = async () => {
+    return new Promise((resolve) => {
+      onAuthStateChanged(auth, (_user) => {
+        if (_user) {
+          authStore.setAuthUser(_user)
+          resolve(_user)
+        } else {
+          authStore.setAuthUser(null)
+        }
+        authStore.setLoading(false)
+      })
+    })
+  }
 
   return {
-    ...toRefs(state),
+    ...storeToRefs(authStore),
+    getCurrentUser,
   }
 }

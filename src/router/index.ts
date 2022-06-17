@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { authenticationGuard } from './routeGuards'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -7,28 +8,33 @@ const router = createRouter({
       name: 'Home',
       path: '/',
       component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue'),
+      meta: {
+        requiresAuth: false
+      }
     },
     {
       name: 'SignIn',
       path: '/sign-in',
       component: () => import(/* webpackChunkName: "sign-in" */ '../views/SignIn.vue'),
+      meta: {
+        requiresAuth: false,
+        forVisitors: true,
+      }
+    },
+    {
+      name: 'SignUp',
+      path: '/sign-up',
+      component: () => import(/* webpackChunkName: "sign-up" */ '../views/SignUp.vue'),
+      meta: {
+        requiresAuth: false,
+        forVisitors: true,
+      }
     },
   ],
 })
 
-// router.beforeEach((to, from, next) => {
-//   if (to.matched.some(record => record.meta.requiresAuth)) { 
-//       if (!auth.loggedIn()) { 
-//           next({ 
-//               path: '/sign-in', 
-//               query: { redirect: to.fullPath } 
-//           }) 
-//       } else { 
-//           next() 
-//       } 
-//   } else {
-//       next() // make sure to always call next()! 
-//   } 
-// })
+router.beforeEach((to, from, next) => {
+  authenticationGuard(to, from, next)
+})
 
 export default router

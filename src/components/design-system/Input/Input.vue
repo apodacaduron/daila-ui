@@ -24,7 +24,12 @@ const updateValue = (event: Event) => {
     :class="['input', { 'input--disabled': disabled, 'input--error': error }]"
   >
     <slot name="leading" />
-    <input v-bind="$attrs" class="input__field" :value="modelValue" @input="updateValue" />
+    <input
+      v-bind="$attrs"
+      class="input__field"
+      :value="modelValue"
+      @input="updateValue"
+    />
     <slot name="trailing" />
   </div>
   <span v-if="hintText" :class="['hint-text', { 'hint-text--error': error }]">
@@ -57,7 +62,7 @@ const updateValue = (event: Event) => {
 }
 
 .hint-text {
-  @apply text-xs;
+  @apply text-xs text-slate-500;
   &--error {
     @apply text-red-500;
   }
