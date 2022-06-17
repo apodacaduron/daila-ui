@@ -3,11 +3,11 @@ import * as functions from 'firebase-functions';
 
 const env = functions.config();
 
-export const onSignUp = functions.https.onCall(async (_, context) => {
+export const createAccountUser = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
-        'failed-precondition',
-        'The function must be called while authenticated.',
+      'failed-precondition',
+      'The function must be called while authenticated.',
     );
   }
 
@@ -16,7 +16,16 @@ export const onSignUp = functions.https.onCall(async (_, context) => {
   const userRole = userEmail === env.role.admin ? 'ADMIN' : 'USER';
   const userExists = (await usersRef.doc(context.auth.uid).get()).exists;
 
-  if (userExists) return { message: 'User already exists' };
+  if (userExists) {
+    if (data.action === 'sign-up') {
+      throw new functions.https.HttpsError(
+        'already-exists',
+        'This user already exists',
+      );
+    } else {
+      return
+    }
+  }
 
   await admin.auth().setCustomUserClaims(context.auth.token.uid, {
     role: userRole,
@@ -27,8 +36,8 @@ export const onSignUp = functions.https.onCall(async (_, context) => {
     email: currentAuthUser.email ?? null,
     photoURL: currentAuthUser.photoURL ?? null,
     phoneNumber: currentAuthUser.phoneNumber ?? null,
+    hasWorkspace: false,
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
   });
-
-  return { message: 'User has been created on firestore' };
 });

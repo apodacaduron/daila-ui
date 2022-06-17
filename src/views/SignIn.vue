@@ -3,8 +3,13 @@ import { DLabel, DInput, DButton } from '../components/design-system'
 import GoogleIcon from '../assets/png/google-48.png'
 import { useForm } from '@evilkiwi/form'
 import { useLogin } from '../composables'
+import { useUserStore } from '../stores/useUserStore';
+import { watch } from 'vue';
+import { useRouter } from 'vue-router';
 
 const loginHook = useLogin()
+const userStore = useUserStore()
+const router = useRouter()
 const { useField, handle, loading } = useForm<{
   email: string
   password: string
@@ -19,9 +24,20 @@ const password = useField('password', {
   required: true,
 })
 
-const onSubmit = handle(async ({ email, password }) =>
-  loginHook.signInWithCredentials(email, password),
-)
+const onSubmit = handle(async ({ email, password }) => {
+  await loginHook.signInWithCredentials(email, password)
+})
+const signInWithGoogle = async () => {
+  await loginHook.signInWithGoogle()
+}
+
+watch(() => userStore.user?.hasWorkspace, () => {
+  if (userStore.user?.hasWorkspace) {
+    router.push('/w/123')
+  } else {
+    router.push('/w/create')
+  }
+})
 </script>
 
 <template>
@@ -58,13 +74,15 @@ const onSubmit = handle(async ({ email, password }) =>
           <router-link to="/forgot-password">Forgot password</router-link>
         </div>
         <div class="sign-in__box__form__button">
-          <DButton type="submit" fullWidth>Sign in</DButton>
+          <DButton type="submit" fullWidth :disabled="loading">Sign in</DButton>
         </div>
         <div class="sign-in__box__form__button">
           <DButton
+            type="button"
             fullWidth
             variant="outlined"
-            @click="loginHook.signInWithGoogle"
+            @click="signInWithGoogle"
+            :disabled="loading"
           >
             <img :src="GoogleIcon" alt="google" width="24" height="24" />
             &nbsp; Sign in with Google

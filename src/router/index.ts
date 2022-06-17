@@ -16,7 +16,7 @@ const router = createRouter({
     {
       name: 'SignIn',
       path: '/sign-in',
-      component: () => import(/* webpackChunkName: "sign-in" */ '../views/SignIn.vue'),
+      component: () => import(/* webpackChunkName: "auth" */ '../views/SignIn.vue'),
       meta: {
         requiresAuth: false,
         forVisitors: true,
@@ -25,10 +25,26 @@ const router = createRouter({
     {
       name: 'SignUp',
       path: '/sign-up',
-      component: () => import(/* webpackChunkName: "sign-up" */ '../views/SignUp.vue'),
+      component: () => import(/* webpackChunkName: "auth" */ '../views/SignUp.vue'),
       meta: {
         requiresAuth: false,
         forVisitors: true,
+      }
+    },
+    {
+      name: 'Workspaces',
+      path: '/w',
+      redirect: '/w/create',
+      component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/Index.vue'),
+      children: [
+        {
+          name: 'WorkspacesCreate',
+          path: 'create',
+          component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/Create.vue'),
+        },
+      ],
+      meta: {
+        requiresAuth: true,
       }
     },
     {

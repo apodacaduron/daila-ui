@@ -6,13 +6,13 @@ import { errorHandler } from '../utils/errorHandler';
 
 export const useLogin = () => {
   // Callable functions
-  const onSignUp = httpsCallable(functions, 'onSignUp')
+  const createAccountUser = httpsCallable(functions, 'createAccountUser')
 
   // Handlers
   async function signUpWithCredentials(email: string, password: string) {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      await onSignUp();
+      await createAccountUser({ action: 'sign-up' });
     } catch (err) {
       errorHandler(err)
     }
@@ -27,7 +27,7 @@ export const useLogin = () => {
   async function signInWithGoogle() {
     try {
       await signInWithPopup(auth, googleAuthProvider)
-      await onSignUp()
+      await createAccountUser({ action: 'sign-in' })
     } catch (err) {
       errorHandler(err)
     }

@@ -1,10 +1,14 @@
-import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth'
+import { onAuthStateChanged } from 'firebase/auth'
 import { storeToRefs } from 'pinia'
+import { ref, watch } from 'vue';
 import { auth } from '../firebase'
 import { useAuthStore } from '../stores/useAuthStore';
+import { useUserStore } from '../stores/useUserStore';
 
 export const useAuth = () => {
+  const isUserByIdQueryEnabled = ref(false)
   const authStore = useAuthStore()
+  const userStore = useUserStore()
 
   const getCurrentUser = async () => {
     return new Promise((resolve) => {
@@ -14,6 +18,7 @@ export const useAuth = () => {
           resolve(_user)
         } else {
           authStore.setAuthUser(null)
+          userStore.setUser(null)
           resolve(null)
         }
         authStore.setLoading(false)
@@ -21,8 +26,20 @@ export const useAuth = () => {
     })
   }
 
+  watch(
+    () => authStore.isAuthenticated,
+    () => {
+      if (authStore.isAuthenticated) {
+        isUserByIdQueryEnabled.value = true
+      } else {
+        isUserByIdQueryEnabled.value = false
+      }
+    },
+  )
+
   return {
     ...storeToRefs(authStore),
     getCurrentUser,
+    isUserByIdQueryEnabled,
   }
 }

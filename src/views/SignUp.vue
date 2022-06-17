@@ -3,8 +3,13 @@ import { DLabel, DInput, DButton } from '../components/design-system'
 import GoogleIcon from '../assets/png/google-48.png'
 import { useForm } from '@evilkiwi/form'
 import { useLogin } from '../composables'
+import { watch } from 'vue';
+import { useUserStore } from '../stores/useUserStore';
+import { useRouter } from 'vue-router';
 
 const loginHook = useLogin()
+const userStore = useUserStore()
+const router = useRouter()
 const { useField, handle, loading } = useForm<{
   email: string
   password: string
@@ -30,6 +35,14 @@ const confirmPassword = useField('confirmPassword', {
 const onSubmit = handle(async ({ email, password }) =>
   loginHook.signInWithCredentials(email, password),
 )
+
+watch(() => userStore.user?.hasWorkspace, () => {
+  if (userStore.user?.hasWorkspace) {
+    router.push('/w/123')
+  } else {
+    router.push('/w/create')
+  }
+})
 </script>
 
 <template>
@@ -76,10 +89,11 @@ const onSubmit = handle(async ({ email, password }) =>
           />
         </div>
         <div class="sign-up__box__form__button">
-          <DButton type="submit" fullWidth>Get started</DButton>
+          <DButton :disabled="loading" type="submit" fullWidth>Get started</DButton>
         </div>
         <div class="sign-up__box__form__button">
           <DButton
+            :disabled="loading"
             fullWidth
             variant="outlined"
             @click="loginHook.signInWithGoogle"
