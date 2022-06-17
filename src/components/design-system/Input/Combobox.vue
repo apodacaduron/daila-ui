@@ -44,7 +44,7 @@ const filteredOptions = computed(() =>
         <ComboboxInput
           :placeholder="props.placeholder"
           class="combobox__container__input"
-          :displayValue="(option: ComboboxItem) => option?.text"
+          :displayValue="(option) => (option as ComboboxItem)?.text"
           @change="query = $event.target.value"
         />
         <ComboboxButton class="combobox__container__button">
@@ -87,7 +87,6 @@ const filteredOptions = computed(() =>
               <span
                 v-if="selected"
                 class="combobox__options__item__selected-icon"
-                :class="{ 'text-white': active, 'text-blue-600': !active }"
               >
                 <CheckIcon class="h-5 w-5" aria-hidden="true" />
               </span>
@@ -123,18 +122,17 @@ const filteredOptions = computed(() =>
   }
   &__options {
     @apply absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm;
-    @apply bg-opacity-90 backdrop-blur-lg;
     &__no-results {
       @apply relative cursor-default select-none py-2 px-4 text-gray-700;
     }
     &__item {
-      @apply relative cursor-default select-none py-2 pl-10 pr-4;
+      @apply relative cursor-default select-none py-2 pl-4;
       @apply text-gray-900;
       &--active {
-        @apply bg-blue-600 text-white;
+        @apply bg-slate-50;
       }
       &__selected-icon {
-        @apply absolute inset-y-0 left-0 flex items-center pl-3;
+        @apply absolute inset-y-0 right-0 flex items-center pr-3 text-blue-600;
       }
     }
   }

@@ -4,11 +4,14 @@ import GoogleIcon from '../assets/png/google-48.png'
 import { useForm } from '@evilkiwi/form'
 import { useLogin } from '../composables'
 import { useUserStore } from '../stores/useUserStore';
-import { watch } from 'vue';
+import { computed, ref, watch, reactive } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '../stores/useAuthStore';
+import { useUserByIdQuery } from '../services';
 
 const loginHook = useLogin()
 const userStore = useUserStore()
+const authStore = useAuthStore()
 const router = useRouter()
 const { useField, handle, loading } = useForm<{
   email: string
@@ -26,10 +29,20 @@ const password = useField('password', {
 
 const onSubmit = handle(async ({ email, password }) => {
   await loginHook.signInWithCredentials(email, password)
+  isUserByIdQueryEnabled.value = true
 })
 const signInWithGoogle = async () => {
   await loginHook.signInWithGoogle()
+  isUserByIdQueryEnabled.value = true
 }
+
+const isUserByIdQueryEnabled = ref(false)
+useUserByIdQuery(
+  reactive({
+    userId: computed(() => authStore.user?.uid ?? null),
+    enabled: isUserByIdQueryEnabled,
+  }),
+)
 
 watch(() => userStore.user?.hasWorkspace, () => {
   if (userStore.user?.hasWorkspace) {

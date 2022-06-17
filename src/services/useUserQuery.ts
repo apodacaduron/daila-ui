@@ -1,5 +1,5 @@
 import { doc, getDoc } from 'firebase/firestore'
-import { watch, computed } from 'vue'
+import { computed, reactive } from 'vue'
 import { useQuery } from 'vue-query'
 import { firestore } from '../firebase'
 import { userConverter } from '../firebase/converters'
@@ -18,7 +18,7 @@ export const useUserByIdQuery = (options: UserByIdQueryOptions) => {
   }
 
   return useQuery(
-    ['user', options.userId],
+    reactive(['user', options.userId]),
     getUserById,
     {
       enabled: computed(() => Boolean(options.userId) && options.enabled),

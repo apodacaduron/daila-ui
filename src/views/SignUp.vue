@@ -3,12 +3,15 @@ import { DLabel, DInput, DButton } from '../components/design-system'
 import GoogleIcon from '../assets/png/google-48.png'
 import { useForm } from '@evilkiwi/form'
 import { useLogin } from '../composables'
-import { watch } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
 import { useRouter } from 'vue-router';
+import { useUserByIdQuery } from '../services';
+import { useAuthStore } from '../stores/useAuthStore';
 
 const loginHook = useLogin()
 const userStore = useUserStore()
+const authStore = useAuthStore()
 const router = useRouter()
 const { useField, handle, loading } = useForm<{
   email: string
@@ -32,8 +35,17 @@ const confirmPassword = useField('confirmPassword', {
   message: 'Password does not match',
 })
 
-const onSubmit = handle(async ({ email, password }) =>
-  loginHook.signInWithCredentials(email, password),
+const onSubmit = handle(async ({ email, password }) => {
+  await loginHook.signUpWithCredentials(email, password)
+  isUserByIdQueryEnabled.value = true
+})
+
+const isUserByIdQueryEnabled = ref(false)
+useUserByIdQuery(
+  reactive({
+    userId: computed(() => authStore.user?.uid ?? null),
+    enabled: isUserByIdQueryEnabled,
+  }),
 )
 
 watch(() => userStore.user?.hasWorkspace, () => {
@@ -84,7 +96,7 @@ watch(() => userStore.user?.hasWorkspace, () => {
             v-model="confirmPassword.value"
             :error="Boolean(confirmPassword.error)"
             :hintText="
-              confirmPassword.error?.message ?? 'Must be at least 8 characters'
+              confirmPassword.error?.message ?? 'Must be at least 6 characters'
             "
           />
         </div>
