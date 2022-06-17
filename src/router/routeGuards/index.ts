@@ -1,1 +1,1 @@
-export * from './authenticationGuard'
+export * from './globalGuard'

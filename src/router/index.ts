@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { authenticationGuard } from './routeGuards'
+import { globalGuard } from './routeGuards'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -34,7 +34,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  authenticationGuard(to, from, next)
+  globalGuard(to, from, next)
 })
 
 export default router
