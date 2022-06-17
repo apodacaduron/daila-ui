@@ -14,6 +14,7 @@ export const useAuth = () => {
           resolve(_user)
         } else {
           authStore.setAuthUser(null)
+          resolve(null)
         }
         authStore.setLoading(false)
       })

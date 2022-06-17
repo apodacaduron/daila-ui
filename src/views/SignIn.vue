@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DLabel, DInput, DButton } from '../components/design-system'
+import { DLabel, DInput, DButton, DCheckbox } from '../components/design-system'
 import GoogleIcon from '../assets/png/google-48.png'
 import { useForm } from '@evilkiwi/form'
 import { useLogin } from '../composables'
@@ -26,6 +26,7 @@ const onSubmit = handle(async ({ email, password }) =>
 
 <template>
   <div class="sign-in">
+    <DCheckbox />
     <div class="sign-in__box">
       <div class="sign-in__box__title">
         <h1>Log in to your account</h1>

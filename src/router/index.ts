@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { globalGuard } from './routeGuards'
+import PageNotFound from '../views/404.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -29,6 +30,11 @@ const router = createRouter({
         requiresAuth: false,
         forVisitors: true,
       }
+    },
+    {
+      name: 'PageNotFound',
+      path: '/:pathMatch(.*)*',
+      component: PageNotFound,
     },
   ],
 })

@@ -10,6 +10,7 @@
   "dependencies": {
     "@evilkiwi/form": "^1.0.7",
     "@headlessui/vue": "^1.6.4",
+    "@heroicons/vue": "^1.0.6",
     "@vueuse/core": "^8.6.0",
     "firebase": "^9.8.3",
     "font-color-contrast": "^11.1.0",
