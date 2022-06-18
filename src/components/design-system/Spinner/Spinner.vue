@@ -1,10 +1,9 @@
-<script setup lang="ts"></script>
-
 <template>
   <svg
     role="status"
     viewBox="0 0 100 101"
     fill="none"
+    class="spinner"
     xmlns="http:www.w3.org/2000/svg"
   >
     <path

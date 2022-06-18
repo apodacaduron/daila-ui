@@ -3,7 +3,7 @@ import * as functions from 'firebase-functions';
 
 const env = functions.config();
 
-export const createAccountUser = functions.https.onCall(async (data, context) => {
+export const createAccountUserCF = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
       'failed-precondition',
@@ -37,6 +37,8 @@ export const createAccountUser = functions.https.onCall(async (data, context) =>
     photoURL: currentAuthUser.photoURL ?? null,
     phoneNumber: currentAuthUser.phoneNumber ?? null,
     hasWorkspace: false,
+    currentWorkspaceId: null,
+    workspaces: [],
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
     updatedAt: admin.firestore.FieldValue.serverTimestamp(),
   });

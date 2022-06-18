@@ -8,8 +8,10 @@ import { computed, ref, watch, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/useAuthStore';
 import { useUserByIdQuery } from '../services';
+import { useGlobalStore } from '../stores/useGlobalStore';
 
 const loginHook = useLogin()
+const globalStore = useGlobalStore()
 const userStore = useUserStore()
 const authStore = useAuthStore()
 const router = useRouter()
@@ -30,10 +32,12 @@ const password = useField('password', {
 const onSubmit = handle(async ({ email, password }) => {
   await loginHook.signInWithCredentials(email, password)
   isUserByIdQueryEnabled.value = true
+  globalStore.setLoading(true)
 })
 const signInWithGoogle = async () => {
   await loginHook.signInWithGoogle()
   isUserByIdQueryEnabled.value = true
+  globalStore.setLoading(true)
 }
 
 const isUserByIdQueryEnabled = ref(false)
@@ -116,7 +120,7 @@ watch(() => userStore.user?.hasWorkspace, () => {
 .sign-in {
   @apply flex justify-center items-center min-h-screen;
   &__box {
-    @apply max-w-[360px];
+    @apply max-w-[360px] w-[360px];
     &__title {
       @apply flex flex-col gap-3 mb-8 text-center;
       h1 {

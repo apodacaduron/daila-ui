@@ -8,10 +8,12 @@ import { useUserStore } from '../stores/useUserStore';
 import { useRouter } from 'vue-router';
 import { useUserByIdQuery } from '../services';
 import { useAuthStore } from '../stores/useAuthStore';
+import { useGlobalStore } from '../stores/useGlobalStore';
 
 const loginHook = useLogin()
 const userStore = useUserStore()
 const authStore = useAuthStore()
+const globalStore = useGlobalStore()
 const router = useRouter()
 const { useField, handle, loading } = useForm<{
   email: string
@@ -38,6 +40,7 @@ const confirmPassword = useField('confirmPassword', {
 const onSubmit = handle(async ({ email, password }) => {
   await loginHook.signUpWithCredentials(email, password)
   isUserByIdQueryEnabled.value = true
+  globalStore.setLoading(true)
 })
 
 const isUserByIdQueryEnabled = ref(false)
@@ -129,7 +132,7 @@ watch(() => userStore.user?.hasWorkspace, () => {
 .sign-up {
   @apply flex justify-center items-center min-h-screen;
   &__box {
-    @apply max-w-[360px];
+    @apply max-w-[360px] w-[360px];
     &__title {
       @apply flex flex-col gap-3 mb-8 text-center;
       h1 {

@@ -3,6 +3,7 @@ import {
   QueryDocumentSnapshot,
   SnapshotOptions,
 } from 'firebase/firestore'
+import { UserWorkspace } from '../../stores/useUserStore'
 
 class User {
   constructor(
@@ -11,6 +12,8 @@ class User {
     readonly photoURL: string | null,
     readonly phoneNumber: string | null,
     readonly hasWorkspace: boolean,
+    readonly currentWorkspaceId: string | null,
+    readonly workspaces: UserWorkspace[],
     readonly createdAt: Date,
     readonly updatedAt: Date,
   ) { }
@@ -35,6 +38,8 @@ export const userConverter = {
       data.photoURL,
       data.phoneNumber,
       data.hasWorkspace,
+      data.currentWorkspaceId,
+      data.workspaces,
       data.createdAt.toDate(),
       data.updatedAt.toDate(),
     )

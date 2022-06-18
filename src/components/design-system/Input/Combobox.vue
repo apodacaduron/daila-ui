@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import {
   Combobox,
   ComboboxInput,
@@ -11,16 +11,23 @@ import {
 import { CheckIcon, SelectorIcon } from '@heroicons/vue/solid'
 
 export type ComboboxItem = {
-  id: string | number, text: string
+  id: string | number
+  text: string
+  value: string | number
 }
 interface Props {
   options: Array<ComboboxItem>
   placeholder: string
+  modelValue: string | number
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  options: () => []
+  options: () => [],
 })
+const emit = defineEmits(['update:modelValue'])
+const updateValue = (selectValue: ComboboxItem['value']) => {
+  emit('update:modelValue', selectValue)
+}
 
 const selected = ref(props.options[0])
 const query = ref('')
@@ -34,6 +41,21 @@ const filteredOptions = computed(() =>
           .replace(/\s+/g, '')
           .includes(query.value.toLowerCase().replace(/\s+/g, '')),
       ),
+)
+
+watch(
+  selected,
+  () => {
+    if (selected.value.value !== props.modelValue) {
+      selected.value =
+        props.options.find((option) => option.value === props.modelValue) ??
+        props.options[0]
+      updateValue(selected.value.value)
+    }
+  },
+  {
+    immediate: true,
+  },
 )
 </script>
 
@@ -76,7 +98,10 @@ const filteredOptions = computed(() =>
             v-slot="{ selected, active }"
           >
             <li
-              :class="['combobox__options__item', {'combobox__options__item--active': active }]"
+              :class="[
+                'combobox__options__item',
+                { 'combobox__options__item--active': active },
+              ]"
             >
               <span
                 class="block truncate"

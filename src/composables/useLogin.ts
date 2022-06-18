@@ -1,18 +1,23 @@
-import { createUserWithEmailAndPassword, signInWithCredential, signInWithEmailAndPassword, signInWithPopup, signOut as signOutFirebase } from 'firebase/auth';
-import { httpsCallable } from 'firebase/functions';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut as signOutFirebase,
+} from 'firebase/auth'
+import { httpsCallable } from 'firebase/functions'
 
-import { auth, functions, googleAuthProvider } from '../firebase';
-import { errorHandler } from '../utils/errorHandler';
+import { auth, functions, googleAuthProvider } from '../firebase'
+import { errorHandler } from '../utils/errorHandler'
 
 export const useLogin = () => {
   // Callable functions
-  const createAccountUser = httpsCallable(functions, 'createAccountUser')
+  const createAccountUserCF = httpsCallable(functions, 'createAccountUserCF')
 
   // Handlers
   async function signUpWithCredentials(email: string, password: string) {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      await createAccountUser({ action: 'sign-up' });
+      await createUserWithEmailAndPassword(auth, email, password)
+      await createAccountUserCF({ action: 'sign-up' })
     } catch (err) {
       errorHandler(err)
     }
@@ -27,7 +32,7 @@ export const useLogin = () => {
   async function signInWithGoogle() {
     try {
       await signInWithPopup(auth, googleAuthProvider)
-      await createAccountUser({ action: 'sign-in' })
+      await createAccountUserCF({ action: 'sign-in' })
     } catch (err) {
       errorHandler(err)
     }
