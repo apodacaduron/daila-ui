@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { DButton } from '../components/design-system'
+import { DButton } from '../components/primitives'
 import { InformationCircleIcon } from '@heroicons/vue/outline'
-import ButtonLink from '../components/design-system/Button/ButtonLink.vue'
+import ButtonLink from '../components/primitives/Button/ButtonLink.vue'
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DLabel, DInput, DButton } from '../components/design-system'
+import { DLabel, DInput, DButton } from '../components/primitives'
 import GoogleIcon from '../assets/png/google-48.png'
 import { useForm } from '@evilkiwi/form'
 import { useLogin } from '../composables'

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { DLabel, DCombobox, DButton, DInput } from '../../components/design-system'
+import { DLabel, DCombobox, DButton, DInput } from '../../components/primitives'
 import { useForm } from '@evilkiwi/form'
 import { ref } from 'vue'
-import { ComboboxItem } from '../../components/design-system/Input/Combobox.vue'
+import { ComboboxItem } from '../../components/primitives/Input/Combobox.vue'
 
 const comboboxOptions = ref<ComboboxItem[]>([
   {

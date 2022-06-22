@@ -3,7 +3,7 @@ import { reactive, watchEffect, computed } from 'vue'
 import { useAuth } from './composables'
 import { useUserByIdQuery } from './services'
 import { useUserStore } from './stores/useUserStore'
-import {DPageSpinner} from './components/design-system/Spinner';
+import { DPageSpinner } from './components/primitives/Spinner';
 import { useGlobalStore } from './stores/useGlobalStore';
 
 const authHook = useAuth()
