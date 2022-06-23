@@ -6,41 +6,62 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      name: 'Home',
       path: '/',
-      component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue'),
+      redirect: '/',
+      component: () => import('../layouts/HomeLayout.vue'),
       meta: {
         requiresAuth: false
-      }
+      },
+      children: [
+        {
+          name: 'Home',
+          path: '',
+          component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue'),
+        },
+        {
+          name: 'SignIn',
+          path: '/sign-in',
+          component: () => import(/* webpackChunkName: "auth" */ '../views/SignIn.vue'),
+          meta: {
+            forVisitors: true,
+          }
+        },
+        {
+          name: 'SignUp',
+          path: '/sign-up',
+          component: () => import(/* webpackChunkName: "auth" */ '../views/SignUp.vue'),
+          meta: {
+            forVisitors: true,
+          }
+        },
+      ]
     },
     {
-      name: 'SignIn',
-      path: '/sign-in',
-      component: () => import(/* webpackChunkName: "auth" */ '../views/SignIn.vue'),
-      meta: {
-        requiresAuth: false,
-        forVisitors: true,
-      }
-    },
-    {
-      name: 'SignUp',
-      path: '/sign-up',
-      component: () => import(/* webpackChunkName: "auth" */ '../views/SignUp.vue'),
-      meta: {
-        requiresAuth: false,
-        forVisitors: true,
-      }
-    },
-    {
-      name: 'Workspaces',
       path: '/w',
       redirect: '/w/create',
       component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/Index.vue'),
       children: [
         {
-          name: 'WorkspacesCreate',
+          name: 'CreateWorkspace',
           path: 'create',
           component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/Create.vue'),
+        },
+        {
+          path: ':workspaceId',
+          component: () => import('../layouts/CRMLayout.vue'),
+          children: [
+            {
+              name: 'Dashboard',
+              path: 'dashboard',
+              alias: '',
+              component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/Dashboard.vue'),
+            },
+            {
+              name: 'Patients',
+              path: 'patients',
+              component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/Dashboard.vue'),
+            },
+          ]
         },
       ],
       meta: {

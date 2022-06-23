@@ -5,8 +5,9 @@ import { useGetUserByIdQuery } from './services'
 import { useUserStore } from './stores/useUserStore'
 import { DPageSpinner } from './components/primitives/Spinner';
 import { useGlobalStore } from './stores/useGlobalStore';
-import Navbar from './components/Navbar.vue';
+import { useDark } from '@vueuse/core';
 
+useDark()
 const authHook = useAuth()
 const userStore = useUserStore()
 const globalStore = useGlobalStore()
@@ -30,6 +31,5 @@ useGetUserByIdQuery({
 
 <template>
   <DPageSpinner v-if="globalStore.loading" />
-  <Navbar />
   <router-view />
 </template>
