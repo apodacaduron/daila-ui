@@ -40,11 +40,12 @@ const updateValue = (event: Event) => {
 <style lang="scss" scoped>
 .input {
   @apply cursor-default rounded-lg text-left;
-  @apply py-2 px-3 border border-slate-300;
+  @apply py-2 px-3 border border-slate-300 dark:border-slate-500 dark:bg-slate-800;
   @apply transition-all shadow-sm;
   @apply focus-within:border focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-100;
+  @apply dark:focus-within:ring-blue-400 dark:focus-within:ring-opacity-30;
   &__field {
-    @apply w-full border-none text-base text-slate-900;
+    @apply w-full border-none text-base text-slate-900 dark:text-slate-200;
     @apply outline-none bg-transparent;
     &::placeholder {
       @apply text-slate-500;
@@ -53,7 +54,7 @@ const updateValue = (event: Event) => {
 
   &--error {
     @apply border-red-300;
-    @apply focus-within:border-red-400 focus-within:ring-red-100;
+    @apply focus-within:border-red-400 focus-within:ring-red-100 dark:focus-within:ring-red-400 dark:focus-within:ring-opacity-30;
   }
 
   &--disabled {

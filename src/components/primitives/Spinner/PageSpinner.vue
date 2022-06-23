@@ -11,7 +11,7 @@ import Spinner from './Spinner.vue';
 <style lang="scss" scoped>
 .page-spinner {
   @apply fixed w-full h-screen;
-  @apply bg-white bg-opacity-90 backdrop-blur-lg;
+  @apply bg-opacity-90 backdrop-blur-lg bg-white dark:bg-slate-900;
   @apply flex justify-center items-center;
 }
 </style>

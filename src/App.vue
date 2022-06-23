@@ -5,6 +5,7 @@ import { useUserByIdQuery } from './services'
 import { useUserStore } from './stores/useUserStore'
 import { DPageSpinner } from './components/primitives/Spinner';
 import { useGlobalStore } from './stores/useGlobalStore';
+import Navbar from './components/Navbar.vue';
 
 const authHook = useAuth()
 const userStore = useUserStore()
@@ -26,5 +27,6 @@ watchEffect(() => {
 
 <template>
   <DPageSpinner v-if="globalStore.loading" />
+  <Navbar />
   <router-view />
 </template>

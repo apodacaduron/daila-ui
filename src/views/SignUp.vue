@@ -132,11 +132,11 @@ watch(() => userStore.user?.hasWorkspace, () => {
 .sign-up {
   @apply flex justify-center items-center min-h-screen;
   &__box {
-    @apply max-w-[360px] w-[360px];
+    @apply max-w-[360px] w-[360px] mb-20;
     &__title {
       @apply flex flex-col gap-3 mb-8 text-center;
       h1 {
-        @apply text-3xl text-slate-900 font-semibold;
+        @apply text-3xl text-slate-900 font-semibold dark:text-slate-200;
       }
       span {
         @apply text-base text-slate-500 font-normal;

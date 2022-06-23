@@ -52,9 +52,9 @@ defineEmits<{
     }
   }
   &--outlined {
-    @apply border-slate-300 text-slate-700;
+    @apply border-slate-300 text-slate-700 dark:text-slate-200;
     &:not(:disabled):active {
-      @apply bg-slate-50;
+      @apply bg-slate-50 dark:bg-slate-800;
     }
     &:not(:disabled):focus {
       @apply ring-slate-100 ring-4;
