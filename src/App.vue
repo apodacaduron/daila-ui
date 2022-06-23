@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { reactive, watchEffect, computed } from 'vue'
+import { reactive, computed } from 'vue'
 import { useAuth } from './composables'
-import { useUserByIdQuery } from './services'
+import { useGetUserByIdQuery } from './services'
 import { useUserStore } from './stores/useUserStore'
 import { DPageSpinner } from './components/primitives/Spinner';
 import { useGlobalStore } from './stores/useGlobalStore';
@@ -10,17 +10,20 @@ import Navbar from './components/Navbar.vue';
 const authHook = useAuth()
 const userStore = useUserStore()
 const globalStore = useGlobalStore()
-const userByIdQuery = useUserByIdQuery(
-  reactive({
+useGetUserByIdQuery({
+  options: reactive({
     userId: computed(() => authHook.user.value?.uid ?? null),
-    enabled: authHook.isUserByIdQueryEnabled,
+    enabled: authHook.isUserByIdQueryEnabled && !userStore.user,
   }),
-)
-
-watchEffect(() => {
-  if (userByIdQuery.isSuccess.value && userByIdQuery.data.value) {
-    userStore.setUser({ ...userByIdQuery.data.value } ?? null)
-    globalStore.setLoading(false)
+  handlers: {
+    onSuccess(user) {
+      if (authHook.isAuthenticated && user) {
+        userStore.setUser(user)
+      } else {
+        userStore.setUser(null)
+      }
+      globalStore.setLoading(false)
+    }
   }
 })
 </script>

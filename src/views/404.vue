@@ -31,8 +31,9 @@ import ButtonLink from '../components/primitives/Button/ButtonLink.vue'
   @apply w-full h-screen;
   @apply flex justify-center items-center text-center;
   &__box {
+    @apply mb-20;
     &__icon {
-      @apply w-8 h-8 mx-auto text-blue-600;
+      @apply w-12 h-12 mx-auto text-blue-600;
     }
     h1 {
       @apply text-6xl font-semibold;

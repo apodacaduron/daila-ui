@@ -6,15 +6,18 @@ import { useLogin } from '../composables'
 import { computed, reactive, ref, watch } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
 import { useRouter } from 'vue-router';
-import { useUserByIdQuery } from '../services';
-import { useAuthStore } from '../stores/useAuthStore';
+import { useGetUserByIdQuery, useGetWorkspacesByUserIdQuery } from '../services';
 import { useGlobalStore } from '../stores/useGlobalStore';
+import { useAuthStore } from '../stores/useAuthStore';
 
+const isGetWorkspacesByUserIdQueryEnabled = ref(false)
+const isUserByIdQueryEnabled = ref(false)
+
+const router = useRouter()
 const loginHook = useLogin()
 const userStore = useUserStore()
 const authStore = useAuthStore()
 const globalStore = useGlobalStore()
-const router = useRouter()
 const { useField, handle, loading } = useForm<{
   email: string
   password: string
@@ -36,24 +39,50 @@ const confirmPassword = useField('confirmPassword', {
   validator: (rule: unknown, value: unknown) => value === password.value,
   message: 'Password does not match',
 })
-
-const onSubmit = handle(async ({ email, password }) => {
-  await loginHook.signUpWithCredentials(email, password)
-  isUserByIdQueryEnabled.value = true
-  globalStore.setLoading(true)
+useGetWorkspacesByUserIdQuery({
+  options: reactive({
+    userId: computed(() => userStore.user?.id ?? null),
+    enabled: isGetWorkspacesByUserIdQueryEnabled,
+  }),
+  handlers: {
+    onSuccess(workspaces) {
+      if (userStore.user?.hasWorkspace && workspaces) {
+        router.push(`/w/${workspaces[0].id}`)
+      }
+    },
+  },
 })
-
-const isUserByIdQueryEnabled = ref(false)
-useUserByIdQuery(
-  reactive({
+useGetUserByIdQuery({
+  options: reactive({
     userId: computed(() => authStore.user?.uid ?? null),
     enabled: isUserByIdQueryEnabled,
   }),
-)
+  handlers: {
+    onSuccess(user) {
+      if (user) {
+        userStore.setUser(user)
+      } else {
+        userStore.setUser(null)
+      }
+      globalStore.setLoading(false)
+    }
+  }
+})
 
-watch(() => userStore.user?.hasWorkspace, () => {
-  if (userStore.user?.hasWorkspace) {
-    router.push('/w/123')
+const onSubmit = handle(async ({ email, password }) => {
+  globalStore.setLoading(true)
+  await loginHook.signUpWithCredentials(email, password)
+  isUserByIdQueryEnabled.value = true
+})
+const signInWithGoogle = async () => {
+  globalStore.setLoading(true)
+  await loginHook.signInWithGoogle()
+  isUserByIdQueryEnabled.value = true
+}
+
+watch(() => userStore.user?.hasWorkspace, (hasWorkspace) => {
+  if (hasWorkspace) {
+    isGetWorkspacesByUserIdQueryEnabled.value = true
   } else {
     router.push('/w/create')
   }
@@ -111,7 +140,7 @@ watch(() => userStore.user?.hasWorkspace, () => {
             :disabled="loading"
             fullWidth
             variant="outlined"
-            @click="loginHook.signInWithGoogle"
+            @click="signInWithGoogle"
           >
             <img :src="GoogleIcon" alt="google" width="24" height="24" />
             &nbsp; Sign up with Google

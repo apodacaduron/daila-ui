@@ -4,13 +4,27 @@ import {
   SnapshotOptions,
 } from 'firebase/firestore'
 
-class User {
+export type User = {
+  id: string;
+  displayName: string | null;
+  email: string | null;
+  photoURL: string | null;
+  phoneNumber: string | null;
+  hasWorkspace: boolean;
+  currentWorkspaceId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+class UserConverter {
   constructor(
+    readonly id: string,
     readonly displayName: string | null,
     readonly email: string | null,
     readonly photoURL: string | null,
     readonly phoneNumber: string | null,
     readonly hasWorkspace: boolean,
+    readonly currentWorkspaceId: string | null,
     readonly createdAt: Date,
     readonly updatedAt: Date,
   ) { }
@@ -21,20 +35,22 @@ class User {
 }
 
 export const userConverter = {
-  toFirestore(user: User): DocumentData {
+  toFirestore(user: UserConverter): DocumentData {
     return { ...user }
   },
   fromFirestore(
     snapshot: QueryDocumentSnapshot,
     options: SnapshotOptions,
-  ): User {
-    const data = snapshot.data(options)!
-    return new User(
+  ): UserConverter {
+    const data = snapshot.data(options)
+    return new UserConverter(
+      snapshot.id,
       data.displayName,
       data.email,
       data.photoURL,
       data.phoneNumber,
       data.hasWorkspace,
+      data.currentWorkspaceId,
       data.createdAt.toDate(),
       data.updatedAt.toDate(),
     )

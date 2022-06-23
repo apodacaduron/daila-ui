@@ -6,20 +6,24 @@ import {
 
 export const workspaceCategories = ['psychologist'] as const
 export type WorkspaceCategory = typeof workspaceCategories[number]
-// export type Workspace = {
-//   title: string;
-//   category: WorkspaceCategory;
-//   logoURL: string | null;
-//   createdBy: {
-//     uid: string;
-//     displayName: string | null;
-//     email: string | null;
-//     photoURL: string | null;
-//   };
-// }
+export type Workspace = {
+  id: string;
+  title: string;
+  category: WorkspaceCategory;
+  logoURL: string | null;
+  createdBy: {
+    uid: string;
+    displayName: string | null;
+    email: string | null;
+    photoURL: string | null;
+  };
+  createdAt: Date;
+  updatedAt: Date;
+}
 
-class Workspace {
+class WorkspaceConverter {
   constructor(
+    readonly id: string,
     readonly title: string,
     readonly category: WorkspaceCategory,
     readonly logoURL: string | null,
@@ -38,16 +42,17 @@ class Workspace {
   }
 }
 
-export const userConverter = {
-  toFirestore(user: Workspace): DocumentData {
-    return { ...user }
+export const workspaceConverter = {
+  toFirestore(workspace: WorkspaceConverter): DocumentData {
+    return { ...workspace }
   },
   fromFirestore(
     snapshot: QueryDocumentSnapshot,
     options: SnapshotOptions,
-  ): Workspace {
-    const data = snapshot.data(options)!
-    return new Workspace(
+  ): WorkspaceConverter {
+    const data = snapshot.data(options)
+    return new WorkspaceConverter(
+      snapshot.id,
       data.title,
       data.category,
       data.logoURL,

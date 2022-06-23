@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { DLabel, DCombobox, DButton, DInput } from '../../components/primitives'
 import { useForm } from '@evilkiwi/form'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { ComboboxItem } from '../../components/primitives/Input/Combobox.vue'
-import { createWorkspaceMutation, isCategoryValid } from '../../composables/useWorkspace';
+import { isWorkspaceCategory } from '../../composables/useWorkspace';
 import { errorHandler } from '../../utils/errorHandler';
+import { useCreateWorkspaceMutation, useGetWorkspacesByUserIdQuery } from '../../services/useWorkspaceService';
+import { useAuthStore } from '../../stores/useAuthStore';
+import { computed } from '@vue/reactivity';
+import { useRouter } from 'vue-router';
 
 const comboboxOptions = ref<ComboboxItem[]>([
   {
@@ -14,7 +18,23 @@ const comboboxOptions = ref<ComboboxItem[]>([
   },
 ])
 
-const { mutateAsync } = createWorkspaceMutation()
+const isGetWorkspacesByUserIdQueryEnabled = ref(false)
+const router = useRouter()
+const authStore = useAuthStore()
+const createWorkspaceMutation = useCreateWorkspaceMutation()
+useGetWorkspacesByUserIdQuery({
+  options: reactive({
+    userId: computed(() => authStore.user?.uid ?? null),
+    enabled: isGetWorkspacesByUserIdQueryEnabled
+  }),
+  handlers: {
+    onSuccess(workspaces) {
+      if (workspaces) {
+        router.push(`/w/${workspaces[0].id}`)
+      }
+    }
+  }
+})
 const { useField, handle, loading } = useForm<{
   title: string
   category: string
@@ -30,10 +50,11 @@ const category = useField('category', {
   required: true,
 })
 const onSubmit = handle(async ({ title, category }) => {
-  if (!isCategoryValid(category)) {
+  if (!isWorkspaceCategory(category)) {
     return errorHandler(new Error('The workspace category is not valid'))
   }
-  await mutateAsync({ title, category })
+  await createWorkspaceMutation.mutateAsync({ title, category })
+  isGetWorkspacesByUserIdQueryEnabled.value = true
 })
 </script>
 

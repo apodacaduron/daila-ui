@@ -18,7 +18,7 @@ export type Workspace = {
 function isCreateWorkspacePayload(data: unknown) {
   return typeof data === 'object' && data !== null && 'title' in data && 'category' in data
 }
-function isCategoryValid(category: unknown): category is WorkspaceCategory {
+function isWorkspaceCategory(category: unknown): category is WorkspaceCategory {
   return typeof category === 'string' && workspaceCategories.includes(category as WorkspaceCategory)
 }
 
@@ -35,7 +35,7 @@ export const createWorkspaceCF = functions.https.onCall(async (data, context) =>
       'Cannot create workspace, title or category is required',
     );
   }
-  if (!isCategoryValid(data.category)) {
+  if (!isWorkspaceCategory(data.category)) {
     throw new functions.https.HttpsError(
       'failed-precondition',
       'The workspace category is not valid',

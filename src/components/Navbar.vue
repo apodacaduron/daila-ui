@@ -28,7 +28,7 @@ const isDark = useDark()
 .navbar {
   @apply h-[74px] border-b border-slate-200 dark:border-slate-800;
   &__box {
-    @apply max-w-7xl mx-auto h-full;
+    @apply max-w-7xl mx-auto h-full px-6;
     @apply flex justify-between items-center;
     &__left {
       .logo {
