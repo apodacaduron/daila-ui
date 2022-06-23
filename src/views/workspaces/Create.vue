@@ -3,6 +3,8 @@ import { DLabel, DCombobox, DButton, DInput } from '../../components/primitives'
 import { useForm } from '@evilkiwi/form'
 import { ref } from 'vue'
 import { ComboboxItem } from '../../components/primitives/Input/Combobox.vue'
+import { createWorkspaceMutation, isCategoryValid } from '../../composables/useWorkspace';
+import { errorHandler } from '../../utils/errorHandler';
 
 const comboboxOptions = ref<ComboboxItem[]>([
   {
@@ -12,6 +14,7 @@ const comboboxOptions = ref<ComboboxItem[]>([
   },
 ])
 
+const { mutateAsync } = createWorkspaceMutation()
 const { useField, handle, loading } = useForm<{
   title: string
   category: string
@@ -27,7 +30,10 @@ const category = useField('category', {
   required: true,
 })
 const onSubmit = handle(async ({ title, category }) => {
-  console.log(title, category)
+  if (!isCategoryValid(category)) {
+    return errorHandler(new Error('The workspace category is not valid'))
+  }
+  await mutateAsync({ title, category })
 })
 </script>
 

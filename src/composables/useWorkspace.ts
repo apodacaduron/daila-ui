@@ -1,24 +1,23 @@
 import { httpsCallable } from 'firebase/functions'
-import { computed } from 'vue'
+import { useMutation } from 'vue-query';
 
 import { functions } from '../firebase'
-import { useUserStore } from '../stores/useUserStore'
+import { workspaceCategories, WorkspaceCategory } from '../firebase/converters/workspaceConverter';
 
-export const useWorkspace = () => {
-  const userStore = useUserStore()
+export type CreateWorkspace = {
+  title: string;
+  category: WorkspaceCategory;
+}
+// Typeguards
+export function isCategoryValid(category: unknown): category is WorkspaceCategory {
+  return typeof category === 'string' && workspaceCategories.includes(category as WorkspaceCategory)
+}
 
-  // Callable functions
+export const useWorkspace = () => {}
+
+// Mutations
+export function createWorkspaceMutation() {
   const createWorkspaceCF = httpsCallable(functions, 'createWorkspaceCF')
 
-  // Computed properties
-  const currentWorkspace = computed(() =>
-    userStore.user?.workspaces.find(
-      (workspace) => workspace.uid === userStore.user?.currentWorkspaceId,
-    ),
-  )
-
-  // Handlers
-  return {
-    currentWorkspace,
-  }
+  return useMutation((createWorkspaceData: CreateWorkspace) => createWorkspaceCF(createWorkspaceData));
 }

@@ -11,13 +11,13 @@ import { errorHandler } from '../utils/errorHandler'
 
 export const useLogin = () => {
   // Callable functions
-  const createAccountUserCF = httpsCallable(functions, 'createAccountUserCF')
+  const createUserAccountCF = httpsCallable(functions, 'createUserAccountCF')
 
   // Handlers
   async function signUpWithCredentials(email: string, password: string) {
     try {
       await createUserWithEmailAndPassword(auth, email, password)
-      await createAccountUserCF({ action: 'sign-up' })
+      await createUserAccountCF({ action: 'sign-up' })
     } catch (err) {
       errorHandler(err)
     }
@@ -32,7 +32,7 @@ export const useLogin = () => {
   async function signInWithGoogle() {
     try {
       await signInWithPopup(auth, googleAuthProvider)
-      await createAccountUserCF({ action: 'sign-in' })
+      await createUserAccountCF({ action: 'sign-in' })
     } catch (err) {
       errorHandler(err)
     }

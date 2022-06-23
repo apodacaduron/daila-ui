@@ -1,20 +1,11 @@
 import { defineStore } from "pinia"
 
-export type UserWorkspace = {
-  uid: string
-  title: string
-  category: string
-  photoURL: string | null
-}
-
 export type UserStore = {
   displayName: string | null,
   email: string | null,
   photoURL: string | null,
   phoneNumber: string | null,
   hasWorkspace: boolean,
-  currentWorkspaceId: string | null,
-  workspaces: UserWorkspace[],
   createdAt: Date,
   updatedAt: Date,
 }
