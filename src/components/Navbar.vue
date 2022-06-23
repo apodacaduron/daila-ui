@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { DSwitch } from './primitives';
 import { useDark } from '@vueuse/core'
-import {SunIcon} from '@heroicons/vue/outline'
+import { SunIcon } from '@heroicons/vue/outline'
 
 const isDark = useDark()
 </script>
@@ -9,7 +9,9 @@ const isDark = useDark()
 <template>
   <nav class="navbar">
     <div class="navbar__box">
-      <div class="navbar__box__left">Daila</div>
+      <div class="navbar__box__left">
+        <router-link class="logo" to="/">Daila</router-link>
+      </div>
       <div class="navbar__box__center"></div>
       <div class="navbar__box__right">
         <DSwitch v-model="isDark">
@@ -28,6 +30,14 @@ const isDark = useDark()
   &__box {
     @apply max-w-7xl mx-auto h-full;
     @apply flex justify-between items-center;
+    &__left {
+      .logo {
+        @apply font-medium text-3xl;
+        &:after {
+          @apply content-['.'] text-blue-600;
+        }
+      }
+    }
   }
 }
 </style>

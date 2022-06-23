@@ -128,11 +128,12 @@ watch(
   @apply relative mt-1;
   &__container {
     @apply cursor-default rounded-lg text-left;
-    @apply py-2 px-3 border border-slate-300;
+    @apply py-2 px-3 border dark:border-slate-500 dark:bg-slate-800;
     @apply transition-all shadow-sm;
     @apply focus-within:border focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-100;
+    @apply dark:focus-within:ring-blue-400 dark:focus-within:ring-opacity-30;
     &__input {
-      @apply w-full border-none text-base text-slate-900;
+      @apply w-full border-none text-base text-slate-900 dark:text-slate-200;
       @apply outline-none bg-transparent;
       &::placeholder {
         @apply text-slate-500;
@@ -141,20 +142,21 @@ watch(
     &__button {
       @apply absolute inset-y-0 right-0 flex items-center pr-2;
       &__icon {
-        @apply h-5 w-5 text-gray-400;
+        @apply h-5 w-5 text-slate-400;
       }
     }
   }
   &__options {
-    @apply absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm;
+    @apply absolute mt-1 max-h-60 w-full overflow-auto rounded-md py-2 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm;
+    @apply bg-white dark:bg-slate-800;
     &__no-results {
-      @apply relative cursor-default select-none py-2 px-4 text-gray-700;
+      @apply relative cursor-default select-none py-2 px-4 text-slate-700;
     }
     &__item {
       @apply relative cursor-default select-none py-2 pl-4;
-      @apply text-gray-900;
+      @apply text-slate-900 dark:text-slate-200;
       &--active {
-        @apply bg-slate-50;
+        @apply bg-slate-50 dark:bg-slate-700;
       }
       &__selected-icon {
         @apply absolute inset-y-0 right-0 flex items-center pr-3 text-blue-600;

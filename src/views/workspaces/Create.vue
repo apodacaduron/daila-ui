@@ -74,11 +74,11 @@ const onSubmit = handle(async ({ title, category }) => {
 .workspaces-create {
   @apply flex justify-center items-center min-h-screen;
   &__box {
-    @apply max-w-[360px] w-[360px];
+    @apply max-w-[360px] w-[360px] mb-20;
     &__title {
       @apply flex flex-col gap-3 mb-8 text-center;
       h1 {
-        @apply text-3xl text-slate-900 font-semibold;
+        @apply text-3xl font-semibold;
       }
       span {
         @apply text-base text-slate-500 font-normal;
@@ -89,6 +89,9 @@ const onSubmit = handle(async ({ title, category }) => {
       @apply flex flex-col gap-5;
       &__row {
         @apply flex flex-col gap-1;
+      }
+      &__button {
+        @apply mt-4;
       }
       &__link {
         @apply text-center;

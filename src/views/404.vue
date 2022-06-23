@@ -35,7 +35,7 @@ import ButtonLink from '../components/primitives/Button/ButtonLink.vue'
       @apply w-8 h-8 mx-auto text-blue-600;
     }
     h1 {
-      @apply text-6xl text-slate-900 font-semibold;
+      @apply text-6xl font-semibold;
       @apply my-6;
     }
     p {

@@ -136,7 +136,7 @@ watch(() => userStore.user?.hasWorkspace, () => {
     &__title {
       @apply flex flex-col gap-3 mb-8 text-center;
       h1 {
-        @apply text-3xl text-slate-900 font-semibold dark:text-slate-200;
+        @apply text-3xl;
       }
       span {
         @apply text-base text-slate-500 font-normal;
