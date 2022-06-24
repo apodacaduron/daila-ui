@@ -11,7 +11,7 @@ export type User = {
   photoURL: string | null;
   phoneNumber: string | null;
   hasWorkspace: boolean;
-  currentWorkspaceId: string | null;
+  lastUsedWorkspaceId: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -24,7 +24,7 @@ class UserConverter {
     readonly photoURL: string | null,
     readonly phoneNumber: string | null,
     readonly hasWorkspace: boolean,
-    readonly currentWorkspaceId: string | null,
+    readonly lastUsedWorkspaceId: string | null,
     readonly createdAt: Date,
     readonly updatedAt: Date,
   ) { }
@@ -50,7 +50,7 @@ export const userConverter = {
       data.photoURL,
       data.phoneNumber,
       data.hasWorkspace,
-      data.currentWorkspaceId,
+      data.lastUsedWorkspaceId,
       data.createdAt.toDate(),
       data.updatedAt.toDate(),
     )

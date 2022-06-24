@@ -55,7 +55,7 @@ export const createUserAccountCF = functions.https.onCall(async (data, context) 
     photoURL: currentAuthUser.photoURL ?? null,
     phoneNumber: currentAuthUser.phoneNumber ?? null,
     hasWorkspace: adminWorkspaceId ? true : false,
-    currentWorkspaceId: adminWorkspaceId ? adminWorkspaceId : null,
+    lastUsedWorkspaceId: adminWorkspaceId ? adminWorkspaceId : null,
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
     updatedAt: admin.firestore.FieldValue.serverTimestamp(),
   });

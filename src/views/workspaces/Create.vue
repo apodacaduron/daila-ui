@@ -9,6 +9,8 @@ import { useCreateWorkspaceMutation, useGetWorkspacesByUserIdQuery } from '../..
 import { computed } from '@vue/reactivity';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '../../stores/useUserStore';
+import Navbar from '../../components/Navbar.vue';
+import { useWorkspaceStore } from '../../stores/useWorkspaceStore';
 
 const comboboxOptions = ref<ComboboxItem[]>([
   {
@@ -22,6 +24,7 @@ const workspaceId = ref<string | null>(null)
 const isGetWorkspacesByUserIdQueryEnabled = ref(false)
 const router = useRouter()
 const userStore = useUserStore()
+const workspaceStore = useWorkspaceStore()
 const createWorkspaceMutation = useCreateWorkspaceMutation()
 useGetWorkspacesByUserIdQuery({
   options: reactive({
@@ -32,6 +35,8 @@ useGetWorkspacesByUserIdQuery({
     onSuccess(workspaces) {
       if (workspaces) {
         router.push(`/w/${workspaceId.value || workspaces[0].id}/${category.value}`)
+        workspaceStore.setWorkspaces(workspaces)
+        workspaceStore.setCurrentWorkspaceId(workspaceId.value)
       }
     }
   }
@@ -61,6 +66,7 @@ const onSubmit = handle(async ({ title, category }) => {
 </script>
 
 <template>
+  <Navbar />
   <div class="create-workspace">
     <div class="create-workspace__box">
       <div class="create-workspace__box__title">

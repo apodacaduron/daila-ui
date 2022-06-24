@@ -8,7 +8,7 @@ import {
   CogIcon,
 } from '@heroicons/vue/outline'
 import { useDark } from '@vueuse/core'
-import { useCRMLayout, useLogin, useWorkspace } from '../composables'
+import { useCRMLayout, useLogin } from '../composables'
 import { useRouter } from 'vue-router'
 import WorkspacesPopover from './workspaces/WorkspacesPopover.vue'
 
@@ -17,7 +17,6 @@ const isDark = useDark()
 const loginHook = useLogin()
 const userStore = useUserStore()
 const crmLayoutHook = useCRMLayout()
-const [workspaceOptions] = useWorkspace()
 
 function signOutAndRedirect() {
   loginHook.signOut()
@@ -41,9 +40,7 @@ function signOutAndRedirect() {
       </div>
       <ul class="sidebar__top__primary-menu">
         <li
-          v-for="menuItem in crmLayoutHook.getPrimaryMenuItems(
-            workspaceOptions.workspace?.category,
-          )"
+          v-for="menuItem in crmLayoutHook.primaryMenuItems"
           :key="menuItem.id"
         >
           <router-link :to="menuItem.path">

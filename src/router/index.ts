@@ -50,6 +50,9 @@ const router = createRouter({
           path: ':workspaceId/psychologist',
           redirect: { name: 'PsychologistDashboard' },
           component: () => import('../layouts/CRMLayout.vue'),
+          meta: {
+            category: 'psychologist',
+          },
           children: [
             {
               name: 'PsychologistDashboard',
@@ -67,6 +70,9 @@ const router = createRouter({
           path: ':workspaceId/admin',
           redirect: { name: 'AdminDashboard' },
           component: () => import('../layouts/CRMLayout.vue'),
+          meta: {
+            category: 'admin',
+          },
           children: [
             {
               name: 'AdminDashboard',

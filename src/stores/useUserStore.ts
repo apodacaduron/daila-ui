@@ -7,7 +7,7 @@ export type UserStore = {
   photoURL: string | null,
   phoneNumber: string | null,
   hasWorkspace: boolean,
-  currentWorkspaceId: string | null,
+  lastUsedWorkspaceId: string | null,
   createdAt: Date,
   updatedAt: Date,
 }

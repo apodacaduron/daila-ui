@@ -1,5 +1,7 @@
 import { ViewGridIcon } from '@heroicons/vue/outline'
+import { computed, reactive } from 'vue'
 import { WorkspaceCategory } from '../firebase/converters'
+import { useWorkspace } from './useWorkspace'
 
 type CategoryMenu = {
   id: string
@@ -43,12 +45,14 @@ export const workspaceCategoryMenus: Record<
 }
 
 export const useCRMLayout = () => {
-  const getPrimaryMenuItems = (category?: WorkspaceCategory | undefined) => {
-    if (!category) return []
-    return workspaceCategoryMenus[category]
-  }
+  const [workspaceOptions] = useWorkspace()
 
-  return {
-    getPrimaryMenuItems,
-  }
+  const primaryMenuItems = computed(() => {
+    if (!workspaceOptions.workspace?.category) return []
+    return workspaceCategoryMenus[workspaceOptions.workspace.category]
+  })
+
+  return reactive({
+    primaryMenuItems,
+  })
 }

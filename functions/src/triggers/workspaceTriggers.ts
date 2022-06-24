@@ -14,5 +14,5 @@ export const onCreateWorkspaceTrigger = functions.firestore
     const userRef = admin
       .firestore()
       .doc(`users/${workspaceDocument.createdBy.uid}`)
-    userRef.update({ currentWorkspaceId: snap.id, hasWorkspace: true })
+    userRef.update({ lastUsedWorkspaceId: snap.id, hasWorkspace: true })
   })

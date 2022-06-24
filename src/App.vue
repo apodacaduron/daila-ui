@@ -37,7 +37,7 @@ useGetWorkspacesByUserIdQuery({
   handlers: {
     onSuccess(workspaces) {
       if (authHook.isAuthenticated && workspaces) {
-        workspaceStore.setCurrentWorkspaceId(userStore.user?.currentWorkspaceId ?? null);
+        workspaceStore.setCurrentWorkspaceId(userStore.user?.lastUsedWorkspaceId ?? null);
         workspaceStore.setWorkspaces(workspaces);
       } else {
         workspaceStore.setCurrentWorkspaceId(null);
