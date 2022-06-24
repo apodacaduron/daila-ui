@@ -47,7 +47,8 @@ useGetWorkspacesByUserIdQuery({
   handlers: {
     onSuccess(workspaces) {
       if (userStore.user?.hasWorkspace && workspaces) {
-        router.push(`/w/${workspaces[0].id}`)
+        const workspaceId = userStore.user?.currentWorkspaceId || workspaces[0].id
+        router.push(`/w/${workspaceId}`)
       }
     },
   },
@@ -73,11 +74,13 @@ const onSubmit = handle(async ({ email, password }) => {
   globalStore.setLoading(true)
   await loginHook.signUpWithCredentials(email, password)
   isUserByIdQueryEnabled.value = true
+  globalStore.setLoading(false)
 })
 const signInWithGoogle = async () => {
   globalStore.setLoading(true)
   await loginHook.signInWithGoogle()
   isUserByIdQueryEnabled.value = true
+  globalStore.setLoading(false)
 }
 
 watch(() => userStore.user?.hasWorkspace, (hasWorkspace) => {

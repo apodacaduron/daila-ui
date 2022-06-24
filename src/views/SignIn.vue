@@ -39,7 +39,8 @@ useGetWorkspacesByUserIdQuery({
   handlers: {
     onSuccess(workspaces) {
       if (userStore.user?.hasWorkspace && workspaces) {
-        router.push(`/w/${workspaces[0].id}`)
+        const workspaceId = userStore.user?.currentWorkspaceId || workspaces[0].id
+        router.push(`/w/${workspaceId}`)
       }
     },
   },

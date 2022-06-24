@@ -8,7 +8,7 @@ import {
   ComboboxOption,
   TransitionRoot,
 } from '@headlessui/vue'
-import { CheckIcon, SelectorIcon } from '@heroicons/vue/solid'
+import { CheckIcon, SelectorIcon } from '@heroicons/vue/outline'
 
 export type ComboboxItem = {
   id: string | number

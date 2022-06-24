@@ -1,3 +1,3 @@
 <template>
-  <div class="workspaces-dashboard">Dashboard</div>
+  <div class="dashboard">Dashboard</div>
 </template>

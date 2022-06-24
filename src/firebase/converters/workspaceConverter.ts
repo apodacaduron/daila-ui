@@ -4,7 +4,7 @@ import {
   SnapshotOptions,
 } from 'firebase/firestore'
 
-export const workspaceCategories = ['psychologist'] as const
+export const workspaceCategories = ['admin', 'psychologist'] as const
 export type WorkspaceCategory = typeof workspaceCategories[number]
 export type Workspace = {
   id: string;

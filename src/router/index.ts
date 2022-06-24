@@ -48,18 +48,18 @@ const router = createRouter({
         },
         {
           path: ':workspaceId',
+          redirect: { name: 'Dashboard' },
           component: () => import('../layouts/CRMLayout.vue'),
           children: [
             {
               name: 'Dashboard',
               path: 'dashboard',
-              alias: '',
               component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/Dashboard.vue'),
             },
             {
-              name: 'Patients',
-              path: 'patients',
-              component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/Dashboard.vue'),
+              name: 'TeamMembers',
+              path: 'team-members',
+              component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/TeamMembers.vue'),
             },
           ]
         },

@@ -1,7 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
-const workspaceCategories = ['psychologist'] as const
+const workspaceCategories = ['admin','psychologist'] as const
 export type WorkspaceCategory = typeof workspaceCategories[number]
 export type Workspace = {
   title: string;
@@ -65,4 +65,5 @@ export const createWorkspaceCF = functions.https.onCall(async (data, context) =>
   
   const workspacesUsersRef = admin.firestore().collection(`workspaces/${workspace.id}/users`);
   await workspacesUsersRef.add(workspaceData.createdBy)
+  return { id: workspace.id, }
 });
