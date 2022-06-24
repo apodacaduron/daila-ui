@@ -2,15 +2,14 @@
 import { DLabel, DInput, DButton } from '../components/primitives'
 import GoogleIcon from '../assets/png/google-48.png'
 import { useForm } from '@evilkiwi/form'
-import { useLogin } from '../composables'
+import { useLogin, useWorkspace } from '../composables'
 import { computed, reactive, ref, watch } from 'vue';
 import { useUserStore } from '../stores/useUserStore';
 import { useRouter } from 'vue-router';
-import { useGetUserByIdQuery, useGetWorkspacesByUserIdQuery } from '../services';
+import { useGetUserByIdQuery } from '../services';
 import { useGlobalStore } from '../stores/useGlobalStore';
 import { useAuthStore } from '../stores/useAuthStore';
 
-const isGetWorkspacesByUserIdQueryEnabled = ref(false)
 const isUserByIdQueryEnabled = ref(false)
 
 const router = useRouter()
@@ -18,6 +17,7 @@ const loginHook = useLogin()
 const userStore = useUserStore()
 const authStore = useAuthStore()
 const globalStore = useGlobalStore()
+const [workspaceOptions] = useWorkspace()
 const { useField, handle, loading } = useForm<{
   email: string
   password: string
@@ -38,20 +38,6 @@ const confirmPassword = useField('confirmPassword', {
   min: 6,
   validator: (rule: unknown, value: unknown) => value === password.value,
   message: 'Password does not match',
-})
-useGetWorkspacesByUserIdQuery({
-  options: reactive({
-    userId: computed(() => userStore.user?.id ?? null),
-    enabled: isGetWorkspacesByUserIdQueryEnabled,
-  }),
-  handlers: {
-    onSuccess(workspaces) {
-      if (userStore.user?.hasWorkspace && workspaces) {
-        const workspaceId = userStore.user?.currentWorkspaceId || workspaces[0].id
-        router.push(`/w/${workspaceId}`)
-      }
-    },
-  },
 })
 useGetUserByIdQuery({
   options: reactive({
@@ -83,10 +69,15 @@ const signInWithGoogle = async () => {
   globalStore.setLoading(false)
 }
 
+watch(() => workspaceOptions.workspace, (workspace) => {
+  if (workspace) {
+    const workspaceId = workspaceOptions.workspace?.id
+    const workspaceCategory = workspaceOptions.workspace?.category
+    router.push(`/w/${workspaceId}/${workspaceCategory}`)
+  }
+})
 watch(() => userStore.user?.hasWorkspace, (hasWorkspace) => {
-  if (hasWorkspace) {
-    isGetWorkspacesByUserIdQueryEnabled.value = true
-  } else {
+  if (!hasWorkspace) {
     router.push('/w/create')
   }
 })

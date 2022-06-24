@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { reactive, computed } from 'vue'
 import { useAuth } from './composables'
-import { useGetUserByIdQuery } from './services'
+import { useGetUserByIdQuery, useGetWorkspacesByUserIdQuery } from './services'
 import { useUserStore } from './stores/useUserStore'
 import { DPageSpinner } from './components/primitives/Spinner';
 import { useGlobalStore } from './stores/useGlobalStore';
 import { useDark } from '@vueuse/core';
+import { useWorkspaceStore } from './stores/useWorkspaceStore';
 
 useDark()
 const authHook = useAuth()
 const userStore = useUserStore()
+const workspaceStore = useWorkspaceStore()
 const globalStore = useGlobalStore()
 useGetUserByIdQuery({
   options: reactive({
@@ -24,6 +26,23 @@ useGetUserByIdQuery({
         userStore.setUser(null)
       }
       globalStore.setLoading(false)
+    }
+  }
+})
+useGetWorkspacesByUserIdQuery({
+  options: reactive({
+    userId: computed(() => authHook.user.value?.uid ?? null),
+    enabled: computed(() => Boolean(userStore.user)),
+  }),
+  handlers: {
+    onSuccess(workspaces) {
+      if (authHook.isAuthenticated && workspaces) {
+        workspaceStore.setCurrentWorkspaceId(userStore.user?.currentWorkspaceId ?? null);
+        workspaceStore.setWorkspaces(workspaces);
+      } else {
+        workspaceStore.setCurrentWorkspaceId(null);
+        workspaceStore.setWorkspaces(null);
+      }
     }
   }
 })

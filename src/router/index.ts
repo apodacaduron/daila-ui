@@ -47,19 +47,36 @@ const router = createRouter({
           component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/Create.vue'),
         },
         {
-          path: ':workspaceId',
-          redirect: { name: 'Dashboard' },
+          path: ':workspaceId/psychologist',
+          redirect: { name: 'PsychologistDashboard' },
           component: () => import('../layouts/CRMLayout.vue'),
           children: [
             {
-              name: 'Dashboard',
+              name: 'PsychologistDashboard',
               path: 'dashboard',
-              component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/Dashboard.vue'),
+              component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/psychologist/Dashboard.vue'),
             },
             {
-              name: 'TeamMembers',
+              name: 'PsychologistTeamMembers',
               path: 'team-members',
-              component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/TeamMembers.vue'),
+              component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/psychologist/TeamMembers.vue'),
+            },
+          ]
+        },
+        {
+          path: ':workspaceId/admin',
+          redirect: { name: 'AdminDashboard' },
+          component: () => import('../layouts/CRMLayout.vue'),
+          children: [
+            {
+              name: 'AdminDashboard',
+              path: 'dashboard',
+              component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/admin/Dashboard.vue'),
+            },
+            {
+              name: 'AdminSales',
+              path: 'sales',
+              component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/admin/Sales.vue'),
             },
           ]
         },

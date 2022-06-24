@@ -31,7 +31,7 @@ useGetWorkspacesByUserIdQuery({
   handlers: {
     onSuccess(workspaces) {
       if (workspaces) {
-        router.push(`/w/${workspaceId.value || workspaces[0].id}`)
+        router.push(`/w/${workspaceId.value || workspaces[0].id}/${category.value}`)
       }
     }
   }

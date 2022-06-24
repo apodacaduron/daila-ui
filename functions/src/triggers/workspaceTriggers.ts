@@ -8,8 +8,8 @@ export const onCreateWorkspaceTrigger = functions.firestore
 
     const userWorkspaceRef = admin
       .firestore()
-      .collection(`users/${workspaceDocument.createdBy.uid}/workspaces`)
-    userWorkspaceRef.add(workspaceDocument)
+      .collection(`users/${workspaceDocument.createdBy.uid}/workspaces`).doc(snap.id)
+    userWorkspaceRef.create(workspaceDocument)
 
     const userRef = admin
       .firestore()

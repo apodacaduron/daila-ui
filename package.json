@@ -19,7 +19,8 @@
     "pinia": "^2.0.14",
     "vue": "^3.2.25",
     "vue-query": "^1.25.0",
-    "vue-router": "4"
+    "vue-router": "4",
+    "vue3-popper": "^1.5.0"
   },
   "devDependencies": {
     "@tailwindcss/line-clamp": "^0.4.0",

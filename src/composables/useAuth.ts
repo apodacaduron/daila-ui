@@ -5,11 +5,13 @@ import { auth } from '../firebase'
 import { useAuthStore } from '../stores/useAuthStore';
 import { useGlobalStore } from '../stores/useGlobalStore';
 import { useUserStore } from '../stores/useUserStore';
+import { useWorkspaceStore } from '../stores/useWorkspaceStore';
 
 export const useAuth = () => {
   const isUserByIdQueryEnabled = ref(false)
   const authStore = useAuthStore()
   const userStore = useUserStore()
+  const workspaceStore = useWorkspaceStore()
   const globalStore = useGlobalStore()
 
   const getCurrentUser = async () => {
@@ -20,14 +22,20 @@ export const useAuth = () => {
           authStore.setAuthUser(_user)
           resolve(_user)
         } else {
-          authStore.setAuthUser(null)
-          userStore.setUser(null)
+          resetStores()
           resolve(null)
         }
         authStore.setLoading(false)
         globalStore.setLoading(false)
       })
     })
+  }
+
+  function resetStores() {
+    authStore.setAuthUser(null)
+    userStore.setUser(null)
+    workspaceStore.setWorkspaces(null)
+    workspaceStore.setCurrentWorkspaceId(null)
   }
 
   watch(

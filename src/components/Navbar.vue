@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import { DSwitch } from './primitives';
+import { DSwitch, DButtonLink } from './primitives';
 import { useDark } from '@vueuse/core'
 import { SunIcon } from '@heroicons/vue/outline'
+import { computed } from 'vue';
+import { useAuthStore } from '../stores/useAuthStore';
+import { useWorkspace } from '../composables';
 
 const isDark = useDark()
+const authStore = useAuthStore()
+const [workspaceOptions] = useWorkspace()
+
+const isAuthenticated = computed(() => authStore.isAuthenticated)
 </script>
 
 <template>
@@ -19,6 +26,15 @@ const isDark = useDark()
             <SunIcon class="text-slate-700 w-3 h-3" />
           </template>
         </DSwitch>
+        <router-link v-if="isAuthenticated && workspaceOptions.hasWorkspace" :to="workspaceOptions.workspaceURL">
+          <DButtonLink>Dashboard</DButtonLink>
+        </router-link>
+        <router-link v-else-if="isAuthenticated && !workspaceOptions.hasWorkspace" to="/w/create">
+          <DButtonLink>Create workspace</DButtonLink>
+        </router-link>
+        <router-link v-else to="/sign-in">
+          <DButtonLink>Sign in</DButtonLink>
+        </router-link>
       </div>
     </div>
   </nav>
@@ -37,6 +53,9 @@ const isDark = useDark()
           @apply content-['.'] text-blue-600;
         }
       }
+    }
+    &__right {
+      @apply flex items-center gap-3;
     }
   }
 }

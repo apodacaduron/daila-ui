@@ -17,13 +17,13 @@ export const workspaceCategoryMenus: Record<
       id: '1',
       name: 'Dashboard',
       icon: ViewGridIcon,
-      path: { name: 'Dashboard' }
+      path: { name: 'AdminDashboard' }
     },
     {
       id: '2',
       name: 'Sales',
       icon: ViewGridIcon,
-      path: { name: 'Sales' }
+      path: { name: 'AdminSales' }
     },
   ],
   psychologist: [
@@ -31,13 +31,13 @@ export const workspaceCategoryMenus: Record<
       id: '1',
       name: 'Dashboard',
       icon: ViewGridIcon,
-      path: { name: 'Dashboard' }
+      path: { name: 'PsychologistDashboard' }
     },
     {
       id: '2',
       name: 'Team members',
       icon: ViewGridIcon,
-      path: { name: 'TeamMembers' }
+      path: { name: 'PsychologistTeamMembers' }
     },
   ],
 }

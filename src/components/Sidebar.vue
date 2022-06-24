@@ -1,16 +1,23 @@
 <script setup lang="ts">
 import { DAvatar, DSwitch } from './primitives'
 import { useUserStore } from '../stores/useUserStore'
-import { LogoutIcon, SunIcon, SupportIcon, CogIcon } from '@heroicons/vue/outline'
+import {
+  LogoutIcon,
+  SunIcon,
+  SupportIcon,
+  CogIcon,
+} from '@heroicons/vue/outline'
 import { useDark } from '@vueuse/core'
-import { useCRMLayout, useLogin } from '../composables'
+import { useCRMLayout, useLogin, useWorkspace } from '../composables'
 import { useRouter } from 'vue-router'
+import WorkspacesPopover from './workspaces/WorkspacesPopover.vue'
 
 const router = useRouter()
 const isDark = useDark()
 const loginHook = useLogin()
 const userStore = useUserStore()
 const crmLayoutHook = useCRMLayout()
+const [workspaceOptions] = useWorkspace()
 
 function signOutAndRedirect() {
   loginHook.signOut()
@@ -30,11 +37,13 @@ function signOutAndRedirect() {
         </DSwitch>
       </div>
       <div class="sidebar__top__workspaces">
-        Workspace selector
+        <WorkspacesPopover />
       </div>
       <ul class="sidebar__top__primary-menu">
         <li
-          v-for="menuItem in crmLayoutHook.getPrimaryMenuItems('psychologist')"
+          v-for="menuItem in crmLayoutHook.getPrimaryMenuItems(
+            workspaceOptions.workspace?.category,
+          )"
           :key="menuItem.id"
         >
           <router-link :to="menuItem.path">
@@ -49,11 +58,15 @@ function signOutAndRedirect() {
         <li>
           <button>
             <SupportIcon class="menu-icon" />
-            Support</button>
+            Support
+          </button>
         </li>
-        <li><button>
-          <CogIcon class="menu-icon" />
-          Settings</button></li>
+        <li>
+          <button>
+            <CogIcon class="menu-icon" />
+            Settings
+          </button>
+        </li>
       </ul>
       <div class="sidebar__bottom__upgrade">
         Want to upgrade?
