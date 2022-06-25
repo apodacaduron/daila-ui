@@ -32,9 +32,14 @@ const isAuthenticated = computed(() => authStore.isAuthenticated)
         <router-link v-else-if="isAuthenticated && !workspaceOptions.hasWorkspace" to="/w/create">
           <DButtonLink>Create workspace</DButtonLink>
         </router-link>
-        <router-link v-else to="/sign-in">
-          <DButtonLink>Sign in</DButtonLink>
-        </router-link>
+        <template v-else>
+          <router-link to="/sign-in">
+            <DButtonLink variant="outlined">Sign in</DButtonLink>
+          </router-link>
+          <router-link to="/sign-up">
+            <DButtonLink>Sign up</DButtonLink>
+          </router-link>
+        </template>
       </div>
     </div>
   </nav>

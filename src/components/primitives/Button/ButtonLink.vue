@@ -44,19 +44,19 @@ defineEmits<{
       @apply bg-blue-700;
     }
     &:not(:disabled):focus {
-      @apply ring-blue-100 ring-4;
+      @apply ring-blue-100 ring-4 dark:ring-blue-400 dark:ring-opacity-30;
     }
     &:disabled {
       @apply bg-blue-200;
     }
   }
   &--outlined {
-    @apply border-slate-300 text-slate-700;
+    @apply border-slate-300 text-slate-700 dark:text-slate-200;
     &:not(:disabled):active {
-      @apply bg-slate-50;
+      @apply bg-slate-50 dark:bg-slate-800;
     }
     &:not(:disabled):focus {
-      @apply ring-slate-100 ring-4;
+      @apply ring-slate-100 ring-4 dark:ring-slate-400 dark:ring-opacity-30;
     }
     &:disabled {
       @apply border-slate-200 text-slate-300;

@@ -60,13 +60,11 @@ const onSubmit = handle(async ({ email, password }) => {
   globalStore.setLoading(true)
   await loginHook.signUpWithCredentials(email, password)
   isUserByIdQueryEnabled.value = true
-  globalStore.setLoading(false)
 })
 const signInWithGoogle = async () => {
   globalStore.setLoading(true)
   await loginHook.signInWithGoogle()
   isUserByIdQueryEnabled.value = true
-  globalStore.setLoading(false)
 }
 
 watch(() => workspaceOptions.workspace, (workspace) => {

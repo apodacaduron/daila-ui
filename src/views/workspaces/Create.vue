@@ -11,6 +11,7 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from '../../stores/useUserStore';
 import Navbar from '../../components/Navbar.vue';
 import { useWorkspaceStore } from '../../stores/useWorkspaceStore';
+import { useQueryClient } from 'vue-query';
 
 const comboboxOptions = ref<ComboboxItem[]>([
   {
@@ -20,6 +21,7 @@ const comboboxOptions = ref<ComboboxItem[]>([
   },
 ])
 
+const queryClient = useQueryClient()
 const workspaceId = ref<string | null>(null)
 const isGetWorkspacesByUserIdQueryEnabled = ref(false)
 const router = useRouter()
@@ -32,8 +34,11 @@ useGetWorkspacesByUserIdQuery({
     enabled: isGetWorkspacesByUserIdQueryEnabled
   }),
   handlers: {
-    onSuccess(workspaces) {
+    async onSuccess(workspaces) {
       if (workspaces) {
+        if (!workspaces.length) {
+          await queryClient.invalidateQueries('workspaces');
+        }
         router.push(`/w/${workspaceId.value || workspaces[0].id}/${category.value}`)
         workspaceStore.setWorkspaces(workspaces)
         workspaceStore.setCurrentWorkspaceId(workspaceId.value)

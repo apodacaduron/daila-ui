@@ -50,13 +50,14 @@ export const useWorkspace = (context?: WorkspaceContext) => {
   })
 
   // Handlers
-  function switchWorkspace(workspace: Workspace, redirect = true) {
-    workspaceStore.setCurrentWorkspaceId(workspace.id)
-    const workspaceURL = `/w/${workspace.id}/${workspace.category}`
+  function switchWorkspace(_workspace: Workspace, redirect = true) {
+    if (_workspace.id === workspace.value?.id) return ''
+    workspaceStore.setCurrentWorkspaceId(_workspace.id)
+    const workspaceURL = `/w/${_workspace.id}/${_workspace.category}`
     if (redirect) {
       router.push(workspaceURL)
     }
-    context?.handlers.onSwitchWorkspace(workspace)
+    context?.handlers.onSwitchWorkspace(_workspace)
   }
 
   return [
