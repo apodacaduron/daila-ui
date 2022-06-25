@@ -1,4 +1,4 @@
-import { ViewGridIcon } from '@heroicons/vue/outline'
+import { CalendarIcon, CurrencyDollarIcon, UserGroupIcon, UsersIcon, ViewGridIcon } from '@heroicons/vue/outline'
 import { computed, reactive } from 'vue'
 import { WorkspaceCategory } from '../firebase/converters'
 import { useWorkspace } from './useWorkspace'
@@ -24,7 +24,7 @@ export const workspaceCategoryMenus: Record<
     {
       id: '2',
       name: 'Sales',
-      icon: ViewGridIcon,
+      icon: CurrencyDollarIcon,
       path: { name: 'AdminSales' }
     },
   ],
@@ -37,9 +37,21 @@ export const workspaceCategoryMenus: Record<
     },
     {
       id: '2',
-      name: 'Team members',
-      icon: ViewGridIcon,
-      path: { name: 'PsychologistTeamMembers' }
+      name: 'Appointments',
+      icon: CalendarIcon,
+      path: { name: 'PsychologistAppointments' }
+    },
+    {
+      id: '3',
+      name: 'Patients',
+      icon: UsersIcon,
+      path: { name: 'PsychologistPatients' }
+    },
+    {
+      id: '4',
+      name: 'Team',
+      icon: UserGroupIcon,
+      path: { name: 'PsychologistTeam' }
     },
   ],
 }

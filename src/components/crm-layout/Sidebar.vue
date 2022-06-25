@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { DAvatar, DSwitch } from './primitives'
-import { useUserStore } from '../stores/useUserStore'
+import { DAvatar, DSwitch } from '../primitives'
+import { useUserStore } from '../../stores/useUserStore'
 import {
   LogoutIcon,
   SunIcon,
@@ -8,9 +8,9 @@ import {
   CogIcon,
 } from '@heroicons/vue/outline'
 import { useDark } from '@vueuse/core'
-import { useCRMLayout, useLogin } from '../composables'
+import { useCRMLayout, useLogin } from '../../composables'
 import { useRouter } from 'vue-router'
-import WorkspacesPopover from './workspaces/WorkspacesPopover.vue'
+import WorkspaceSwitcher from '../workspaces/WorkspaceSwitcher.vue'
 
 const router = useRouter()
 const isDark = useDark()
@@ -36,7 +36,7 @@ function signOutAndRedirect() {
         </DSwitch>
       </div>
       <div class="sidebar__top__workspaces">
-        <WorkspacesPopover />
+        <WorkspaceSwitcher />
       </div>
       <ul class="sidebar__top__primary-menu">
         <li

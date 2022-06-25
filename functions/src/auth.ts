@@ -43,6 +43,7 @@ export const createUserAccountCF = functions.https.onCall(async (data, context) 
         displayName: currentAuthUser.displayName ?? null,
         email: currentAuthUser.email ?? null,
         photoURL: currentAuthUser.photoURL ?? null,
+        role: 'admin'
       },
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),

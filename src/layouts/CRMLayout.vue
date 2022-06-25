@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import Sidebar from '../components/Sidebar.vue'
+import Sidebar from '../components/crm-layout/Sidebar.vue'
 import { useWorkspace } from '../composables';
+import CRMNavbar from '../components/crm-layout/Navbar.vue';
 
 const route = useRoute()
 const router = useRouter()
@@ -25,6 +26,7 @@ watch([routeCategory, () => workspaceOptions.hasWorkspace], () => {
       <Sidebar />
     </aside>
     <div class="crm-layout__content">
+      <CRMNavbar />
       <router-view />
     </div>
   </div>
@@ -36,7 +38,7 @@ watch([routeCategory, () => workspaceOptions.hasWorkspace], () => {
   aside {
     @apply max-w-[280px] flex-none;
   }
-  aside {
+  &__content {
     @apply w-full;
   }
 }

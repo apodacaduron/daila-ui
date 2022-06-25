@@ -16,6 +16,7 @@ export type Workspace = {
     displayName: string | null;
     email: string | null;
     photoURL: string | null;
+    role: 'admin' | 'editor' | 'user'
   };
   createdAt: Date;
   updatedAt: Date;
@@ -32,6 +33,7 @@ class WorkspaceConverter {
       displayName: string | null;
       email: string | null;
       photoURL: string | null;
+      role: 'admin' | 'editor' | 'user'
     },
     readonly createdAt: Date,
     readonly updatedAt: Date,

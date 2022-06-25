@@ -12,6 +12,7 @@ export type Workspace = {
     displayName: string | null;
     email: string | null;
     photoURL: string | null;
+    role: 'admin' | 'editor' | 'user'
   };
 }
 
@@ -54,6 +55,7 @@ export const createWorkspaceCF = functions.https.onCall(async (data, context) =>
       displayName: currentAuthUser.displayName ?? null,
       email: currentAuthUser.email ?? null,
       photoURL: currentAuthUser.photoURL ?? null,
+      role: 'admin'
     }
   }
   

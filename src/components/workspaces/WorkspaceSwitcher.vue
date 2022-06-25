@@ -4,6 +4,7 @@ import { useUpdateLastUsedWorkspaceIdMutation } from '../../services/useUserServ
 import { errorHandler } from '../../utils/errorHandler'
 import { DPopover, DButton } from '../primitives'
 import { PencilIcon, ChevronDownIcon } from '@heroicons/vue/outline'
+import {sentenceCase} from 'change-case'
 
 const updateLastUsedWorkspaceId = useUpdateLastUsedWorkspaceIdMutation()
 const [workspaceOptions, workspaceHandlers] = useWorkspace({
@@ -27,7 +28,7 @@ const [workspaceOptions, workspaceHandlers] = useWorkspace({
       <div class="flex flex-col items-start w-full py-2">
         {{workspaceOptions.workspace?.title}}
         <span class="text-sm font-normal">
-          {{ `${workspaceOptions.workspace?.category} workspace` }}
+          {{ sentenceCase(`${workspaceOptions.workspace?.category} workspace`) }}
         </span>
       </div>
       <ChevronDownIcon class="w-4 h-4" />
@@ -61,7 +62,7 @@ const [workspaceOptions, workspaceHandlers] = useWorkspace({
                     {{ workspace.title }}
                   </p>
                   <p class="text-sm text-gray-500">
-                    {{ `${workspace.category} workspace` }}
+                    {{ sentenceCase(`${workspace.category} workspace`) }}
                   </p>
                 </div>
               </router-link>
