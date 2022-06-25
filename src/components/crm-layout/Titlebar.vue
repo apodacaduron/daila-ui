@@ -16,7 +16,7 @@
   @apply flex items-center justify-between;
   &__text {
     h1 {
-      @apply text-3xl;
+      @apply text-3xl flex items-center gap-3;
     }
     p {
       @apply text-slate-500;

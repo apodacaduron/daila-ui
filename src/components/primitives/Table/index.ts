@@ -1,0 +1,1 @@
+export { default as DTable } from './Table.vue'
