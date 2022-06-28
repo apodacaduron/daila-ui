@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import Titlebar from '../../../components/crm-layout/Titlebar.vue'
-import { DButton } from '../../../components/primitives'
-import { PlusIcon, TrashIcon, PencilIcon } from '@heroicons/vue/outline'
-import { DTable, DCard, DBadge } from '../../../components/primitives'
+import { DButton, DTableFooter, DTable, DCard, DBadge } from '../../../components/primitives'
+import { PlusIcon, TrashIcon, PencilIcon, ArrowRightIcon, ArrowLeftIcon } from '@heroicons/vue/outline'
 import { useWorkspace } from '../../../composables'
 import { sentenceCase } from 'change-case'
 
@@ -50,20 +49,16 @@ const [workspaceOptions] = useWorkspace()
               <PencilIcon class="w-4 h-4" />
             </td>
           </tr>
-          <tr>
-            <td>Daniel</td>
-            <td>
-              <DBadge color="green">Active</DBadge>
-            </td>
-            <td>Admin</td>
-            <td>apodacaduron@gmail.com</td>
-            <td class="team__card__table__actions">
-              <TrashIcon class="w-4 h-4" />
-              <PencilIcon class="w-4 h-4" />
-            </td>
-          </tr>
         </tbody>
       </DTable>
+      <DTableFooter>
+        <template #left>
+          <DButton variant="outlined"><ArrowLeftIcon class="w-4 h-4 mr-2" /> Previous</DButton>
+        </template>
+        <template #right>
+          <DButton variant="outlined">Next <ArrowRightIcon class="w-4 h-4 ml-2" /></DButton>
+        </template>
+      </DTableFooter>
     </DCard>
   </div>
 </template>
@@ -71,7 +66,7 @@ const [workspaceOptions] = useWorkspace()
 <style lang="scss" scoped>
 .team {
   &__card {
-    @apply py-4 mx-6;
+    @apply mx-6;
     &__table {
       &__actions {
         @apply flex gap-3;

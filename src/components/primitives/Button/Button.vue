@@ -52,7 +52,7 @@ defineEmits<{
     }
   }
   &--outlined {
-    @apply border-slate-300 text-slate-700 dark:text-slate-200;
+    @apply border-slate-300 text-slate-700 dark:text-slate-200 dark:border-slate-400;
     &:not(:disabled):active {
       @apply bg-slate-50 dark:bg-slate-800;
     }
