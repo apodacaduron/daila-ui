@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { BadgeColor } from './types';
+
 interface Props {
-  color: 'blue' | 'green' | 'yellow' | 'red' | 'purple' | 'gray'
+  color: BadgeColor
 }
 withDefaults(defineProps<Props>(), {
   color: 'blue'

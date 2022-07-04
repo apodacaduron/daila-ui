@@ -60,7 +60,7 @@ defineEmits<{
       @apply ring-slate-100 ring-4 dark:ring-slate-400 dark:ring-opacity-30;
     }
     &:disabled {
-      @apply border-slate-200 text-slate-300;
+      @apply border-slate-200 text-slate-300 dark:text-slate-500 dark:border-slate-700;
     }
   }
 }
