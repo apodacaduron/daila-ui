@@ -1,4 +1,5 @@
-<script setup lang="ts">
+<script setup lang="ts">import { ref } from 'vue';
+
 interface Props {
   variant?: 'contained' | 'outlined' | 'text'
   disabled?: boolean
@@ -17,14 +18,18 @@ const updateValue = (event: Event) => {
   const { value } = event.target as HTMLInputElement
   emit('update:modelValue', value)
 }
+
+const inputRef = ref<HTMLInputElement>()
 </script>
 
 <template>
   <div
     :class="['input', { 'input--disabled': disabled, 'input--error': error }]"
+    @click="inputRef?.focus()"
   >
     <slot name="leading" />
     <input
+      ref="inputRef"
       v-bind="$attrs"
       class="input__field"
       :value="modelValue"
@@ -44,6 +49,7 @@ const updateValue = (event: Event) => {
   @apply transition-all shadow-sm;
   @apply focus-within:border focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-100;
   @apply dark:focus-within:ring-blue-400 dark:focus-within:ring-opacity-30;
+  @apply flex items-center gap-2;
   &__field {
     @apply w-full border-none text-base text-slate-900 dark:text-slate-200;
     @apply outline-none bg-transparent;
