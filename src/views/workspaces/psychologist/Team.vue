@@ -6,6 +6,7 @@ import {
   DTable,
   DCard,
   DBadge,
+useDialog,
 } from '../../../components/primitives'
 import {
   PlusIcon,
@@ -17,26 +18,22 @@ import {
 import { useWorkspace } from '../../../composables'
 import { sentenceCase } from 'change-case'
 import { useGetWorkspaceUsersQuery } from '../../../services'
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
+import AddTeamMemberDialog from '../../../components/team/AddTeamMemberDialog.vue'
 
 const [workspaceOptions, workspaceHandlers] = useWorkspace()
+const [dialogOptions, dialogHandlers] = useDialog()
+
 const getWorkspaceUsersQuery = useGetWorkspaceUsersQuery({
   options: reactive({
     workspaceId: computed(() => workspaceOptions.workspace?.id),
     enabled: true,
-  }),
-  handlers: {
-    onSuccess(workspaceUsers) {
-      console.log(workspaceUsers)
-    },
-    onError(err) {
-      console.log(err)
-    },
-  },
+  })
 })
 </script>
 
 <template>
+  <AddTeamMemberDialog :show="dialogOptions.isOpen" @close="dialogHandlers.close" />
   <div class="team">
     <Titlebar>
       <template #title>
@@ -49,7 +46,7 @@ const getWorkspaceUsersQuery = useGetWorkspaceUsersQuery({
         Manage your team members and their account permissions here.
       </template>
       <template #actions>
-        <DButton variant="outlined">
+        <DButton variant="outlined" @click="dialogHandlers.open">
           <PlusIcon class="w-3 h-3" />
           &nbsp; Add team member
         </DButton>
