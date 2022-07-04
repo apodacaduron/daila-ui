@@ -1,11 +1,38 @@
 <script setup lang="ts">
 import Titlebar from '../../../components/crm-layout/Titlebar.vue'
-import { DButton, DTableFooter, DTable, DCard, DBadge } from '../../../components/primitives'
-import { PlusIcon, TrashIcon, PencilIcon, ArrowRightIcon, ArrowLeftIcon } from '@heroicons/vue/outline'
+import {
+  DButton,
+  DTableFooter,
+  DTable,
+  DCard,
+  DBadge,
+} from '../../../components/primitives'
+import {
+  PlusIcon,
+  TrashIcon,
+  PencilIcon,
+  ArrowRightIcon,
+  ArrowLeftIcon,
+} from '@heroicons/vue/outline'
 import { useWorkspace } from '../../../composables'
 import { sentenceCase } from 'change-case'
+import { useGetWorkspaceUsersQuery } from '../../../services'
 
 const [workspaceOptions] = useWorkspace()
+const getWorkspaceUsersQuery = useGetWorkspaceUsersQuery({
+  options: {
+    workspaceId: workspaceOptions.workspace?.id,
+    enabled: true,
+  },
+  handlers: {
+    onSuccess(workspaceUsers) {
+      console.log(workspaceUsers)
+    },
+    onError(err) {
+      console.log(err)
+    }
+  }
+})
 </script>
 
 <template>
@@ -53,10 +80,16 @@ const [workspaceOptions] = useWorkspace()
       </DTable>
       <DTableFooter>
         <template #left>
-          <DButton variant="outlined"><ArrowLeftIcon class="w-4 h-4 mr-2" /> Previous</DButton>
+          <DButton variant="outlined">
+            <ArrowLeftIcon class="w-4 h-4 mr-2" />
+            Previous
+          </DButton>
         </template>
         <template #right>
-          <DButton variant="outlined">Next <ArrowRightIcon class="w-4 h-4 ml-2" /></DButton>
+          <DButton variant="outlined">
+            Next
+            <ArrowRightIcon class="w-4 h-4 ml-2" />
+          </DButton>
         </template>
       </DTableFooter>
     </DCard>

@@ -1,19 +1,30 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
-const workspaceCategories = ['admin','psychologist'] as const
+export const workspaceCategories = ['admin', 'psychologist'] as const
 export type WorkspaceCategory = typeof workspaceCategories[number]
+
+export const workspaceRoles = ['admin', 'editor', 'user'] as const;
+export type WorkspaceRole = typeof workspaceRoles[number]
+
+export type WorkspaceUser = {
+  id: string,
+  displayName: string | null,
+  email: string | null,
+  photoURL: string | null,
+  role: 'admin' | 'editor' | 'user',
+  status: 'active' | 'inactive' | 'deleted' | 'invited',
+  addedAt: admin.firestore.FieldValue,
+  updatedAt: admin.firestore.FieldValue,
+}
+
 export type Workspace = {
   title: string;
   category: WorkspaceCategory;
   logoURL: string | null;
-  createdBy: {
-    uid: string;
-    displayName: string | null;
-    email: string | null;
-    photoURL: string | null;
-    role: 'admin' | 'editor' | 'user'
-  };
+  createdBy: WorkspaceUser;
+  createdAt: admin.firestore.FieldValue;
+  updatedAt: admin.firestore.FieldValue;
 }
 
 function isCreateWorkspacePayload(data: unknown) {
@@ -51,19 +62,20 @@ export const createWorkspaceCF = functions.https.onCall(async (data, context) =>
     category: data.category,
     logoURL: data.logoURL ?? null,
     createdBy: {
-      uid: context.auth.uid,
+      id: context.auth.uid,
       displayName: currentAuthUser.displayName ?? null,
       email: currentAuthUser.email ?? null,
       photoURL: currentAuthUser.photoURL ?? null,
-      role: 'admin'
-    }
-  }
-  
-  const workspace = await workspacesRef.add({
-    ...workspaceData,
+      role: 'admin',
+      status: 'active',
+      addedAt: admin.firestore.FieldValue.serverTimestamp(),
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    },
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
     updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-  });
+  }
+  
+  const workspace = await workspacesRef.add(workspaceData);
   
   const workspacesUsersRef = admin.firestore().collection(`workspaces/${workspace.id}/users`);
   await workspacesUsersRef.add(workspaceData.createdBy)

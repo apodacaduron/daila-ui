@@ -1,8 +1,8 @@
 import { httpsCallable } from "firebase/functions";
 import { firestore, functions } from "../firebase";
-import { Workspace, WorkspaceCategory, workspaceConverter } from "../firebase/converters/workspaceConverter";
-import { useMutation, useQuery } from 'vue-query';
-import { getDocs, query, collection } from "firebase/firestore";
+import { Workspace, WorkspaceCategory, workspaceConverter, WorkspaceUser, workspaceUserConverter } from "../firebase/converters/workspaceConverter";
+import { useInfiniteQuery, useMutation, useQuery } from 'vue-query';
+import { getDocs, query, collection, startAfter, startAt } from "firebase/firestore";
 import { computed, reactive } from "vue";
 import { errorHandler } from "../utils/errorHandler";
 
@@ -51,6 +51,48 @@ export const useGetWorkspacesByUserIdQuery = (context: GetWorkspacesByUserIdQuer
     {
       enabled: computed(() => Boolean(context.options.userId) && context.options.enabled),
       refetchOnWindowFocus: false
+    },
+  )
+}
+
+// Queries
+export type GetWorkspaceUsersQueryContext = {
+  options: {
+    workspaceId: string | null | undefined
+    enabled: boolean
+  },
+  handlers?: {
+    onSuccess?(workspaceUsers: unknown): void
+    onError?(err: unknown): void
+  }
+}
+export const useGetWorkspaceUsersQuery = (context: GetWorkspaceUsersQueryContext) => {
+  async function getWorkspaceUsers({ pageParam = 0 }) {
+    try {
+      if (!context.options.workspaceId) return
+      const workspaceUsers: WorkspaceUser[] = [];
+      const q = query(collection(firestore, `workspaces/${context.options.workspaceId}/users`)).withConverter(workspaceUserConverter);
+      const snapshot = await getDocs(q)
+      snapshot.forEach(workspaceUser => workspaceUsers.push(workspaceUser.data()))
+      context.handlers?.onSuccess?.(workspaceUsers)
+      return workspaceUsers
+    } catch (err) {
+      errorHandler(err)
+      context.handlers?.onError?.(err)
+    }
+  }
+
+  return useInfiniteQuery(
+    reactive(['workspaces', context.options.workspaceId, 'users']),
+    getWorkspaceUsers,
+    {
+      enabled: computed(() => Boolean(context.options.workspaceId) && context.options.enabled),
+      refetchOnWindowFocus: false,
+      getNextPageParam: (pageSnapshot, allPages) => {
+        if (!pageSnapshot?.length) return
+        const lastDocument = pageSnapshot[pageSnapshot.length - 1]
+        return query(collection(firestore, `workspaces/${context.options.workspaceId}/users`), startAt('email'))
+      }
     },
   )
 }
