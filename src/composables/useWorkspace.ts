@@ -3,10 +3,12 @@ import {
   Workspace,
   workspaceCategories,
   WorkspaceCategory,
+  WorkspaceUserStatus,
 } from '../firebase/converters/workspaceConverter'
 import { useWorkspaceStore } from '../stores/useWorkspaceStore'
 import { KeyIcon, ChatAlt2Icon } from '@heroicons/vue/outline'
 import { useRouter } from 'vue-router'
+import { BadgeColor } from '../components/primitives'
 
 export const workspaceCategoryHelpers = {
   admin: {
@@ -60,6 +62,21 @@ export const useWorkspace = (context?: WorkspaceContext) => {
     context?.handlers.onSwitchWorkspace(_workspace)
   }
 
+  function getWorkspaceUserStatusColor(status: WorkspaceUserStatus): BadgeColor {
+    switch (status) {
+      case 'active':
+        return 'green'
+      case 'inactive':
+        return 'gray'
+      case 'deleted':
+        return 'red'
+      case 'invited':
+        return 'blue'
+      default:
+        return 'green'
+    }
+  }
+
   return [
     reactive({
       workspaceURL,
@@ -68,7 +85,8 @@ export const useWorkspace = (context?: WorkspaceContext) => {
       hasWorkspace,
     }),
     {
-      switchWorkspace
+      switchWorkspace,
+      getWorkspaceUserStatusColor
     }
   ] as const
 }

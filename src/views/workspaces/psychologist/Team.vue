@@ -17,21 +17,22 @@ import {
 import { useWorkspace } from '../../../composables'
 import { sentenceCase } from 'change-case'
 import { useGetWorkspaceUsersQuery } from '../../../services'
+import { computed, reactive } from 'vue'
 
-const [workspaceOptions] = useWorkspace()
+const [workspaceOptions, workspaceHandlers] = useWorkspace()
 const getWorkspaceUsersQuery = useGetWorkspaceUsersQuery({
-  options: {
-    workspaceId: workspaceOptions.workspace?.id,
+  options: reactive({
+    workspaceId: computed(() => workspaceOptions.workspace?.id),
     enabled: true,
-  },
+  }),
   handlers: {
     onSuccess(workspaceUsers) {
       console.log(workspaceUsers)
     },
     onError(err) {
       console.log(err)
-    }
-  }
+    },
+  },
 })
 </script>
 
@@ -64,29 +65,52 @@ const getWorkspaceUsersQuery = useGetWorkspaceUsersQuery({
           <th>Actions</th>
         </thead>
         <tbody>
-          <tr>
-            <td>Daniel</td>
-            <td>
-              <DBadge color="green">Active</DBadge>
-            </td>
-            <td>Admin</td>
-            <td>apodacaduron@gmail.com</td>
-            <td class="team__card__table__actions">
-              <TrashIcon class="w-4 h-4 text-red-500" />
-              <PencilIcon class="w-4 h-4" />
-            </td>
-          </tr>
+          <template
+            v-for="(workspaceUserPage, index) in getWorkspaceUsersQuery.data
+              .value?.pages"
+            :key="index"
+          >
+            <tr
+              v-for="workspaceUser in workspaceUserPage"
+              :key="workspaceUser.id"
+            >
+              <td>{{ workspaceUser.displayName ?? '-' }}</td>
+              <td>
+                <DBadge
+                  :color="
+                    workspaceHandlers.getWorkspaceUserStatusColor(
+                      workspaceUser.status,
+                    )
+                  "
+                >
+                  {{ sentenceCase(workspaceUser.status) }}
+                </DBadge>
+              </td>
+              <td>{{ sentenceCase(workspaceUser.role) }}</td>
+              <td>{{ workspaceUser.email }}</td>
+              <td class="team__card__table__actions">
+                <TrashIcon class="w-4 h-4 text-red-500" />
+                <PencilIcon class="w-4 h-4" />
+              </td>
+            </tr>
+          </template>
         </tbody>
       </DTable>
       <DTableFooter>
         <template #left>
-          <DButton variant="outlined">
+          <DButton
+            variant="outlined"
+            :disabled="getWorkspaceUsersQuery.hasPreviousPage?.value"
+          >
             <ArrowLeftIcon class="w-4 h-4 mr-2" />
             Previous
           </DButton>
         </template>
         <template #right>
-          <DButton variant="outlined">
+          <DButton
+            variant="outlined"
+            :disabled="getWorkspaceUsersQuery.hasNextPage?.value"
+          >
             Next
             <ArrowRightIcon class="w-4 h-4 ml-2" />
           </DButton>

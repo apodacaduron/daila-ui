@@ -10,7 +10,7 @@ export type WorkspaceCategory = typeof workspaceCategories[number]
 export const workspaceUserRoles = ['admin', 'editor', 'user'] as const;
 export type WorkspaceUserRole = typeof workspaceUserRoles[number]
 
-export const workspaceUserStatus = ['admin', 'editor', 'user'] as const;
+export const workspaceUserStatus = ['active', 'inactive', 'deleted', 'invited'] as const;
 export type WorkspaceUserStatus = typeof workspaceUserStatus[number]
 
 export type WorkspaceUser = {
@@ -19,7 +19,7 @@ export type WorkspaceUser = {
   email: string | null,
   photoURL: string | null,
   role: WorkspaceUserRole,
-  status: 'active' | 'inactive' | 'deleted' | 'invited',
+  status: WorkspaceUserStatus,
   addedAt: Date,
   updatedAt: Date,
 }
