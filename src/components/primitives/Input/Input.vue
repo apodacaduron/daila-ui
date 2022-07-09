@@ -24,23 +24,25 @@ const inputRef = ref<HTMLInputElement>()
 </script>
 
 <template>
-  <div
-    :class="['input', { 'input--disabled': disabled, 'input--error': error }]"
-    @click="inputRef?.focus()"
-  >
-    <slot name="leading" />
-    <input
-      ref="inputRef"
-      v-bind="$attrs"
-      class="input__field"
-      :value="modelValue"
-      @input="updateValue"
-    />
-    <slot name="trailing" />
+  <div>
+    <div
+      :class="['input', { 'input--disabled': disabled, 'input--error': error }]"
+      @click="inputRef?.focus()"
+    >
+      <slot name="leading" />
+      <input
+        ref="inputRef"
+        v-bind="$attrs"
+        class="input__field"
+        :value="modelValue"
+        @input="updateValue"
+      />
+      <slot name="trailing" />
+    </div>
+    <span v-if="hintText" :class="['hint-text', { 'hint-text--error': error }]">
+      {{ hintText }}
+    </span>
   </div>
-  <span v-if="hintText" :class="['hint-text', { 'hint-text--error': error }]">
-    {{ hintText }}
-  </span>
 </template>
 
 <style lang="scss" scoped>

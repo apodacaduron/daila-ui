@@ -15,7 +15,6 @@ import {
   collection,
   startAfter,
   orderBy,
-  endBefore,
   limit,
   Query,
   getDoc,
@@ -40,15 +39,15 @@ export function useCreateWorkspaceMutation() {
   )
 }
 
-export type AddUserToWorkspace = {
+export type InviteUserToWorkspace = {
   workspaceId: string
   emailList: Array<{ email: string }>
 }
-export function useAddUserToWorkspaceMutation() {
-  const addUserToWorkspaceCF = httpsCallable(functions, 'addUserToWorkspaceCF')
+export function useInviteUserToWorkspaceMutation() {
+  const inviteUserToWorkspaceCF = httpsCallable(functions, 'inviteUserToWorkspaceCF')
 
-  return useMutation((addUserToWorkspaceData: AddUserToWorkspace) =>
-    addUserToWorkspaceCF(addUserToWorkspaceData),
+  return useMutation((inviteUserToWorkspaceData: InviteUserToWorkspace) =>
+    inviteUserToWorkspaceCF(inviteUserToWorkspaceData),
     {
       onError: (err: unknown) => {
         errorHandler(err)
@@ -80,7 +79,6 @@ export const useGetUserWorkspacesQuery = (
       ).withConverter(workspaceConverter)
       const snapshot = await getDocs(q)
       snapshot.forEach((workspace) => workspaces.push(workspace.data()))
-      console.log(workspaces)
       context.handlers?.onSuccess?.(workspaces)
       return workspaces
     } catch (err) {
@@ -143,6 +141,7 @@ export const useGetUserWorkspaceByIdQuery = (
 
 export type GetWorkspaceUsersQueryContext = {
   options: {
+    pageNumber: number,
     workspaceId: string | null | undefined
     enabled: boolean
   }
@@ -154,19 +153,20 @@ export type GetWorkspaceUsersQueryContext = {
 export const useGetWorkspaceUsersQuery = (
   context: GetWorkspaceUsersQueryContext,
 ) => {
+  const q = computed(() => query(
+    collection(
+      firestore,
+      `workspaces/${context.options.workspaceId}/users`,
+    ),
+    orderBy('email'),
+    limit(2)
+  ).withConverter(workspaceUserConverter))
+
   async function getWorkspaceUsers(queryParam: Query<WorkspaceUserConverter>) {
     try {
       if (!context.options.workspaceId) return
       const workspaceUsers: WorkspaceUser[] = []
-      const q = query(
-        collection(
-          firestore,
-          `workspaces/${context.options.workspaceId}/users`,
-        ),
-        orderBy('email'),
-        limit(2)
-      ).withConverter(workspaceUserConverter)
-      const snapshot = await getDocs(queryParam ?? q)
+      const snapshot = await getDocs(queryParam)
       snapshot.forEach((workspaceUser) =>
         workspaceUsers.push(workspaceUser.data()),
       )
@@ -179,8 +179,8 @@ export const useGetWorkspaceUsersQuery = (
   }
 
   return useInfiniteQuery(
-    reactive(['workspaces', context.options.workspaceId, 'users']),
-    ({ pageParam = q }) => {
+    reactive(['workspaces', context.options.workspaceId, 'users', context.options.pageNumber]),
+    ({ pageParam = q.value }) => {
       return getWorkspaceUsers(pageParam)
     },
     {
@@ -191,28 +191,7 @@ export const useGetWorkspaceUsersQuery = (
       getNextPageParam: (pageSnapshot, allPages) => {
         if (!pageSnapshot?.length) return
         const lastUserEmail = pageSnapshot[pageSnapshot.length - 1].email
-        return query(
-          collection(
-            firestore,
-            `workspaces/${context.options.workspaceId}/users`,
-          ),
-          orderBy('email'),
-          limit(2),
-          startAfter(lastUserEmail),
-        ).withConverter(workspaceUserConverter)
-      },
-      getPreviousPageParam: (pageSnapshot, allPages) => {
-        if (!pageSnapshot?.length) return
-        const firstUserEmail = pageSnapshot[0].email
-        return query(
-          collection(
-            firestore,
-            `workspaces/${context.options.workspaceId}/users`,
-          ),
-          orderBy('email'),
-          limit(2),
-          endBefore(firstUserEmail),
-        ).withConverter(workspaceUserConverter)
+        return query(q.value, startAfter(lastUserEmail)).withConverter(workspaceUserConverter)
       },
     },
   )

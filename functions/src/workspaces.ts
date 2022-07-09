@@ -55,7 +55,7 @@ export const createWorkspaceCF = functions.https.onCall(async (data, context) =>
 
   const workspacesRef = admin.firestore().collection('workspaces');
   const currentAuthUser = await admin.auth().getUser(context.auth.uid);
-  
+
   const workspaceData: Workspace = {
     title: data.title,
     category: data.category,
@@ -75,13 +75,13 @@ export const createWorkspaceCF = functions.https.onCall(async (data, context) =>
   }
 
   const workspace = await workspacesRef.add(workspaceData);
-  
+
   const workspacesUsersRef = admin.firestore().collection(`workspaces/${workspace.id}/users`).doc(context.auth.uid);
   await workspacesUsersRef.set(workspaceData.createdBy)
   return { id: workspace.id, }
 });
 
-export const addUserToWorkspaceCF = functions.https.onCall(async (data, context) => {
+export const inviteUserToWorkspaceCF = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError(
       'failed-precondition',
@@ -112,7 +112,7 @@ export const addUserToWorkspaceCF = functions.https.onCall(async (data, context)
   }
 
   const batch = admin.firestore().batch()
-  
+
   data.emailList.forEach((emailItem: { email: string }) => {
     const workspacesUsersRef = admin.firestore().collection(`workspaces/${data.workspaceId}/users`).doc();
     const user: WorkspaceUser = {

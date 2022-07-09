@@ -6,7 +6,7 @@ import {
   DTable,
   DCard,
   DBadge,
-useDialog,
+  useDialog,
 } from '../../../components/primitives'
 import {
   PlusIcon,
@@ -23,17 +23,43 @@ import AddTeamMemberDialog from '../../../components/team/AddTeamMemberDialog.vu
 
 const [workspaceOptions, workspaceHandlers] = useWorkspace()
 const [dialogOptions, dialogHandlers] = useDialog()
+const pageNumber = ref(1)
 
 const getWorkspaceUsersQuery = useGetWorkspaceUsersQuery({
   options: reactive({
+    pageNumber: computed(() => pageNumber.value),
     workspaceId: computed(() => workspaceOptions.workspace?.id),
     enabled: true,
-  })
+  }),
 })
+
+const hasNextPage = computed(
+  () => getWorkspaceUsersQuery.data.value?.pages[pageNumber.value - 1]?.length,
+)
+
+function previousPage() {
+  if (pageNumber.value > 1) {
+    pageNumber.value -= 1
+  }
+}
+function nextPage() {
+  if (!hasNextPage.value) return
+
+  pageNumber.value += 1
+  const hasPageLoaded =
+    getWorkspaceUsersQuery.data.value?.pages[pageNumber.value - 1]
+
+  if (!hasPageLoaded) {
+    getWorkspaceUsersQuery.fetchNextPage.value()
+  }
+}
 </script>
 
 <template>
-  <AddTeamMemberDialog :show="dialogOptions.isOpen" @close="dialogHandlers.close" />
+  <AddTeamMemberDialog
+    :show="dialogOptions.isOpen"
+    @close="dialogHandlers.close"
+  />
   <div class="team">
     <Titlebar>
       <template #title>
@@ -62,42 +88,45 @@ const getWorkspaceUsersQuery = useGetWorkspaceUsersQuery({
           <th>Actions</th>
         </thead>
         <tbody>
-          <template
+          <!-- <template
             v-for="(workspaceUserPage, index) in getWorkspaceUsersQuery.data
               .value?.pages"
             :key="index"
+          > -->
+          <tr
+            v-for="workspaceUser in getWorkspaceUsersQuery.data.value?.pages[
+              pageNumber - 1
+            ]"
+            :key="workspaceUser.id"
           >
-            <tr
-              v-for="workspaceUser in workspaceUserPage"
-              :key="workspaceUser.id"
-            >
-              <td>{{ workspaceUser.displayName ?? '-' }}</td>
-              <td>
-                <DBadge
-                  :color="
-                    workspaceHandlers.getWorkspaceUserStatusColor(
-                      workspaceUser.status,
-                    )
-                  "
-                >
-                  {{ sentenceCase(workspaceUser.status) }}
-                </DBadge>
-              </td>
-              <td>{{ sentenceCase(workspaceUser.role) }}</td>
-              <td>{{ workspaceUser.email }}</td>
-              <td class="team__card__table__actions">
-                <TrashIcon class="w-4 h-4 text-red-500" />
-                <PencilIcon class="w-4 h-4" />
-              </td>
-            </tr>
-          </template>
+            <td>{{ workspaceUser.displayName ?? '-' }}</td>
+            <td>
+              <DBadge
+                :color="
+                  workspaceHandlers.getWorkspaceUserStatusColor(
+                    workspaceUser.status,
+                  )
+                "
+              >
+                {{ sentenceCase(workspaceUser.status) }}
+              </DBadge>
+            </td>
+            <td>{{ sentenceCase(workspaceUser.role) }}</td>
+            <td>{{ workspaceUser.email }}</td>
+            <td class="team__card__table__actions">
+              <TrashIcon class="w-4 h-4 text-red-500" />
+              <PencilIcon class="w-4 h-4" />
+            </td>
+          </tr>
+          <!-- </template> -->
         </tbody>
       </DTable>
       <DTableFooter>
         <template #left>
           <DButton
             variant="outlined"
-            :disabled="getWorkspaceUsersQuery.hasPreviousPage?.value"
+            :disabled="pageNumber <= 1"
+            @click="previousPage"
           >
             <ArrowLeftIcon class="w-4 h-4 mr-2" />
             Previous
@@ -106,7 +135,8 @@ const getWorkspaceUsersQuery = useGetWorkspaceUsersQuery({
         <template #right>
           <DButton
             variant="outlined"
-            :disabled="getWorkspaceUsersQuery.hasNextPage?.value"
+            :disabled="!hasNextPage"
+            @click="nextPage"
           >
             Next
             <ArrowRightIcon class="w-4 h-4 ml-2" />

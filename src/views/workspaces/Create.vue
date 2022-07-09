@@ -74,7 +74,6 @@ const onSubmit = handle(async ({ title, category }) => {
     category,
   })
   workspaceId.value = ((response.data as any).id as string) ?? null
-  console.log(workspaceId.value)
   isGetUserWorkspacesQueryEnabled.value = true
 })
 </script>

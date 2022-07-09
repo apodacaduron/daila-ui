@@ -45,6 +45,7 @@ useGetUserWorkspacesQuery({
         workspaceStore.setCurrentWorkspaceId(null)
         workspaceStore.setWorkspaces(null)
       }
+      globalStore.setLoading(false)
     },
   },
 })
