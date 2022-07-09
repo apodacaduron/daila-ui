@@ -23,6 +23,7 @@ import AddTeamMemberDialog from '../../../components/team/AddTeamMemberDialog.vu
 
 const [workspaceOptions, workspaceHandlers] = useWorkspace()
 const [dialogOptions, dialogHandlers] = useDialog()
+const limit = ref(20)
 const pageNumber = ref(1)
 
 const getWorkspaceUsersQuery = useGetWorkspaceUsersQuery({
@@ -30,12 +31,15 @@ const getWorkspaceUsersQuery = useGetWorkspaceUsersQuery({
     pageNumber: computed(() => pageNumber.value),
     workspaceId: computed(() => workspaceOptions.workspace?.id),
     enabled: true,
+    limit,
   }),
 })
 
-const hasNextPage = computed(
-  () => getWorkspaceUsersQuery.data.value?.pages[pageNumber.value - 1]?.length,
-)
+const hasNextPage = computed(() => {
+  const pageUserCount =
+    getWorkspaceUsersQuery.data.value?.pages[pageNumber.value - 1]?.length
+  return pageUserCount === limit.value
+})
 
 function previousPage() {
   if (pageNumber.value > 1) {
@@ -82,17 +86,12 @@ function nextPage() {
       <DTable class="team__card__table">
         <thead>
           <th>Name</th>
+          <th>Email address</th>
           <th>Status</th>
           <th>Role</th>
-          <th>Email address</th>
           <th>Actions</th>
         </thead>
         <tbody>
-          <!-- <template
-            v-for="(workspaceUserPage, index) in getWorkspaceUsersQuery.data
-              .value?.pages"
-            :key="index"
-          > -->
           <tr
             v-for="workspaceUser in getWorkspaceUsersQuery.data.value?.pages[
               pageNumber - 1
@@ -100,6 +99,7 @@ function nextPage() {
             :key="workspaceUser.id"
           >
             <td>{{ workspaceUser.displayName ?? '-' }}</td>
+            <td>{{ workspaceUser.email }}</td>
             <td>
               <DBadge
                 :color="
@@ -112,13 +112,11 @@ function nextPage() {
               </DBadge>
             </td>
             <td>{{ sentenceCase(workspaceUser.role) }}</td>
-            <td>{{ workspaceUser.email }}</td>
             <td class="team__card__table__actions">
               <TrashIcon class="w-4 h-4 text-red-500" />
               <PencilIcon class="w-4 h-4" />
             </td>
           </tr>
-          <!-- </template> -->
         </tbody>
       </DTable>
       <DTableFooter>

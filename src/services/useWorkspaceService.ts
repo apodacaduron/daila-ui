@@ -144,6 +144,7 @@ export type GetWorkspaceUsersQueryContext = {
     pageNumber: number,
     workspaceId: string | null | undefined
     enabled: boolean
+    limit: number,
   }
   handlers?: {
     onSuccess?(workspaceUsers: unknown): void
@@ -159,7 +160,7 @@ export const useGetWorkspaceUsersQuery = (
       `workspaces/${context.options.workspaceId}/users`,
     ),
     orderBy('email'),
-    limit(2)
+    limit(context.options.limit)
   ).withConverter(workspaceUserConverter))
 
   async function getWorkspaceUsers(queryParam: Query<WorkspaceUserConverter>) {
