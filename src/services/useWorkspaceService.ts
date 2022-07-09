@@ -19,6 +19,8 @@ import {
   Query,
   getDoc,
   doc,
+  collectionGroup,
+  where,
 } from 'firebase/firestore'
 import { computed, reactive } from 'vue'
 import { errorHandler } from '../utils/errorHandler'

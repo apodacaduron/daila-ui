@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
-import { Workspace } from '../workspaces'
+import { Workspace, WorkspaceUser } from '../workspaces'
 
 export const onCreateWorkspaceTrigger = functions.firestore
   .document('workspaces/{workspaceId}')
@@ -16,4 +16,19 @@ export const onCreateWorkspaceTrigger = functions.firestore
       .firestore()
       .doc(`users/${workspaceDocument.createdBy.id}`)
     userRef.update({ lastUsedWorkspaceId: snap.id, hasWorkspace: true })
+  })
+
+export const onUserInvitedToWorkspaceTrigger = functions.firestore
+  .document('workspaces/{workspaceId}/users/{userId}')
+  .onCreate(async (snap, context) => {
+    const workspaceRef = admin
+      .firestore()
+      .collection(`workspaces`).doc(context.params.workspaceId)
+    const workspace = await workspaceRef.get()
+
+    const workspaceUserDocument = snap.data() as WorkspaceUser
+    const userInvitationsRef = admin
+      .firestore()
+      .collection('invitations').doc()
+    userInvitationsRef.create({ workspace: { id: workspace.id, ...workspace.data() }, ...workspaceUserDocument })
   })

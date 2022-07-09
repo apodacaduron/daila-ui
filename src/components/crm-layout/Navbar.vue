@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { BellIcon, HomeIcon } from '@heroicons/vue/outline'
+import { DSidebar, useSidebar } from '../primitives'
+import NotificationSidebar from './NotificationSidebar.vue'
+
+const [sidebarOptions, sidebarHandlers] = useSidebar()
 </script>
 
 <template>
@@ -13,11 +17,14 @@ import { BellIcon, HomeIcon } from '@heroicons/vue/outline'
     </div>
     <div class="navbar__center"></div>
     <div class="navbar__right">
-      <button>
+      <button @click="sidebarHandlers.open">
         <BellIcon class="w-6 h-6" />
       </button>
     </div>
   </nav>
+  <DSidebar :show="sidebarOptions.isOpen" @close="sidebarHandlers.close">
+    <NotificationSidebar />
+  </DSidebar>
 </template>
 
 <style lang="scss" scoped>

@@ -21,7 +21,7 @@ export type Workspace = {
   title: string;
   category: WorkspaceCategory;
   logoURL: string | null;
-  createdBy: WorkspaceUser & { id: string };
+  createdBy: WorkspaceUser & { id?: string };
   createdAt: admin.firestore.FieldValue;
   updatedAt: admin.firestore.FieldValue;
 }
@@ -73,9 +73,9 @@ export const createWorkspaceCF = functions.https.onCall(async (data, context) =>
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
     updatedAt: admin.firestore.FieldValue.serverTimestamp(),
   }
-
   const workspace = await workspacesRef.add(workspaceData);
 
+  delete workspaceData.createdBy.id
   const workspacesUsersRef = admin.firestore().collection(`workspaces/${workspace.id}/users`).doc(context.auth.uid);
   await workspacesUsersRef.set(workspaceData.createdBy)
   return { id: workspace.id, }
@@ -115,6 +115,7 @@ export const inviteUserToWorkspaceCF = functions.https.onCall(async (data, conte
 
   data.emailList.forEach((emailItem: { email: string }) => {
     const workspacesUsersRef = admin.firestore().collection(`workspaces/${data.workspaceId}/users`).doc();
+    console.log(workspacesUsersRef.id)
     const user: WorkspaceUser = {
       displayName: null,
       email: emailItem.email ?? null,

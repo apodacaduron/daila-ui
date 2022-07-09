@@ -1,9 +1,15 @@
-import { doc, getDoc } from 'firebase/firestore'
+import {
+  doc,
+  getDoc,
+} from 'firebase/firestore'
 import { httpsCallable } from 'firebase/functions'
 import { computed, reactive } from 'vue'
 import { useMutation, useQuery } from 'vue-query'
 import { firestore, functions } from '../firebase'
-import { User, userConverter } from '../firebase/converters'
+import {
+  User,
+  userConverter,
+} from '../firebase/converters'
 import { errorHandler } from '../utils/errorHandler'
 
 export type GetUserByIdQueryContext = {
@@ -43,11 +49,10 @@ export const useGetUserByIdQuery = (context: GetUserByIdQueryContext) => {
   })
 }
 
+// Mutations
 export type UpdateLastUsedWorkspaceId = {
   workspaceId: string
 }
-
-// Mutations
 export function useUpdateLastUsedWorkspaceIdMutation() {
   const updateLastUsedWorkspaceIdCF = httpsCallable(
     functions,

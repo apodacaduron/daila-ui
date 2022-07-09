@@ -10,11 +10,10 @@ export type WorkspaceCategory = typeof workspaceCategories[number]
 export const workspaceUserRoles = ['admin', 'editor', 'user'] as const;
 export type WorkspaceUserRole = typeof workspaceUserRoles[number]
 
-export const workspaceUserStatus = ['active', 'inactive', 'deleted', 'invited'] as const;
+export const workspaceUserStatus = ['active', 'inactive', 'deleted', 'invited', 'declined'] as const;
 export type WorkspaceUserStatus = typeof workspaceUserStatus[number]
 
 export type WorkspaceUser = {
-  id: string,
   displayName: string | null,
   email: string | null,
   photoURL: string | null,
@@ -29,7 +28,7 @@ export type Workspace = {
   title: string;
   category: WorkspaceCategory;
   logoURL: string | null;
-  createdBy: WorkspaceUser;
+  createdBy: WorkspaceUser & { id: string };
   createdAt: Date;
   updatedAt: Date;
 }
@@ -40,7 +39,7 @@ class WorkspaceConverter {
     readonly title: string,
     readonly category: WorkspaceCategory,
     readonly logoURL: string | null,
-    readonly createdBy: WorkspaceUser,
+    readonly createdBy: WorkspaceUser & { id: string },
     readonly createdAt: Date,
     readonly updatedAt: Date,
   ) { }
