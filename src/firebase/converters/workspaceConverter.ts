@@ -71,7 +71,7 @@ export const workspaceConverter = {
   },
 }
 
-class WorkspaceUserConverter {
+export class WorkspaceUserConverter {
   constructor(
     readonly id: string,
     readonly displayName: string | null,

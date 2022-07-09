@@ -26,7 +26,7 @@ const [workspaceOptions, workspaceHandlers] = useWorkspace({
   <DPopover>
     <DButton fullWidth>
       <div class="flex flex-col items-start w-full py-2">
-        {{workspaceOptions.workspace?.title}}
+        {{ workspaceOptions.workspace?.title }}
         <span class="text-sm font-normal">
           {{ sentenceCase(`${workspaceOptions.workspace?.category} workspace`) }}
         </span>

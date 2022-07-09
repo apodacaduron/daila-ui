@@ -3,21 +3,28 @@ import { DDialog, DButton, DInput, DLabel } from '../primitives'
 import { MailIcon } from '@heroicons/vue/outline'
 import { ref, UnwrapRef } from 'vue'
 import { emailRegex } from '../../utils/regex'
+import { useAddUserToWorkspaceMutation } from '../../services'
+import { useWorkspace } from '../../composables'
+import { errorHandler } from '../../utils/errorHandler'
+import { useQueryClient } from 'vue-query'
+import { createToast } from 'mosha-vue-toastify'
 
 interface Props {
   show: boolean
 }
 type EmailItem = {
-      fieldType: string,
-    fieldValue: string,
-    error: { message: string} | null,
+  fieldType: string
+  fieldValue: string
+  error: { message: string } | null
 }
 
 defineProps<Props>()
-defineEmits<{
-  close: (close: boolean) => void
+const emit = defineEmits<{
+  (e: 'close'): void
 }>()
 
+const queryClient = useQueryClient()
+const [workspaceOptions] = useWorkspace()
 function getEmailItem(): EmailItem {
   return {
     fieldType: 'email',
@@ -28,13 +35,13 @@ function getEmailItem(): EmailItem {
 const emailList = ref<EmailItem[]>([getEmailItem()])
 
 function validateEmailList(list: UnwrapRef<typeof emailList>) {
-  const invalidIndexes: number[] = [];
+  const invalidIndexes: number[] = []
   list.forEach((item, index) => {
     if (!emailRegex.test(item.fieldValue)) {
       invalidIndexes.push(index)
-      emailList.value[index].error = { message: "Email is not valid" }
+      emailList.value[index].error = { message: 'Email is not valid' }
     } else {
-      emailList.value[index].error = null;
+      emailList.value[index].error = null
     }
   })
 
@@ -44,11 +51,34 @@ function validateEmailList(list: UnwrapRef<typeof emailList>) {
   }
 }
 
+const addUserToWorkspaceMutation = useAddUserToWorkspaceMutation()
+
+function formatEmailList(list: UnwrapRef<typeof emailList>) {
+  return list.map((item) => ({ email: item.fieldValue }))
+}
+
 const onSubmit = async () => {
   const validationResponse = validateEmailList(emailList.value)
-  if (!validationResponse.isListValid) return;
+  if (!validationResponse.isListValid) return
+  if (!workspaceOptions.workspace?.id)
+    return errorHandler(new Error('Workspace ID must be provided'))
 
-  console.log('SENDING DATA 🚀')
+  await addUserToWorkspaceMutation.mutateAsync({
+    workspaceId: workspaceOptions.workspace?.id,
+    emailList: formatEmailList(emailList.value),
+  })
+  if (addUserToWorkspaceMutation.isSuccess.value) {
+    createToast('User has been invited to join the workspace', {
+      position: 'top-center',
+      showIcon: true,
+      hideProgressBar: true,
+      type: 'success',
+      transition: 'slide',
+    })
+    // TODO: Fix invalidate query by keys not working
+    queryClient.invalidateQueries()
+  }
+  emit('close')
 }
 </script>
 
@@ -61,6 +91,7 @@ const onSubmit = async () => {
         <template v-for="(row, index) in emailList" :key="index">
           <div class="form__row">
             <DInput
+              :disabled="addUserToWorkspaceMutation.isLoading.value"
               placeholder="john@example.com"
               :type="row.fieldType"
               v-model="row.fieldValue"
@@ -74,13 +105,15 @@ const onSubmit = async () => {
           </div>
         </template>
       </div>
-      <DButton variant="text" @click="emailList.push(getEmailItem())">
+      <DButton :disabled="addUserToWorkspaceMutation.isLoading.value" variant="text" @click="emailList.push(getEmailItem())">
         + Add another
       </DButton>
     </template>
     <template #footer>
-      <DButton variant="outlined" @click="$emit('close')">Cancel</DButton>
-      <DButton variant="translucent" @click="onSubmit">Add to workspace</DButton>
+      <DButton :disabled="addUserToWorkspaceMutation.isLoading.value" variant="outlined" @click="$emit('close')">Cancel</DButton>
+      <DButton :disabled="addUserToWorkspaceMutation.isLoading.value" variant="translucent" @click="onSubmit">
+        Add to workspace
+      </DButton>
     </template>
   </DDialog>
 </template>

@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { reactive, computed } from 'vue'
 import { useAuth } from './composables'
-import { useGetUserByIdQuery, useGetWorkspacesByUserIdQuery } from './services'
+import { useGetUserByIdQuery, useGetUserWorkspacesQuery } from './services'
 import { useUserStore } from './stores/useUserStore'
-import { DPageSpinner } from './components/primitives/Spinner';
-import { useGlobalStore } from './stores/useGlobalStore';
-import { useDark } from '@vueuse/core';
-import { useWorkspaceStore } from './stores/useWorkspaceStore';
+import { DPageSpinner } from './components/primitives/Spinner'
+import { useGlobalStore } from './stores/useGlobalStore'
+import { useDark } from '@vueuse/core'
+import { useWorkspaceStore } from './stores/useWorkspaceStore'
 
 useDark()
 const authHook = useAuth()
@@ -26,10 +26,10 @@ useGetUserByIdQuery({
         userStore.setUser(null)
       }
       globalStore.setLoading(false)
-    }
-  }
+    },
+  },
 })
-useGetWorkspacesByUserIdQuery({
+useGetUserWorkspacesQuery({
   options: reactive({
     userId: computed(() => authHook.user.value?.uid ?? null),
     enabled: computed(() => Boolean(userStore.user)),
@@ -37,14 +37,16 @@ useGetWorkspacesByUserIdQuery({
   handlers: {
     onSuccess(workspaces) {
       if (authHook.isAuthenticated && workspaces) {
-        workspaceStore.setCurrentWorkspaceId(userStore.user?.lastUsedWorkspaceId ?? null);
-        workspaceStore.setWorkspaces(workspaces);
+        workspaceStore.setCurrentWorkspaceId(
+          userStore.user?.lastUsedWorkspaceId ?? null,
+        )
+        workspaceStore.setWorkspaces(workspaces)
       } else {
-        workspaceStore.setCurrentWorkspaceId(null);
-        workspaceStore.setWorkspaces(null);
+        workspaceStore.setCurrentWorkspaceId(null)
+        workspaceStore.setWorkspaces(null)
       }
-    }
-  }
+    },
+  },
 })
 </script>
 

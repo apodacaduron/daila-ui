@@ -6,18 +6,19 @@ import { useLogin, useWorkspace } from '../composables'
 import { useUserStore } from '../stores/useUserStore'
 import { computed, ref, reactive, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useGetUserByIdQuery } from '../services'
+import { useGetUserByIdQuery, useGetUserWorkspaceByIdQuery } from '../services'
 import { useGlobalStore } from '../stores/useGlobalStore'
 import { useAuthStore } from '../stores/useAuthStore'
 
 const isUserByIdQueryEnabled = ref(false)
+const workspaceId = ref<string | null | undefined>(null)
 
 const router = useRouter()
 const loginHook = useLogin()
-const globalStore = useGlobalStore()
 const userStore = useUserStore()
 const authStore = useAuthStore()
-const [workspaceOptions] = useWorkspace()
+const globalStore = useGlobalStore()
+const [workspaceOptions, workspaceHandlers] = useWorkspace()
 const { useField, handle, loading } = useForm<{
   email: string
   password: string
@@ -44,8 +45,22 @@ useGetUserByIdQuery({
         userStore.setUser(null)
       }
       globalStore.setLoading(false)
-    }
-  }
+    },
+  },
+})
+useGetUserWorkspaceByIdQuery({
+  options: reactive({
+    workspaceId: computed(() => workspaceId.value ?? null),
+    userId: computed(() => authStore.user?.uid ?? null),
+    enabled: isUserByIdQueryEnabled,
+  }),
+  handlers: {
+    onSuccess(workspace) {
+      if (workspace) {
+        workspaceHandlers.switchWorkspace(workspace, true)
+      }
+    },
+  },
 })
 
 const onSubmit = handle(async ({ email, password }) => {
@@ -59,18 +74,26 @@ const signInWithGoogle = async () => {
   isUserByIdQueryEnabled.value = true
 }
 
-watch(() => workspaceOptions.workspace, (workspace) => {
-  if (workspace) {
-    const workspaceId = workspaceOptions.workspace?.id
-    const workspaceCategory = workspaceOptions.workspace?.category
-    router.push(`/w/${workspaceId}/${workspaceCategory}`)
-  }
-})
-watch(() => userStore.user?.hasWorkspace, (hasWorkspace) => {
-  if (!hasWorkspace) {
-    router.push('/w/create')
-  }
-})
+watch(
+  () => workspaceOptions.workspace,
+  (workspace) => {
+    if (workspace) {
+      const workspaceId = workspaceOptions.workspace?.id
+      const workspaceCategory = workspaceOptions.workspace?.category
+      router.push(`/w/${workspaceId}/${workspaceCategory}`)
+    }
+  },
+)
+watch(
+  () => userStore.user?.hasWorkspace,
+  (hasWorkspace) => {
+    if (!hasWorkspace) {
+      router.push('/w/create')
+    } else {
+      workspaceId.value = userStore.user?.lastUsedWorkspaceId
+    }
+  },
+)
 </script>
 
 <template>

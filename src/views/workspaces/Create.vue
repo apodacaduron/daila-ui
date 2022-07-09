@@ -3,55 +3,60 @@ import { DLabel, DCombobox, DButton, DInput } from '../../components/primitives'
 import { useForm } from '@evilkiwi/form'
 import { ref, reactive } from 'vue'
 import { ComboboxItem } from '../../components/primitives/Input/Combobox.vue'
-import { isWorkspaceCategory } from '../../composables/useWorkspace';
-import { errorHandler } from '../../utils/errorHandler';
-import { useCreateWorkspaceMutation, useGetWorkspacesByUserIdQuery } from '../../services/useWorkspaceService';
-import { computed } from '@vue/reactivity';
-import { useRouter } from 'vue-router';
-import { useUserStore } from '../../stores/useUserStore';
-import Navbar from '../../components/Navbar.vue';
-import { useWorkspaceStore } from '../../stores/useWorkspaceStore';
-import { useQueryClient } from 'vue-query';
+import { isWorkspaceCategory } from '../../composables/useWorkspace'
+import { errorHandler } from '../../utils/errorHandler'
+import {
+  useCreateWorkspaceMutation,
+  useGetUserWorkspacesQuery,
+} from '../../services/useWorkspaceService'
+import { computed } from '@vue/reactivity'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '../../stores/useUserStore'
+import Navbar from '../../components/Navbar.vue'
+import { useWorkspaceStore } from '../../stores/useWorkspaceStore'
+import { useQueryClient } from 'vue-query'
 
 const comboboxOptions = ref<ComboboxItem[]>([
   {
     id: 1,
     text: 'Psychologist',
-    value: 'psychologist'
+    value: 'psychologist',
   },
 ])
 
 const queryClient = useQueryClient()
 const workspaceId = ref<string | null>(null)
-const isGetWorkspacesByUserIdQueryEnabled = ref(false)
+const isGetUserWorkspacesQueryEnabled = ref(false)
 const router = useRouter()
 const userStore = useUserStore()
 const workspaceStore = useWorkspaceStore()
 const createWorkspaceMutation = useCreateWorkspaceMutation()
-useGetWorkspacesByUserIdQuery({
+useGetUserWorkspacesQuery({
   options: reactive({
     userId: computed(() => userStore.user?.id ?? null),
-    enabled: isGetWorkspacesByUserIdQueryEnabled
+    enabled: isGetUserWorkspacesQueryEnabled,
   }),
   handlers: {
     async onSuccess(workspaces) {
       if (workspaces) {
         if (!workspaces.length) {
-          await queryClient.invalidateQueries('workspaces');
+          await queryClient.invalidateQueries('workspaces')
         }
-        router.push(`/w/${workspaceId.value || workspaces[0].id}/${category.value}`)
         workspaceStore.setWorkspaces(workspaces)
         workspaceStore.setCurrentWorkspaceId(workspaceId.value)
+        router.push(
+          `/w/${workspaceId.value || workspaces[0].id}/${category.value}`,
+        )
       }
-    }
-  }
+    },
+  },
 })
 const { useField, handle, loading } = useForm<{
   title: string
   category: string
 }>({
   defaults: {
-    category: comboboxOptions.value[0].value.toString()
+    category: comboboxOptions.value[0].value.toString(),
   },
 })
 const title = useField('title', {
@@ -64,9 +69,13 @@ const onSubmit = handle(async ({ title, category }) => {
   if (!isWorkspaceCategory(category)) {
     return errorHandler(new Error('The workspace category is not valid'))
   }
-  const response = await createWorkspaceMutation.mutateAsync({ title, category })
-  workspaceId.value = (response.data as any).id as string ?? null
-  isGetWorkspacesByUserIdQueryEnabled.value = true
+  const response = await createWorkspaceMutation.mutateAsync({
+    title,
+    category,
+  })
+  workspaceId.value = ((response.data as any).id as string) ?? null
+  console.log(workspaceId.value)
+  isGetUserWorkspacesQueryEnabled.value = true
 })
 </script>
 

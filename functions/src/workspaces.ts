@@ -8,7 +8,6 @@ export const workspaceRoles = ['admin', 'editor', 'user'] as const;
 export type WorkspaceRole = typeof workspaceRoles[number]
 
 export type WorkspaceUser = {
-  id: string,
   displayName: string | null,
   email: string | null,
   photoURL: string | null,
@@ -22,7 +21,7 @@ export type Workspace = {
   title: string;
   category: WorkspaceCategory;
   logoURL: string | null;
-  createdBy: WorkspaceUser;
+  createdBy: WorkspaceUser & { id: string };
   createdAt: admin.firestore.FieldValue;
   updatedAt: admin.firestore.FieldValue;
 }
@@ -62,7 +61,7 @@ export const createWorkspaceCF = functions.https.onCall(async (data, context) =>
     category: data.category,
     logoURL: data.logoURL ?? null,
     createdBy: {
-      id: context.auth.uid,
+      id: context.auth.uid ?? null,
       displayName: currentAuthUser.displayName ?? null,
       email: currentAuthUser.email ?? null,
       photoURL: currentAuthUser.photoURL ?? null,
@@ -74,10 +73,59 @@ export const createWorkspaceCF = functions.https.onCall(async (data, context) =>
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
     updatedAt: admin.firestore.FieldValue.serverTimestamp(),
   }
-  
+
   const workspace = await workspacesRef.add(workspaceData);
   
-  const workspacesUsersRef = admin.firestore().collection(`workspaces/${workspace.id}/users`);
-  await workspacesUsersRef.add(workspaceData.createdBy)
+  const workspacesUsersRef = admin.firestore().collection(`workspaces/${workspace.id}/users`).doc(context.auth.uid);
+  await workspacesUsersRef.set(workspaceData.createdBy)
   return { id: workspace.id, }
+});
+
+export const addUserToWorkspaceCF = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError(
+      'failed-precondition',
+      'The function must be called while authenticated.',
+    );
+  }
+  if (!data.workspaceId || !data.emailList || !Array.isArray(data.emailList)) {
+    throw new functions.https.HttpsError(
+      'failed-precondition',
+      'Workspace ID and email list must be provided.',
+    );
+  }
+
+  const workspaceUserRef = admin.firestore().doc(`workspaces/${data.workspaceId}/users/${context.auth.uid}`);
+  const workspaceUserDoc = await workspaceUserRef.get()
+  if (!workspaceUserDoc.exists) {
+    throw new functions.https.HttpsError(
+      'failed-precondition',
+      'You are not a member of this workspace',
+    );
+  }
+  const workspaceUser = workspaceUserDoc.data() as WorkspaceUser;
+  if (workspaceUser?.role === 'user') {
+    throw new functions.https.HttpsError(
+      'failed-precondition',
+      'You don\'t have permission to access this function',
+    );
+  }
+
+  const batch = admin.firestore().batch()
+  
+  data.emailList.forEach((emailItem: { email: string }) => {
+    const workspacesUsersRef = admin.firestore().collection(`workspaces/${data.workspaceId}/users`).doc();
+    const user: WorkspaceUser = {
+      displayName: null,
+      email: emailItem.email ?? null,
+      photoURL: null,
+      role: 'user',
+      status: 'invited',
+      addedAt: admin.firestore.FieldValue.serverTimestamp(),
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    }
+    batch.set(workspacesUsersRef, user)
+  })
+
+  await batch.commit()
 });

@@ -1,4 +1,5 @@
-<script setup lang="ts">import { ref } from 'vue';
+<script setup lang="ts">
+import { ref } from 'vue'
 
 interface Props {
   variant?: 'contained' | 'outlined' | 'text'
@@ -59,7 +60,7 @@ const inputRef = ref<HTMLInputElement>()
   }
 
   &--error {
-    @apply border-red-300;
+    @apply border-red-300 dark:border-red-400;
     @apply focus-within:border-red-400 focus-within:ring-red-100 dark:focus-within:ring-red-400 dark:focus-within:ring-opacity-30;
   }
 

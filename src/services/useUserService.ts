@@ -10,7 +10,7 @@ export type GetUserByIdQueryContext = {
   options: {
     userId: string | null
     enabled: boolean
-  },
+  }
   handlers?: {
     onSuccess?(user: User | undefined): void
     onError?(err: unknown): void
@@ -21,7 +21,9 @@ export const useGetUserByIdQuery = (context: GetUserByIdQueryContext) => {
     try {
       if (!context.options.userId) return
       const snapshot = await getDoc(
-        doc(firestore, 'users', context.options.userId).withConverter(userConverter),
+        doc(firestore, 'users', context.options.userId).withConverter(
+          userConverter,
+        ),
       )
       const user = snapshot.data()
       context.handlers?.onSuccess?.(user)
@@ -32,23 +34,31 @@ export const useGetUserByIdQuery = (context: GetUserByIdQueryContext) => {
     }
   }
 
-  return useQuery(
-    reactive(['user', context.options.userId]),
-    getUserById,
-    {
-      enabled: computed(() => Boolean(context.options.userId) && context.options.enabled),
-      refetchOnWindowFocus: false
-    },
-  )
+  return useQuery(reactive(['user', context.options.userId]), getUserById, {
+    enabled: computed(
+      () => Boolean(context.options.userId) && context.options.enabled,
+    ),
+    refetchOnWindowFocus: false,
+    onError: (err: unknown) => errorHandler(err),
+  })
 }
 
 export type UpdateLastUsedWorkspaceId = {
-  workspaceId: string;
+  workspaceId: string
 }
 
 // Mutations
 export function useUpdateLastUsedWorkspaceIdMutation() {
-  const updateLastUsedWorkspaceIdCF = httpsCallable(functions, 'updateLastUsedWorkspaceIdCF')
+  const updateLastUsedWorkspaceIdCF = httpsCallable(
+    functions,
+    'updateLastUsedWorkspaceIdCF',
+  )
 
-  return useMutation((lastUsedWorkspaceId: UpdateLastUsedWorkspaceId) => updateLastUsedWorkspaceIdCF(lastUsedWorkspaceId));
+  return useMutation(
+    (lastUsedWorkspaceId: UpdateLastUsedWorkspaceId) =>
+      updateLastUsedWorkspaceIdCF(lastUsedWorkspaceId),
+    {
+      onError: (err: unknown) => errorHandler(err),
+    },
+  )
 }

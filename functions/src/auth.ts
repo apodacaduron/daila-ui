@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { Workspace } from './workspaces';
 
 const env = functions.config();
 
@@ -39,25 +40,27 @@ export const createUserAccountCF = functions.https.onCall(async (data, context) 
   // If user is admin create default ADMIN Workspace
   if (userRole === 'ADMIN') {
     const workspacesRef = admin.firestore().collection('workspaces');
-    const userData = {
-      id: context.auth.uid,
-      displayName: currentAuthUser.displayName ?? null,
-      email: currentAuthUser.email ?? null,
-      photoURL: currentAuthUser.photoURL ?? null,
-      role: 'admin',
-      addedAt: admin.firestore.FieldValue.serverTimestamp(),
-      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-    }
-    const workspace = await workspacesRef.add({
+    const workspacePayload: Workspace= {
       title: 'Admin',
       category: 'admin',
       logoURL: null,
-      createdBy: userData,
+      createdBy: {
+        id: context.auth.uid,
+        displayName: currentAuthUser.displayName ?? null,
+        email: currentAuthUser.email ?? null,
+        photoURL: currentAuthUser.photoURL ?? null,
+        role: 'admin',
+        status: 'active',
+        addedAt: admin.firestore.FieldValue.serverTimestamp(),
+        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      },
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-    })
+      
+    }
+    const workspace = await workspacesRef.add(workspacePayload)
     const workspaceUserRef = admin.firestore().doc(`workspaces/${workspace.id}/users/${context.auth.uid}`);
-    await workspaceUserRef.set(userData)
+    await workspaceUserRef.set(workspacePayload.createdBy)
     adminWorkspaceId = workspace.id
   }
 
