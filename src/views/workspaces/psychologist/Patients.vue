@@ -6,6 +6,7 @@ import {
   DTable,
   DCard,
   DBadge,
+  useDialog,
 } from '../../../components/primitives'
 import {
   PlusIcon,
@@ -14,15 +15,22 @@ import {
   ArrowRightIcon,
   ArrowLeftIcon,
 } from '@heroicons/vue/outline'
+import { AddPatientDialog } from '../../../features/patients'
+
+const [dialogOptions, dialogHandlers] = useDialog()
 </script>
 
 <template>
+  <AddPatientDialog
+    :show="dialogOptions.isOpen"
+    @close="dialogHandlers.close"
+  />
   <div class="patients">
     <Titlebar>
       <template #title>Patients</template>
       <template #subtitle>Manage your patients.</template>
       <template #actions>
-        <DButton variant="outlined">
+        <DButton variant="outlined" @click="dialogHandlers.open">
           <PlusIcon class="w-3 h-3" />
           &nbsp; Add patient
         </DButton>

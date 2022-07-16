@@ -53,7 +53,7 @@ export const workspaceCategoryMenus: Record<
     },
     {
       id: '4',
-      name: 'Team',
+      name: 'Team members',
       icon: UserGroupIcon,
       path: { name: 'PsychologistTeam' }
     },
