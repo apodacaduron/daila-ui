@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { useWorkspace, workspaceCategoryHelpers } from '../../composables'
-import { useUpdateLastUsedWorkspaceIdMutation } from '../../services/useUserService'
-import { errorHandler } from '../../utils/errorHandler'
-import { DPopover, DButton } from '../primitives'
+import { useWorkspace, workspaceCategoryHelpers } from '../'
+import { useUpdateLastUsedWorkspaceIdMutation } from '../../../services/useUserService'
+import { errorHandler } from '../../../utils/errorHandler'
+import { DPopover, DButton } from '../../../components/primitives'
 import { PencilIcon, ChevronDownIcon } from '@heroicons/vue/outline'
-import {sentenceCase} from 'change-case'
+import { sentenceCase } from 'change-case'
+import type { Workspace } from '../../../firebase/converters'
 
 const updateLastUsedWorkspaceId = useUpdateLastUsedWorkspaceIdMutation()
 const [workspaceOptions, workspaceHandlers] = useWorkspace({
@@ -20,6 +21,11 @@ const [workspaceOptions, workspaceHandlers] = useWorkspace({
     },
   },
 })
+
+function switchWorkspace(workspace: Workspace, closeSidebar: () => void) {
+  closeSidebar()
+  workspaceHandlers.switchWorkspace(workspace, false)
+}
 </script>
 
 <template>
@@ -28,7 +34,9 @@ const [workspaceOptions, workspaceHandlers] = useWorkspace({
       <div class="flex flex-col items-start w-full py-2">
         {{ workspaceOptions.workspace?.title }}
         <span class="text-sm font-normal">
-          {{ sentenceCase(`${workspaceOptions.workspace?.category} workspace`) }}
+          {{
+            sentenceCase(`${workspaceOptions.workspace?.category} workspace`)
+          }}
         </span>
       </div>
       <ChevronDownIcon class="w-4 h-4" />
@@ -38,14 +46,16 @@ const [workspaceOptions, workspaceHandlers] = useWorkspace({
         <div
           class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5"
         >
-          <div class="relative flex flex-col gap-4 bg-white p-7">
+          <div
+            class="relative flex flex-col gap-4 bg-white p-7 overflow-auto max-h-80 rounded-t-lg"
+          >
             <div
               v-for="workspace in workspaceOptions.workspaces"
               :key="workspace.id"
               class="flex items-center gap-4"
             >
               <router-link
-                @click="close(); workspaceHandlers.switchWorkspace(workspace, false)"
+                @click="switchWorkspace(workspace, close)"
                 :to="`/w/${workspace.id}/${workspace.category}`"
                 class="-m-3 w-full flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-50"
               >

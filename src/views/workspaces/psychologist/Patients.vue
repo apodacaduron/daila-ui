@@ -1,7 +1,19 @@
 <script setup lang="ts">
-import Titlebar from '../../../components/crm-layout/Titlebar.vue';
-import { DButton, DTableFooter, DTable, DCard, DBadge } from '../../../components/primitives'
-import { PlusIcon, TrashIcon, PencilIcon, ArrowRightIcon, ArrowLeftIcon } from '@heroicons/vue/outline'
+import Titlebar from '../../../components/crm/Titlebar.vue'
+import {
+  DButton,
+  DTableFooter,
+  DTable,
+  DCard,
+  DBadge,
+} from '../../../components/primitives'
+import {
+  PlusIcon,
+  TrashIcon,
+  PencilIcon,
+  ArrowRightIcon,
+  ArrowLeftIcon,
+} from '@heroicons/vue/outline'
 </script>
 
 <template>
@@ -10,7 +22,10 @@ import { PlusIcon, TrashIcon, PencilIcon, ArrowRightIcon, ArrowLeftIcon } from '
       <template #title>Patients</template>
       <template #subtitle>Manage your patients.</template>
       <template #actions>
-        <DButton variant="outlined"><PlusIcon class="w-3 h-3" /> &nbsp; Add patient</DButton>
+        <DButton variant="outlined">
+          <PlusIcon class="w-3 h-3" />
+          &nbsp; Add patient
+        </DButton>
       </template>
     </Titlebar>
     <DCard class="patients__card">
@@ -39,10 +54,16 @@ import { PlusIcon, TrashIcon, PencilIcon, ArrowRightIcon, ArrowLeftIcon } from '
       </DTable>
       <DTableFooter>
         <template #left>
-          <DButton variant="outlined"><ArrowLeftIcon class="w-4 h-4 mr-2" /> Previous</DButton>
+          <DButton variant="outlined">
+            <ArrowLeftIcon class="w-4 h-4 mr-2" />
+            Previous
+          </DButton>
         </template>
         <template #right>
-          <DButton variant="outlined">Next <ArrowRightIcon class="w-4 h-4 ml-2" /></DButton>
+          <DButton variant="outlined">
+            Next
+            <ArrowRightIcon class="w-4 h-4 ml-2" />
+          </DButton>
         </template>
       </DTableFooter>
     </DCard>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Titlebar from '../../../components/crm-layout/Titlebar.vue'
+import Titlebar from '../../../components/crm/Titlebar.vue'
 import {
   DButton,
   DTableFooter,
@@ -15,11 +15,11 @@ import {
   ArrowRightIcon,
   ArrowLeftIcon,
 } from '@heroicons/vue/outline'
-import { useWorkspace } from '../../../composables'
+import { useWorkspace } from '../../../features/workspaces'
 import { sentenceCase } from 'change-case'
-import { useGetWorkspaceUsersQuery } from '../../../services'
+import { useGetWorkspaceUsersQuery } from '../../../features/workspaces'
 import { computed, reactive, ref } from 'vue'
-import AddTeamMemberDialog from '../../../components/team/AddTeamMemberDialog.vue'
+import { AddTeamMemberDialog } from '../../../features/team-members'
 
 const [workspaceOptions, workspaceHandlers] = useWorkspace()
 const [dialogOptions, dialogHandlers] = useDialog()

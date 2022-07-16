@@ -2,17 +2,17 @@
 import { DLabel, DCombobox, DButton, DInput } from '../../components/primitives'
 import { useForm } from '@evilkiwi/form'
 import { ref, reactive } from 'vue'
-import { ComboboxItem } from '../../components/primitives/Input/Combobox.vue'
-import { isWorkspaceCategory } from '../../composables/useWorkspace'
+import type { ComboboxItem } from '../../components/primitives/Input/Combobox.vue'
+import { isWorkspaceCategory } from '../../features/workspaces'
 import { errorHandler } from '../../utils/errorHandler'
 import {
   useCreateWorkspaceMutation,
   useGetUserWorkspacesQuery,
-} from '../../services/useWorkspaceService'
+} from '../../features/workspaces'
 import { computed } from '@vue/reactivity'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../../stores/useUserStore'
-import Navbar from '../../components/Navbar.vue'
+import Navbar from '../../layouts/Navbar.vue'
 import { useWorkspaceStore } from '../../stores/useWorkspaceStore'
 import { useQueryClient } from 'vue-query'
 
@@ -45,7 +45,7 @@ useGetUserWorkspacesQuery({
         workspaceStore.setWorkspaces(workspaces)
         workspaceStore.setCurrentWorkspaceId(workspaceId.value)
         router.push(
-          `/w/${workspaceId.value || workspaces[0].id}/${category.value}`,
+          `/w/${workspaceId.value || workspaces[0]?.id}/${category.value}`,
         )
       }
     },
@@ -56,7 +56,7 @@ const { useField, handle, loading } = useForm<{
   category: string
 }>({
   defaults: {
-    category: comboboxOptions.value[0].value.toString(),
+    category: comboboxOptions.value[0]?.value.toString(),
   },
 })
 const title = useField('title', {

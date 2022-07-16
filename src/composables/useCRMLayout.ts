@@ -1,8 +1,12 @@
-import { CalendarIcon, CurrencyDollarIcon, UserGroupIcon, UsersIcon, ViewGridIcon } from '@heroicons/vue/outline'
-import { computed, reactive } from 'vue'
-import { WorkspaceCategory } from '../firebase/converters'
-import { useWorkspace } from './useWorkspace'
+import { computed, reactive } from 'vue';
 
+import {
+    CalendarIcon, CurrencyDollarIcon, UserGroupIcon, UsersIcon, ViewGridIcon
+} from '@heroicons/vue/outline';
+
+import { useWorkspace } from '../features/workspaces';
+
+import type { WorkspaceCategory } from '../firebase/converters'
 type CategoryMenu = {
   id: string
   name: string

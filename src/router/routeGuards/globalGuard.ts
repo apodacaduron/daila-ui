@@ -1,7 +1,8 @@
-import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
-import { useAuth, useWorkspace } from "../../composables";
+import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
 
-export const globalGuard = async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+import { useAuth } from '../../features/authentication';
+
+export const globalGuard = async (to: RouteLocationNormalized, _from: RouteLocationNormalized, next: NavigationGuardNext) => {
   const authInstance = useAuth()
   const isAuthenticated = Boolean(await authInstance.getCurrentUser())
 

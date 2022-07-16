@@ -1,14 +1,12 @@
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { computed, reactive } from 'vue';
+import { useQuery } from 'vue-query';
+
+import { firestore } from '../../../firebase';
 import {
-  query,
-  where,
-  collection,
-  getDocs,
-} from 'firebase/firestore'
-import { computed, reactive } from 'vue'
-import { useQuery } from 'vue-query'
-import { firestore } from '../firebase'
-import { Notification, notificationConverter } from '../firebase/converters/notificationConverter'
-import { errorHandler } from '../utils/errorHandler'
+    Notification, notificationConverter
+} from '../../../firebase/converters/notificationConverter';
+import { errorHandler } from '../../../utils/errorHandler';
 
 export type GetNotificationByEmailQueryContext = {
   options: {
@@ -20,7 +18,7 @@ export type GetNotificationByEmailQueryContext = {
     onError?(err: unknown): void
   }
 }
-export const useGetNotificationByEmailQuery = (
+export const useGetNotificationsByEmailQuery = (
   context: GetNotificationByEmailQueryContext,
 ) => {
   const q = computed(() =>
@@ -30,7 +28,7 @@ export const useGetNotificationByEmailQuery = (
       where('email', '==', context.options.email),
     ).withConverter(notificationConverter),
   )
-  async function getNotificationByEmail() {
+  async function getNotificationsByEmail() {
     try {
       const userNotification: Notification[] = []
       const snapshot = await getDocs(q.value)
@@ -45,7 +43,7 @@ export const useGetNotificationByEmailQuery = (
 
   return useQuery(
     reactive(['notifications', { status: 'invited', email: context.options.email }]),
-    getNotificationByEmail,
+    getNotificationsByEmail,
     {
       enabled: computed(
         () => Boolean(context.options.email) && context.options.enabled,

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { reactive, computed } from 'vue'
-import { useAuth } from './composables'
-import { useGetUserByIdQuery, useGetUserWorkspacesQuery } from './services'
+import { useAuth } from './features/authentication'
+import { useGetUserWorkspacesQuery } from './features/workspaces'
+import { useGetUserByIdQuery } from './services'
 import { useUserStore } from './stores/useUserStore'
 import { DPageSpinner } from './components/primitives/Spinner'
 import { useGlobalStore } from './stores/useGlobalStore'

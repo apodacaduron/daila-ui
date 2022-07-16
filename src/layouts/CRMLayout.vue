@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, watch, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import Sidebar from '../components/crm-layout/Sidebar.vue'
-import { useWorkspace } from '../composables'
-import CRMNavbar from '../components/crm-layout/Navbar.vue'
+import Sidebar from '../layouts/crm/Sidebar.vue'
+import { useWorkspace } from '../features/workspaces'
+import CRMNavbar from '../layouts/crm/Navbar.vue'
 import { useUserStore } from '../stores/useUserStore'
-import { useGetNotificationByEmailQuery } from '../services'
+import { useGetNotificationsByEmailQuery } from '../features/notifications'
 
 const route = useRoute()
 const router = useRouter()
@@ -14,7 +14,7 @@ const routeCategory = computed(() => route.meta.category)
 const routeWorkspaceId = computed(() => route.params.workspaceId)
 
 const userStore = useUserStore()
-useGetNotificationByEmailQuery({
+useGetNotificationsByEmailQuery({
   options: reactive({
     email: computed(() => userStore.user?.email),
     enabled: true,

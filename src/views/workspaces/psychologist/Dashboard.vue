@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import Titlebar from '../../../components/crm-layout/Titlebar.vue';
-import { DButton } from '../../../components/primitives';
-import { PlusIcon } from '@heroicons/vue/outline';
+import Titlebar from '../../../components/crm/Titlebar.vue'
 </script>
 
 <template>

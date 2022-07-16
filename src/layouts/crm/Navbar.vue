@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { BellIcon, HomeIcon } from '@heroicons/vue/outline'
-import { DSidebar, useSidebar } from '../primitives'
-import NotificationSidebar from './NotificationSidebar.vue'
+import { DSidebar, useSidebar } from '../../components/primitives'
+import { NotificationSidebar } from '../../features/notifications'
 
 const [sidebarOptions, sidebarHandlers] = useSidebar()
 </script>

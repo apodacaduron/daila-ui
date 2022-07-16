@@ -1,11 +1,16 @@
 <script setup lang="ts">
-import { DDialog, DButton, DInput, DLabel } from '../primitives'
+import {
+  DDialog,
+  DButton,
+  DInput,
+  DLabel,
+} from '../../../components/primitives'
 import { MailIcon, TrashIcon } from '@heroicons/vue/outline'
 import { ref, UnwrapRef } from 'vue'
-import { emailRegex } from '../../utils/regex'
-import { useInviteUserToWorkspaceMutation } from '../../services'
-import { useWorkspace } from '../../composables'
-import { errorHandler } from '../../utils/errorHandler'
+import { emailRegex } from '../../../utils/regex'
+import { useInviteUserToWorkspaceMutation } from '../../workspaces'
+import { useWorkspace } from '../../workspaces'
+import { errorHandler } from '../../../utils/errorHandler'
 import { useQueryClient } from 'vue-query'
 import { createToast } from 'mosha-vue-toastify'
 

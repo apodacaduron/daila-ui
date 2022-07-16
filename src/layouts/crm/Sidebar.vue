@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DAvatar, DSwitch } from '../primitives'
+import { DAvatar, DSwitch } from '../../components/primitives'
 import { useUserStore } from '../../stores/useUserStore'
 import {
   LogoutIcon,
@@ -8,9 +8,10 @@ import {
   CogIcon,
 } from '@heroicons/vue/outline'
 import { useDark } from '@vueuse/core'
-import { useCRMLayout, useLogin } from '../../composables'
+import { useCRMLayout } from '../../composables'
+import { useLogin } from '../../features/authentication'
 import { useRouter } from 'vue-router'
-import WorkspaceSwitcher from '../workspaces/WorkspaceSwitcher.vue'
+import { WorkspaceSwitcher } from '../../features/workspaces'
 
 const router = useRouter()
 const isDark = useDark()

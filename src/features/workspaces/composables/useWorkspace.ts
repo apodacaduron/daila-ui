@@ -1,14 +1,14 @@
-import { computed, reactive } from 'vue'
+import { computed, reactive } from 'vue';
+import { useRouter } from 'vue-router';
+
+import { ChatAlt2Icon, KeyIcon } from '@heroicons/vue/outline';
+
 import {
-  Workspace,
-  workspaceCategories,
-  WorkspaceCategory,
-  WorkspaceUserStatus,
-} from '../firebase/converters/workspaceConverter'
-import { useWorkspaceStore } from '../stores/useWorkspaceStore'
-import { KeyIcon, ChatAlt2Icon } from '@heroicons/vue/outline'
-import { useRouter } from 'vue-router'
-import { BadgeColor } from '../components/primitives'
+    Workspace, workspaceCategories, WorkspaceCategory, WorkspaceUserStatus
+} from '../../../firebase/converters/workspaceConverter';
+import { useWorkspaceStore } from '../../../stores/useWorkspaceStore';
+
+import type { BadgeColor } from '../../../components/primitives'
 
 export const workspaceCategoryHelpers = {
   admin: {

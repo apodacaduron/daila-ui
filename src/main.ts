@@ -1,10 +1,12 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import './tailwind.scss'
-import 'mosha-vue-toastify/dist/style.css'
-import { createPinia } from 'pinia'
-import { VueQueryPlugin } from 'vue-query'
+import './assets/tailwind.scss';
+import 'mosha-vue-toastify/dist/style.css';
+
+import { createPinia } from 'pinia';
+import { createApp } from 'vue';
+import { VueQueryPlugin } from 'vue-query';
+
+import App from './App.vue';
+import router from './router';
 
 const app = createApp(App)
 

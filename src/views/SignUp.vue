@@ -2,11 +2,15 @@
 import { DLabel, DInput, DButton } from '../components/primitives'
 import GoogleIcon from '../assets/png/google-48.png'
 import { useForm } from '@evilkiwi/form'
-import { useLogin, useWorkspace } from '../composables'
 import { computed, reactive, ref, watch } from 'vue'
 import { useUserStore } from '../stores/useUserStore'
 import { useRouter } from 'vue-router'
-import { useGetUserByIdQuery, useGetUserWorkspaceByIdQuery } from '../services'
+import { useGetUserByIdQuery } from '../services'
+import {
+  useGetUserWorkspaceByIdQuery,
+  useWorkspace,
+} from '../features/workspaces'
+import { useLogin } from '../features/authentication'
 import { useGlobalStore } from '../stores/useGlobalStore'
 import { useAuthStore } from '../stores/useAuthStore'
 

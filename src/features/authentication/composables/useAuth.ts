@@ -1,11 +1,12 @@
-import { onAuthStateChanged } from 'firebase/auth'
-import { storeToRefs } from 'pinia'
+import { onAuthStateChanged } from 'firebase/auth';
+import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
-import { auth } from '../firebase'
-import { useAuthStore } from '../stores/useAuthStore';
-import { useGlobalStore } from '../stores/useGlobalStore';
-import { useUserStore } from '../stores/useUserStore';
-import { useWorkspaceStore } from '../stores/useWorkspaceStore';
+
+import { auth } from '../../../firebase';
+import { useAuthStore } from '../../../stores/useAuthStore';
+import { useGlobalStore } from '../../../stores/useGlobalStore';
+import { useUserStore } from '../../../stores/useUserStore';
+import { useWorkspaceStore } from '../../../stores/useWorkspaceStore';
 
 export const useAuth = () => {
   const isUserByIdQueryEnabled = ref(false)

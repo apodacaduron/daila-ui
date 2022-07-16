@@ -1,29 +1,16 @@
-import { httpsCallable } from 'firebase/functions'
-import { firestore, functions } from '../firebase'
 import {
-  Workspace,
-  WorkspaceCategory,
-  workspaceConverter,
-  WorkspaceUser,
-  WorkspaceUserConverter,
-  workspaceUserConverter,
-} from '../firebase/converters/workspaceConverter'
-import { useInfiniteQuery, useMutation, useQuery } from 'vue-query'
+    collection, doc, getDoc, getDocs, limit, orderBy, query, Query, startAfter
+} from 'firebase/firestore';
+import { httpsCallable } from 'firebase/functions';
+import { computed, reactive } from 'vue';
+import { useInfiniteQuery, useMutation, useQuery } from 'vue-query';
+
+import { firestore, functions } from '../../../firebase';
 import {
-  getDocs,
-  query,
-  collection,
-  startAfter,
-  orderBy,
-  limit,
-  Query,
-  getDoc,
-  doc,
-  collectionGroup,
-  where,
-} from 'firebase/firestore'
-import { computed, reactive } from 'vue'
-import { errorHandler } from '../utils/errorHandler'
+    Workspace, WorkspaceCategory, workspaceConverter, WorkspaceUser, WorkspaceUserConverter,
+    workspaceUserConverter
+} from '../../../firebase/converters/workspaceConverter';
+import { errorHandler } from '../../../utils/errorHandler';
 
 // Mutations
 export type CreateWorkspace = {
@@ -85,7 +72,7 @@ export const useGetUserWorkspacesQuery = (
       return workspaces
     } catch (err) {
       errorHandler(err)
-      context.handlers?.onError?.(err)
+      return context.handlers?.onError?.(err)
     }
   }
 
@@ -125,7 +112,7 @@ export const useGetUserWorkspaceByIdQuery = (
       return workspace
     } catch (err) {
       errorHandler(err)
-      context.handlers?.onError?.(err)
+      return context.handlers?.onError?.(err)
     }
   }
 
@@ -177,7 +164,7 @@ export const useGetWorkspaceUsersQuery = (
       return workspaceUsers
     } catch (err) {
       errorHandler(err)
-      context.handlers?.onError?.(err)
+      return context.handlers?.onError?.(err)
     }
   }
 
@@ -191,9 +178,9 @@ export const useGetWorkspaceUsersQuery = (
         () => Boolean(context.options.workspaceId) && context.options.enabled,
       ),
       refetchOnWindowFocus: false,
-      getNextPageParam: (pageSnapshot, allPages) => {
+      getNextPageParam: (pageSnapshot, _allPages) => {
         if (!pageSnapshot?.length) return
-        const lastUserEmail = pageSnapshot[pageSnapshot.length - 1].email
+        const lastUserEmail = pageSnapshot[pageSnapshot.length - 1]?.email
         return query(q.value, startAfter(lastUserEmail)).withConverter(workspaceUserConverter)
       },
     },

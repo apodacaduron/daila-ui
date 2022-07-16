@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { DSwitch, DButtonLink } from './primitives';
+import { DSwitch, DButtonLink } from '../components/primitives'
 import { useDark } from '@vueuse/core'
 import { SunIcon } from '@heroicons/vue/outline'
-import { computed } from 'vue';
-import { useAuthStore } from '../stores/useAuthStore';
-import { useWorkspace } from '../composables';
+import { computed } from 'vue'
+import { useAuthStore } from '../stores/useAuthStore'
+import { useWorkspace } from '../features/workspaces'
 
 const isDark = useDark()
 const authStore = useAuthStore()
@@ -26,10 +26,16 @@ const isAuthenticated = computed(() => authStore.isAuthenticated)
             <SunIcon class="text-slate-700 w-3 h-3" />
           </template>
         </DSwitch>
-        <router-link v-if="isAuthenticated && workspaceOptions.hasWorkspace" :to="workspaceOptions.workspaceURL">
+        <router-link
+          v-if="isAuthenticated && workspaceOptions.hasWorkspace"
+          :to="workspaceOptions.workspaceURL"
+        >
           <DButtonLink>Dashboard</DButtonLink>
         </router-link>
-        <router-link v-else-if="isAuthenticated && !workspaceOptions.hasWorkspace" to="/w/create">
+        <router-link
+          v-else-if="isAuthenticated && !workspaceOptions.hasWorkspace"
+          to="/w/create"
+        >
           <DButtonLink>Create workspace</DButtonLink>
         </router-link>
         <template v-else>

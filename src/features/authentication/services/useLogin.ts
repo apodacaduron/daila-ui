@@ -1,13 +1,11 @@
 import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  signOut as signOutFirebase,
-} from 'firebase/auth'
-import { httpsCallable } from 'firebase/functions'
+    createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup,
+    signOut as signOutFirebase
+} from 'firebase/auth';
+import { httpsCallable } from 'firebase/functions';
 
-import { auth, functions, googleAuthProvider } from '../firebase'
-import { errorHandler } from '../utils/errorHandler'
+import { auth, functions, googleAuthProvider } from '../../../firebase';
+import { errorHandler } from '../../../utils/errorHandler';
 
 export const useLogin = () => {
   // Callable functions

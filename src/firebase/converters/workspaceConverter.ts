@@ -1,8 +1,4 @@
-import {
-  DocumentData,
-  QueryDocumentSnapshot,
-  SnapshotOptions,
-} from 'firebase/firestore'
+import type { DocumentData, QueryDocumentSnapshot, SnapshotOptions } from 'firebase/firestore';
 
 export const workspaceCategories = ['admin', 'psychologist'] as const
 export type WorkspaceCategory = typeof workspaceCategories[number]
@@ -14,6 +10,7 @@ export const workspaceUserStatus = ['active', 'inactive', 'deleted', 'invited', 
 export type WorkspaceUserStatus = typeof workspaceUserStatus[number]
 
 export type WorkspaceUser = {
+  id: string,
   displayName: string | null,
   email: string | null,
   photoURL: string | null,

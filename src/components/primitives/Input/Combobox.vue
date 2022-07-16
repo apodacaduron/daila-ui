@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import {
   Combobox,
   ComboboxInput,
@@ -9,6 +9,7 @@ import {
   TransitionRoot,
 } from '@headlessui/vue'
 import { CheckIcon, SelectorIcon } from '@heroicons/vue/outline'
+import type { Option } from '../../../utils/types'
 
 export type ComboboxItem = {
   id: string | number
@@ -25,7 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
   options: () => [],
 })
 const emit = defineEmits<{
-  (e: 'update:modelValue', selectValue: ComboboxItem['value']): void
+  (e: 'update:modelValue', selectValue: Option<ComboboxItem['value']>): void
 }>()
 
 const selected = ref(props.options[0])
@@ -42,19 +43,20 @@ const filteredOptions = computed(() =>
       ),
 )
 
-function updateValue(event: Event) {
-  const inputValue = (event.target as HTMLInputElement).value
-  if (inputValue !== props.modelValue) {
-      selected.value =
-        props.options.find((option) => option.value === props.modelValue) ??
-        props.options[0]
-      emit('update:modelValue', inputValue)
-    }
+function updateValue(newSelectedValue: Option<ComboboxItem['value']>) {
+  if (newSelectedValue !== props.modelValue) {
+    selected.value =
+      props.options.find((option) => option.value === props.modelValue) ??
+      props.options[0]
+    emit('update:modelValue', newSelectedValue)
+  }
 }
+
+watch(selected, (newSelectedData) => updateValue(newSelectedData?.value))
 </script>
 
 <template>
-  <Combobox :value="selected" @input="updateValue">
+  <Combobox v-model="selected">
     <div class="combobox">
       <div class="combobox__container">
         <ComboboxInput

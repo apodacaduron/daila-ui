@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useLogin } from '../composables';
+import { useLogin } from '../features/authentication'
 
 const loginHook = useLogin()
 </script>
