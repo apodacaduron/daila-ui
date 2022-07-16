@@ -1,6 +1,6 @@
 import { onAuthStateChanged } from 'firebase/auth'
 import { storeToRefs } from 'pinia'
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { auth } from '../firebase'
 import { useAuthStore } from '../stores/useAuthStore';
 import { useGlobalStore } from '../stores/useGlobalStore';
@@ -20,6 +20,7 @@ export const useAuth = () => {
       onAuthStateChanged(auth, (_user) => {
         if (_user) {
           authStore.setAuthUser(_user)
+          isUserByIdQueryEnabled.value = true
           resolve(_user)
         } else {
           resetStores()
@@ -36,18 +37,8 @@ export const useAuth = () => {
     userStore.setUser(null)
     workspaceStore.setWorkspaces(null)
     workspaceStore.setCurrentWorkspaceId(null)
+    isUserByIdQueryEnabled.value = false
   }
-
-  watch(
-    () => authStore.isAuthenticated,
-    () => {
-      if (authStore.isAuthenticated) {
-        isUserByIdQueryEnabled.value = true
-      } else {
-        isUserByIdQueryEnabled.value = false
-      }
-    },
-  )
 
   return {
     ...storeToRefs(authStore),

@@ -1,15 +1,32 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue'
+import { computed, watch, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Sidebar from '../components/crm-layout/Sidebar.vue'
 import { useWorkspace } from '../composables'
 import CRMNavbar from '../components/crm-layout/Navbar.vue'
+import { useUserStore } from '../stores/useUserStore'
+import { useGetNotificationByEmailQuery } from '../services'
 
 const route = useRoute()
 const router = useRouter()
 const [workspaceOptions] = useWorkspace()
 const routeCategory = computed(() => route.meta.category)
 const routeWorkspaceId = computed(() => route.params.workspaceId)
+
+const userStore = useUserStore()
+useGetNotificationByEmailQuery({
+  options: reactive({
+    email: computed(() => userStore.user?.email),
+    enabled: true,
+  }),
+  handlers: {
+    onSuccess(userInvitations) {
+      if (userInvitations) {
+      }
+    },
+  },
+})
+
 watch([routeCategory, () => workspaceOptions.hasWorkspace], () => {
   if (
     workspaceOptions.hasWorkspace &&

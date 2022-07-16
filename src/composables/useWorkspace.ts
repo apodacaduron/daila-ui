@@ -60,6 +60,7 @@ export const useWorkspace = (context?: WorkspaceContext) => {
       router.push(workspaceURL)
     }
     context?.handlers.onSwitchWorkspace(_workspace)
+    return workspaceURL
   }
 
   function getWorkspaceUserStatusColor(status: WorkspaceUserStatus): BadgeColor {

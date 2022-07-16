@@ -29,6 +29,6 @@ export const onUserInvitedToWorkspaceTrigger = functions.firestore
     const workspaceUserDocument = snap.data() as WorkspaceUser
     const userInvitationsRef = admin
       .firestore()
-      .collection('invitations').doc()
+      .collection('notifications').doc()
     userInvitationsRef.create({ workspace: { id: workspace.id, ...workspace.data() }, ...workspaceUserDocument })
   })

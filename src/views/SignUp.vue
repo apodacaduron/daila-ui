@@ -37,7 +37,7 @@ const password = useField('password', {
 const confirmPassword = useField('confirmPassword', {
   required: true,
   min: 6,
-  validator: (rule: unknown, value: unknown) => value === password.value,
+  validator: (_: unknown, value: unknown) => value === password.value,
   message: 'Password does not match',
 })
 useGetUserByIdQuery({

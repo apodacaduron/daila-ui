@@ -66,7 +66,7 @@ defineEmits<{
   }
   &--translucent {
     @apply shadow-sm;
-    @apply bg-blue-100 text-blue-600 dark:bg-blue-600 dark:bg-opacity-30;
+    @apply bg-blue-100 text-blue-600 dark:bg-blue-600 dark:bg-opacity-20 dark:text-blue-400;
     &:not(:disabled):active {
       @apply bg-blue-200 dark:bg-blue-500 dark:bg-opacity-30;
     }

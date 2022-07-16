@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import {
   Combobox,
   ComboboxInput,
@@ -24,10 +24,9 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   options: () => [],
 })
-const emit = defineEmits(['update:modelValue'])
-const updateValue = (selectValue: ComboboxItem['value']) => {
-  emit('update:modelValue', selectValue)
-}
+const emit = defineEmits<{
+  (e: 'update:modelValue', selectValue: ComboboxItem['value']): void
+}>()
 
 const selected = ref(props.options[0])
 const query = ref('')
@@ -43,24 +42,19 @@ const filteredOptions = computed(() =>
       ),
 )
 
-watch(
-  selected,
-  () => {
-    if (selected.value.value !== props.modelValue) {
+function updateValue(event: Event) {
+  const inputValue = (event.target as HTMLInputElement).value
+  if (inputValue !== props.modelValue) {
       selected.value =
         props.options.find((option) => option.value === props.modelValue) ??
         props.options[0]
-      updateValue(selected.value.value)
+      emit('update:modelValue', inputValue)
     }
-  },
-  {
-    immediate: true,
-  },
-)
+}
 </script>
 
 <template>
-  <Combobox v-model="selected">
+  <Combobox :value="selected" @input="updateValue">
     <div class="combobox">
       <div class="combobox__container">
         <ComboboxInput

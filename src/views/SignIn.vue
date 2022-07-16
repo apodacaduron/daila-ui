@@ -83,6 +83,9 @@ watch(
       router.push(`/w/${workspaceId}/${workspaceCategory}`)
     }
   },
+  {
+    immediate: true
+  }
 )
 watch(
   () => userStore.user?.hasWorkspace,
