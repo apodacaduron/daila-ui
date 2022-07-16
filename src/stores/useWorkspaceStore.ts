@@ -1,5 +1,6 @@
-import { defineStore } from 'pinia'
-import { Workspace } from '../firebase/converters'
+import { defineStore } from 'pinia';
+
+import type { Workspace } from '../firebase/converters'
 
 type WorkspaceStoreState = {
   lastUsedWorkspaceId: Workspace['id'] | null

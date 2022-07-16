@@ -1,5 +1,5 @@
-import { User as FirebaseUser } from "firebase/auth"
-import { defineStore } from "pinia"
+import type { User as FirebaseUser } from "firebase/auth"
+import { defineStore } from 'pinia';
 
 type AuthStoreState = {
   user: FirebaseUser | null;
