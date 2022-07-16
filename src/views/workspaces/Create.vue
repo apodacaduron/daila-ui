@@ -38,16 +38,13 @@ useGetUserWorkspacesQuery({
   }),
   handlers: {
     async onSuccess(workspaces) {
-      if (workspaces) {
-        if (!workspaces.length) {
-          await queryClient.invalidateQueries('workspaces')
-        }
-        workspaceStore.setWorkspaces(workspaces)
-        workspaceStore.setCurrentWorkspaceId(workspaceId.value)
-        router.push(
-          `/w/${workspaceId.value || workspaces[0]?.id}/${category.value}`,
-        )
-      }
+      console.log(workspaces)
+      if (!workspaces) return
+      workspaceStore.setWorkspaces(workspaces)
+      workspaceStore.setCurrentWorkspaceId(workspaceId.value)
+      router.push(
+        `/w/${workspaceId.value || workspaces[0]?.id}/${category.value}`,
+      )
     },
   },
 })
@@ -73,6 +70,7 @@ const onSubmit = handle(async ({ title, category }) => {
     title,
     category,
   })
+  await queryClient.invalidateQueries(['workspaces'])
   workspaceId.value = ((response.data as any).id as string) ?? null
   isGetUserWorkspacesQueryEnabled.value = true
 })

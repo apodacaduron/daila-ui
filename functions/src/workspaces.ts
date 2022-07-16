@@ -1,30 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
-export const workspaceCategories = ['admin', 'psychologist'] as const
-export type WorkspaceCategory = typeof workspaceCategories[number]
-
-export const workspaceRoles = ['admin', 'editor', 'user'] as const;
-export type WorkspaceRole = typeof workspaceRoles[number]
-
-export type WorkspaceUser = {
-  displayName: string | null,
-  email: string | null,
-  photoURL: string | null,
-  role: 'admin' | 'editor' | 'user',
-  status: 'active' | 'inactive' | 'deleted' | 'invited',
-  addedAt: admin.firestore.FieldValue,
-  updatedAt: admin.firestore.FieldValue,
-}
-
-export type Workspace = {
-  title: string;
-  category: WorkspaceCategory;
-  logoURL: string | null;
-  createdBy: WorkspaceUser & { id?: string };
-  createdAt: admin.firestore.FieldValue;
-  updatedAt: admin.firestore.FieldValue;
-}
+import { Workspace, workspaceCategories, WorkspaceCategory, WorkspaceUser } from './utils/types';
 
 function isCreateWorkspacePayload(data: unknown) {
   return typeof data === 'object' && data !== null && 'title' in data && 'category' in data
@@ -67,7 +44,7 @@ export const createWorkspaceCF = functions.https.onCall(async (data, context) =>
       photoURL: currentAuthUser.photoURL ?? null,
       role: 'admin',
       status: 'active',
-      addedAt: admin.firestore.FieldValue.serverTimestamp(),
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     },
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -78,7 +55,18 @@ export const createWorkspaceCF = functions.https.onCall(async (data, context) =>
   delete workspaceData.createdBy.id
   const workspacesUsersRef = admin.firestore().collection(`workspaces/${workspace.id}/users`).doc(context.auth.uid);
   await workspacesUsersRef.set(workspaceData.createdBy)
-  return { id: workspace.id, }
+
+  const userWorkspaceRef = admin
+    .firestore()
+    .collection(`users/${context.auth.uid}/workspaces`).doc(workspace.id)
+  userWorkspaceRef.create(workspaceData)
+
+  const userRef = admin
+    .firestore()
+    .doc(`users/${context.auth.uid}`)
+  userRef.update({ lastUsedWorkspaceId: workspace.id, hasWorkspace: true })
+
+  return { id: workspace.id }
 });
 
 export const inviteUserToWorkspaceCF = functions.https.onCall(async (data, context) => {
@@ -115,14 +103,13 @@ export const inviteUserToWorkspaceCF = functions.https.onCall(async (data, conte
 
   data.emailList.forEach((emailItem: { email: string }) => {
     const workspacesUsersRef = admin.firestore().collection(`workspaces/${data.workspaceId}/users`).doc();
-    console.log(workspacesUsersRef.id)
     const user: WorkspaceUser = {
       displayName: null,
       email: emailItem.email ?? null,
       photoURL: null,
       role: 'user',
       status: 'invited',
-      addedAt: admin.firestore.FieldValue.serverTimestamp(),
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     }
     batch.set(workspacesUsersRef, user)

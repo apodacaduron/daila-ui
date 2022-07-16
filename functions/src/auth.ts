@@ -1,6 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import { Workspace } from './workspaces';
+
+import { Workspace } from './utils/types';
 
 const env = functions.config();
 
@@ -40,7 +41,7 @@ export const createUserAccountCF = functions.https.onCall(async (data, context) 
   // If user is admin create default ADMIN Workspace
   if (userRole === 'ADMIN') {
     const workspacesRef = admin.firestore().collection('workspaces');
-    const workspacePayload: Workspace= {
+    const workspacePayload: Workspace = {
       title: 'Admin',
       category: 'admin',
       logoURL: null,
@@ -51,12 +52,12 @@ export const createUserAccountCF = functions.https.onCall(async (data, context) 
         photoURL: currentAuthUser.photoURL ?? null,
         role: 'admin',
         status: 'active',
-        addedAt: admin.firestore.FieldValue.serverTimestamp(),
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
         updatedAt: admin.firestore.FieldValue.serverTimestamp(),
       },
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
-      
+
     }
     const workspace = await workspacesRef.add(workspacePayload)
     const workspaceUserRef = admin.firestore().doc(`workspaces/${workspace.id}/users/${context.auth.uid}`);

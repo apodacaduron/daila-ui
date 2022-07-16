@@ -18,7 +18,7 @@ export const updateLastUsedWorkspaceIdCF = functions.https.onCall(async (data, c
 
   const usersRef = admin.firestore().collection('users');
   await usersRef.doc(context.auth.uid).update({
-    hasWorkspace: data.workspaceId,
+    hasWorkspace: true,
     lastUsedWorkspaceId: data.workspaceId,
   });
 });

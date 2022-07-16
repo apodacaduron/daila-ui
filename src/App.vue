@@ -33,7 +33,7 @@ useGetUserByIdQuery({
 useGetUserWorkspacesQuery({
   options: reactive({
     userId: computed(() => authHook.user.value?.uid ?? null),
-    enabled: computed(() => Boolean(userStore.user)),
+    enabled: computed(() => Boolean(userStore.user?.hasWorkspace)),
   }),
   handlers: {
     onSuccess(workspaces) {

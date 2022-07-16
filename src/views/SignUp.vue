@@ -158,6 +158,7 @@ watch(
         </div>
         <div class="sign-up__box__form__button">
           <DButton
+            type="button"
             :disabled="loading"
             fullWidth
             variant="outlined"

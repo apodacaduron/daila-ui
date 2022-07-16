@@ -8,4 +8,3 @@ export * from './workspaces';
 export * from './users';
 
 // Firestore Triggers
-export * from './triggers/workspaceTriggers';

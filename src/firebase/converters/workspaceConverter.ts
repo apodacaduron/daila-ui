@@ -16,7 +16,7 @@ export type WorkspaceUser = {
   photoURL: string | null,
   role: WorkspaceUserRole,
   status: WorkspaceUserStatus,
-  addedAt: Date,
+  createdAt: Date,
   updatedAt: Date,
 }
 
@@ -75,7 +75,7 @@ export class WorkspaceUserConverter {
     readonly photoURL: string | null,
     readonly role: 'admin' | 'editor' | 'user',
     readonly status: 'active' | 'inactive' | 'deleted' | 'invited',
-    readonly addedAt: Date,
+    readonly createdAt: Date,
     readonly updatedAt: Date,
   ) { }
 
@@ -100,7 +100,7 @@ export const workspaceUserConverter = {
       data.photoURL,
       data.role,
       data.status,
-      data.addedAt.toDate(),
+      data.createdAt.toDate(),
       data.updatedAt.toDate(),
     )
   },

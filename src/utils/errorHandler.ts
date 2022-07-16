@@ -1,5 +1,7 @@
-import { FirebaseError } from 'firebase/app'
-import { createToast } from 'mosha-vue-toastify'
+import { FirebaseError } from 'firebase/app';
+import { createToast } from 'mosha-vue-toastify';
+
+import { useGlobalStore } from '../stores/useGlobalStore';
 
 type ErrorWithMessage = {
   message: string
@@ -10,6 +12,8 @@ function isErrorMessage(err: unknown): err is ErrorWithMessage {
 }
 
 export const errorHandler = (err: unknown) => {
+  const globalStore = useGlobalStore()
+  globalStore.setLoading(false)
   if (
     err instanceof TypeError ||
     err instanceof RangeError ||
