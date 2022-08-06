@@ -1,10 +1,12 @@
 import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
 
 admin.initializeApp();
 
 // Cloud functions
-export * from './auth';
-export * from './workspaces';
-export * from './users';
+// export * from './auth';
 
-// Firestore Triggers
+export const hello = functions.https.onCall(async (data, context) => {
+  // Check if user is authenticated
+  return 'Hello'
+});

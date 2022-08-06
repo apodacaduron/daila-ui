@@ -12,6 +12,7 @@
     "@headlessui/vue": "^1.6.4",
     "@heroicons/vue": "^1.0.6",
     "@vueuse/core": "^8.6.0",
+    "axios": "^0.27.2",
     "change-case": "^4.1.2",
     "firebase": "^9.8.3",
     "font-color-contrast": "^11.1.0",
@@ -19,7 +20,6 @@
     "mosha-vue-toastify": "^1.0.23",
     "pinia": "^2.0.14",
     "vue": "^3.2.25",
-    "vue-query": "^1.25.0",
     "vue-router": "4",
     "vue3-popper": "^1.5.0"
   },

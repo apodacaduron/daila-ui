@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { DButton } from '../components/primitives'
+import { DButton, DButtonLink } from '../components/ui'
 import { InformationCircleIcon } from '@heroicons/vue/outline'
-import ButtonLink from '../components/primitives/Button/ButtonLink.vue'
 </script>
 
 <template>
@@ -19,7 +18,7 @@ import ButtonLink from '../components/primitives/Button/ButtonLink.vue'
       <div class="page-not-found__box__actions">
         <DButton @click="$router.go(-1)" variant="outlined">Go back</DButton>
         <router-link to="/">
-          <ButtonLink>Take me home</ButtonLink>
+          <DButtonLink>Take me home</DButtonLink>
         </router-link>
       </div>
     </div>
