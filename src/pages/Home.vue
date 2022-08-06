@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { useAuthService } from '../features/authentication'
-
-const authService = useAuthService()
+import LandingNav from '../components/LandingNav.vue'
 </script>
 
 <template>
-  HOME
-  <button @click="authService.signOut">sign out</button>
+  <LandingNav />
+  Home
 </template>
