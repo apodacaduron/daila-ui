@@ -29,7 +29,6 @@ export const errorHandler = (err: unknown) => {
       type: 'danger',
       transition: 'slide',
     })
-  } else {
-    console.log(err)
   }
+  return Promise.reject(err)
 }

@@ -1,10 +1,15 @@
-import { useForm } from "@evilkiwi/form"
+import { useForm } from '@evilkiwi/form';
 
+import { useAuthService } from '../services/useAuthService';
+
+type SignInForm = {
+  email: string
+  password: string
+}
 export const useSignInForm = () => {
-  const formInstance = useForm<{
-    email: string
-    password: string
-  }>({
+  const authService = useAuthService()
+
+  const formInstance = useForm<SignInForm>({
     defaults: {},
   })
   const email = formInstance.useField('email', {
@@ -14,13 +19,10 @@ export const useSignInForm = () => {
   const password = formInstance.useField('password', {
     required: true,
   })
-  
+
   const onSubmit = formInstance.handle(async (formValues) => {
-    console.log(formValues)
+    authService.signInWithCredentials(formValues.email, formValues.password)
   })
-  const signInWithGoogle = async () => {
-    console.log('signInWithGoogle')
-  }
 
   return {
     formInstance,
@@ -28,6 +30,6 @@ export const useSignInForm = () => {
     password,
 
     onSubmit,
-    signInWithGoogle,
+    signInWithGoogle: authService.signInWithGoogle,
   }
 }

@@ -60,7 +60,7 @@ const signUpForm = useSignUpForm()
         </div>
         <div class="sign-up__box__form__button">
           <GoogleButton
-            @click="signUpForm.signInWithGoogle"
+            @click="signUpForm.signUpWithGoogle"
             :disabled="signUpForm.formInstance.loading.value"
           >
             Sign up with Google
