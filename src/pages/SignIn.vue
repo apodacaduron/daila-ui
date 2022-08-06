@@ -1,8 +1,28 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { DLabel, DInput, DButton } from '../components/ui'
-import { useSignInForm, GoogleButton } from '../features/authentication'
+import {
+  useSignInForm,
+  GoogleButton,
+  useAuthStore,
+} from '../features/authentication'
 
-const signInForm = useSignInForm()
+const router = useRouter()
+const authStore = useAuthStore()
+const signInForm = useSignInForm({
+  handlers: {
+    onSignInWithGoogle() {
+      if (authStore.isAuthenticated) {
+        router.push({ name: 'Home' })
+      }
+    },
+    onSubmitSignInForm() {
+      if (authStore.isAuthenticated) {
+        router.push({ name: 'Home' })
+      }
+    },
+  },
+})
 </script>
 
 <template>

@@ -6,7 +6,13 @@ type SignInForm = {
   email: string
   password: string
 }
-export const useSignInForm = () => {
+type SignInFormContext = {
+  handlers?: {
+    onSignInWithGoogle?(): void
+    onSubmitSignInForm?(): void
+  }
+}
+export const useSignInForm = (context: SignInFormContext) => {
   const authService = useAuthService()
 
   const formInstance = useForm<SignInForm>({
@@ -21,7 +27,8 @@ export const useSignInForm = () => {
   })
 
   const onSubmit = formInstance.handle(async (formValues) => {
-    authService.signInWithCredentials(formValues.email, formValues.password)
+    await authService.signInWithCredentials(formValues.email, formValues.password)
+    context.handlers?.onSubmitSignInForm?.()
   })
 
   return {
@@ -30,6 +37,9 @@ export const useSignInForm = () => {
     password,
 
     onSubmit,
-    signInWithGoogle: authService.signInWithGoogle,
+    signInWithGoogle: async () => {
+      await authService.signInWithGoogle()
+      context.handlers?.onSignInWithGoogle?.()
+    },
   }
 }

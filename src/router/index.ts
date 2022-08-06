@@ -39,7 +39,7 @@ router.beforeEach(async (to) => {
   const authService = useAuthService()
   const isAuthenticated = Boolean(await authService.currentUser())
 
-  if (!isAuthenticated && to.meta.requiresAuth) return { name: 'SignIn' }
+  if (!isAuthenticated && to.meta.requiresAuth) return { name: 'SignIn', query: { redirect: to.fullPath } }
   if (isAuthenticated && to.meta.forVisitors) return { name: 'Home' }
 
   return

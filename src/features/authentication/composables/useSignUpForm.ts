@@ -7,8 +7,13 @@ type SignUpForm = {
   password: string
   confirmPassword: string
 }
-
-export const useSignUpForm = () => {
+type SignUpFormContext = {
+  handlers?: {
+    onSignUpWithGoogle?(): void
+    onSubmitSignUpForm?(): void
+  }
+}
+export const useSignUpForm = (context: SignUpFormContext) => {
   const authService = useAuthService()
 
   const formInstance = useForm<SignUpForm>({
@@ -29,7 +34,8 @@ export const useSignUpForm = () => {
   })
 
   const onSubmit = formInstance.handle(async (formValues) => {
-    authService.signUpWithCredentials(formValues.email, formValues.password)
+    await authService.signUpWithCredentials(formValues.email, formValues.password)
+    context.handlers?.onSubmitSignUpForm?.()
   })
 
   return {
@@ -39,6 +45,9 @@ export const useSignUpForm = () => {
     confirmPassword,
 
     onSubmit,
-    signUpWithGoogle: authService.signInWithGoogle,
+    signUpWithGoogle: async () => {
+      await authService.signInWithGoogle()
+      context.handlers?.onSignUpWithGoogle?.()
+    },
   }
 }
