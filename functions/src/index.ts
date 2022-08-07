@@ -5,7 +5,7 @@ import * as admin from 'firebase-admin';
 admin.initializeApp();
 
 // Cloud functions
-// export * from './auth';
+export * from './functions';
 
 // Triggers
 export * from './triggers';

@@ -1,11 +1,11 @@
 import { collection, getDocs, query } from 'firebase/firestore';
+import { httpsCallable } from 'firebase/functions';
 
-import { firestore } from '../../../firebase';
+import { firestore, functions } from '../../../firebase';
 import { errorHandler } from '../../../utils/errorHandler';
 import { workspaceConverter } from '../converters';
 
 import type { Option } from '../../../utils/types';
-
 export const workspaceCategories = ['personal-space', 'psychologist', 'admin'] as const
 export type WorkspaceCategory = typeof workspaceCategories[number]
 
@@ -24,7 +24,14 @@ export type WorkspacesMap = {
   [workspaceId: string]: Workspace
 }
 
+export type CreateWorkspace = {
+  name: string
+  category: WorkspaceCategory
+}
+
 export const useWorkspaceService = () => {
+  const createWorkspaceCF = httpsCallable<CreateWorkspace>(functions, 'createWorkspace')
+
   // Handlers
   async function getWorkspacesByUserId(userId: Option<string>) {
     try {
@@ -44,7 +51,16 @@ export const useWorkspaceService = () => {
     }
   }
 
+  function createWorkspace(payload: CreateWorkspace) {
+    try {
+      return createWorkspaceCF(payload)
+    } catch (err) {
+      return errorHandler(err)
+    }
+  }
+
   return {
-    getWorkspacesByUserId
+    getWorkspacesByUserId,
+    createWorkspace,
   }
 }

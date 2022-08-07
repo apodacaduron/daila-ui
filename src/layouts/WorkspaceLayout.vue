@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import { useAuthStore, useUserService } from '../features/authentication'
-import { useUserStore } from '../features/authentication/stores/useUserStore'
+import {
+  useAuthStore,
+  useUserService,
+  useUserStore,
+} from '../features/authentication'
 import { useWorkspaceService, useWorkspaceStore } from '../features/workspaces'
 import { DPageSpinner } from '../components/ui'
-import router from '../router'
+import { useRouter } from 'vue-router'
 
-console.log('WORKSPACE LAYOUT (LOAD USER WORKSPACES)')
 const authStore = useAuthStore()
 const userStore = useUserStore()
 const workspaceStore = useWorkspaceStore()
 const userService = useUserService()
 const workspaceService = useWorkspaceService()
+const router = useRouter()
 
 async function initializeWorkspace() {
   const user = await userService.getUserById(authStore.user?.uid)

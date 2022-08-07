@@ -9,8 +9,7 @@ import {
 } from '@heroicons/vue/outline'
 import { useDark } from '@vueuse/core'
 import { workspaceMenus } from '../features/workspaces'
-import { useUserStore } from '../features/authentication/stores/useUserStore'
-import { useAuthService } from '../features/authentication'
+import { useAuthService, useUserStore } from '../features/authentication'
 
 const isDark = useDark()
 const authService = useAuthService()

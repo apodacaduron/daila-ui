@@ -5,11 +5,14 @@ import { workspaceIcons } from '../../data'
 import type { Workspace } from '../../services'
 import { useWorkspaceStore } from '../../stores'
 import { DPopover, DButton } from '../../../../components/ui'
+import { useUserService } from '../../../authentication'
 
+const userService = useUserService()
 const workspaceStore = useWorkspaceStore()
 
 function switchWorkspace(workspace: Workspace, closeSidebar: () => void) {
   workspaceStore.setWorkspaceById(workspace.id)
+  userService.updateUser({ lastWorkspaceId: workspace.id })
   closeSidebar()
 }
 </script>

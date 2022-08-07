@@ -1,6 +1,7 @@
 import { doc, getDoc } from 'firebase/firestore';
+import { httpsCallable } from 'firebase/functions';
 
-import { firestore } from '../../../firebase';
+import { firestore, functions } from '../../../firebase';
 import { errorHandler } from '../../../utils/errorHandler';
 import { userConverter } from '../converters';
 
@@ -17,6 +18,8 @@ export type User = {
 }
 
 export const useUserService = () => {
+  const updateUserCF = httpsCallable<Partial<User>>(functions, 'updateUser')
+
   // Handlers
   async function getUserById(userId: Option<string>) {
     try {
@@ -32,7 +35,16 @@ export const useUserService = () => {
     }
   }
 
+  function updateUser(userData: Partial<User>) {
+    try {
+      return updateUserCF(userData)
+    } catch (err) {
+      return errorHandler(err)
+    }
+  }
+
   return {
     getUserById,
+    updateUser,
   }
 }
