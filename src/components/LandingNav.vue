@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { DSwitch, DButtonLink, DButton, DSpinner } from './ui'
+import { DSwitch, DButtonLink, DButton } from './ui'
 import { useDark } from '@vueuse/core'
 import { SunIcon } from '@heroicons/vue/outline'
 import { useAuthService, useAuthStore } from '../features/authentication'
-import { useUserStore } from '../features/authentication/stores/useUserStore'
 
 const isDark = useDark()
 const authStore = useAuthStore()
-const userStore = useUserStore()
 const authService = useAuthService()
 </script>
 
@@ -26,12 +24,9 @@ const authService = useAuthService()
         </DSwitch>
 
         <template v-if="authStore.isAuthenticated">
-          <router-link v-if="userStore.hasUser" :to="`/w`">
+          <router-link to="/w">
             <DButtonLink>Dashboard</DButtonLink>
           </router-link>
-          <DButton v-else :disabled="!userStore.hasUser">
-            <DSpinner class="w-4 h-4" />
-          </DButton>
 
           <DButton @click="authService.signOut" variant="outlined">
             Sign out

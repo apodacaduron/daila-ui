@@ -6,7 +6,7 @@ import { workspaceConverter } from '../converters';
 
 import type { Option } from '../../../utils/types';
 
-export const workspaceCategories = ['personal-space'] as const
+export const workspaceCategories = ['personal-space', 'psychologist', 'admin'] as const
 export type WorkspaceCategory = typeof workspaceCategories[number]
 
 export type Workspace = {

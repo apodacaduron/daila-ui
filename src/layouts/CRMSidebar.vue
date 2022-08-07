@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { DAvatar, DSwitch } from '../components/ui'
+import { useWorkspaceStore, WorkspaceSwitcher } from '../features/workspaces'
 import {
   LogoutIcon,
   SunIcon,
@@ -7,13 +8,14 @@ import {
   CogIcon,
 } from '@heroicons/vue/outline'
 import { useDark } from '@vueuse/core'
-import { useRouter } from 'vue-router'
+import { workspaceMenus } from '../features/workspaces'
+import { useUserStore } from '../features/authentication/stores/useUserStore'
+import { useAuthService } from '../features/authentication'
 
-const router = useRouter()
 const isDark = useDark()
-function signOutAndRedirect() {
-  router.push('/')
-}
+const authService = useAuthService()
+const workspaceStore = useWorkspaceStore()
+const userStore = useUserStore()
 </script>
 
 <template>
@@ -28,18 +30,21 @@ function signOutAndRedirect() {
         </DSwitch>
       </div>
       <div class="sidebar__top__workspaces">
-        <!-- <WorkspaceSwitcher /> -->
+        <WorkspaceSwitcher />
       </div>
-      <ul class="sidebar__top__primary-menu">
-        <!-- <li
-          v-for="menuItem in crmLayoutHook.primaryMenuItems"
+      <ul
+        class="sidebar__top__primary-menu"
+        v-if="workspaceStore.workspace?.category"
+      >
+        <li
+          v-for="menuItem in workspaceMenus[workspaceStore.workspace?.category]"
           :key="menuItem.id"
         >
           <router-link :to="menuItem.path">
             <component :is="menuItem.icon" class="menu-icon" />
             {{ menuItem.name }}
           </router-link>
-        </li> -->
+        </li>
       </ul>
     </div>
     <div class="sidebar__bottom">
@@ -61,7 +66,7 @@ function signOutAndRedirect() {
         Want to upgrade?
       </div>
       <div class="sidebar__bottom__account">
-        <!-- <div class="sidebar__bottom__account__avatar">
+        <div class="sidebar__bottom__account__avatar">
           <DAvatar
             :src="userStore.user?.photoURL"
             :text="userStore.user?.displayName ?? userStore.user?.email"
@@ -74,9 +79,9 @@ function signOutAndRedirect() {
           <div class="sidebar__bottom__account__info__email">
             {{ userStore.user?.email }}
           </div>
-        </div> -->
+        </div>
         <div class="sidebar__bottom__account__icon">
-          <button @click="signOutAndRedirect">
+          <button @click="authService.signOut">
             <LogoutIcon />
           </button>
         </div>
