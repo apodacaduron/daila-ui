@@ -1,0 +1,1 @@
+<template>Psychologist dashboard</template>

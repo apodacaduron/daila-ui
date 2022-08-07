@@ -19,6 +19,6 @@
 
 <style lang="scss" scoped>
 .spinner {
-  @apply w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600;
+  @apply text-gray-200 animate-spin dark:text-gray-600 fill-blue-600;
 }
 </style>

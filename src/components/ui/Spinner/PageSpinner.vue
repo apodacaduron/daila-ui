@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import Spinner from './Spinner.vue';
+import Spinner from './Spinner.vue'
 </script>
 
 <template>
   <div class="page-spinner">
-    <Spinner />
+    <Spinner class="w-8 h-8" />
   </div>
 </template>
 
