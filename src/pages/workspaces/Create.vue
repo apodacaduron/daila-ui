@@ -1,37 +1,17 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
 import { DLabel, DCombobox, DButton, DInput } from '../../components/ui'
 import {
-  useAuthStore,
-  useUserService,
-  useUserStore,
-} from '../../features/authentication'
-import {
   useCreateWorkspaceForm,
-  useWorkspaceService,
+  useInitializeWorkspace,
   useWorkspaceStore,
 } from '../../features/workspaces'
 
 const workspaceStore = useWorkspaceStore()
-const authStore = useAuthStore()
-const userStore = useUserStore()
-const userService = useUserService()
-const workspaceService = useWorkspaceService()
-const router = useRouter()
+const initializeWorkspace = useInitializeWorkspace()
 const createWorkspaceForm = useCreateWorkspaceForm({
   handlers: {
     async onCreateWorkspace() {
-      const user = await userService.getUserById(authStore.user?.uid)
-      const workspaces = await workspaceService.getWorkspacesByUserId(
-        authStore.user?.uid,
-      )
-      userStore.setUser(user)
-      workspaceStore.setWorkspaces(workspaces)
-      workspaceStore.setWorkspaceById(user?.lastWorkspaceId)
-
-      router.push(
-        `/w/${workspaceStore.workspace?.id}/${workspaceStore.workspace?.category}`,
-      )
+      initializeWorkspace.execute({ redirect: true })
     },
   },
 })
