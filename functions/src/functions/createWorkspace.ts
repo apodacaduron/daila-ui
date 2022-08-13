@@ -9,7 +9,7 @@ export const createWorkspace = functions.https.onCall(async (data, context) => {
 
   if (!context.auth?.uid) return
 
-  const user = await admin.firestore().collection('workspaces').doc(context.auth.uid).get()
+  const user = await admin.firestore().collection('users').doc(context.auth.uid).get()
 
   const workspaceDoc = {
     name: data.name,

@@ -9,7 +9,7 @@
   @apply w-full;
   :deep() {
     thead {
-      @apply bg-slate-50 border-y border-slate-200;
+      @apply bg-slate-50 border-b border-slate-200;
       @apply dark:bg-slate-700 dark:border-slate-700;
       th {
         @apply font-medium text-xs text-slate-500 dark:text-slate-200;
@@ -25,6 +25,9 @@
     tbody {
       tr {
         @apply border-y border-slate-200 dark:border-slate-700;
+        &:last-child {
+          @apply border-b-0;
+        }
         td {
           @apply text-sm text-slate-500 dark:text-slate-200;
           @apply py-4 text-left;

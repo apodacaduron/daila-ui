@@ -49,21 +49,16 @@ const router = createRouter({
               path: 'dashboard',
               component: () => import(/* webpackChunkName: "workspaces" */ '../pages/workspaces/psychologist/Dashboard.vue'),
             },
-            // {
-            //   name: 'PsychologistAppointments',
-            //   path: 'appointments',
-            //   component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/psychologist/Appointments.vue'),
-            // },
-            // {
-            //   name: 'PsychologistPatients',
-            //   path: 'patients',
-            //   component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/psychologist/Patients.vue'),
-            // },
-            // {
-            //   name: 'PsychologistTeam',
-            //   path: 'team',
-            //   component: () => import(/* webpackChunkName: "workspaces" */ '../views/workspaces/psychologist/Team.vue'),
-            // },
+            {
+              name: 'PsychologistAppointments',
+              path: 'appointments',
+              component: () => import(/* webpackChunkName: "workspaces" */ '../pages/workspaces/psychologist/Appointments.vue'),
+            },
+            {
+              name: 'PsychologistTeamMembers',
+              path: 'team-members',
+              component: () => import(/* webpackChunkName: "workspaces" */ '../pages/workspaces/psychologist/TeamMembers.vue'),
+            },
           ]
         },
         {

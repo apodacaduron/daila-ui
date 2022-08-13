@@ -14,5 +14,5 @@ initializeWorkspace.execute({ redirect: true })
 
 <template>
   <DPageSpinner v-if="!userStore.hasUser && !workspaceStore.hasWorkspace" />
-  <router-view />
+  <router-view v-else />
 </template>
