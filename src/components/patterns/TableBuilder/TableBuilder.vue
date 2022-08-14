@@ -13,7 +13,6 @@ export type Props = {
 const props = withDefaults(defineProps<Props>(), {
   columns: () => ({}),
   data: () => [],
-  settings: undefined,
 })
 
 dayjs.extend(localizedFormat)
@@ -29,18 +28,20 @@ function dataParser(val: any, column: string) {
 
   // If column matches table setting badges set component
   if (
-    Object.keys(props.settings.ui.badges ?? {}).some(
+    Object.keys(props.settings?.ui?.badges ?? {}).some(
       (badgeKey) => badgeKey === column,
     )
   )
     return {
       wrapper: DBadge,
       slot: columnValue,
-      props: { color: props.settings.ui.badges?.[column]?.color(columnValue) },
+      props: {
+        color: props.settings?.ui?.badges?.[column]?.color(columnValue),
+      },
     }
 
   // If column matches table setting badges set component
-  if (props.settings.ui.avatar?.name === column)
+  if (props.settings?.ui?.avatar?.name === column)
     return {
       wrapper: NamedAvatar,
       slot: columnValue,

@@ -2,7 +2,7 @@ import type { BadgeColor } from "../../ui"
 
 export type TableBuilderColumns = Record<string, { text: string }>
 export type TableBuilderSettings = {
-  ui: {
+  ui?: {
     avatar?: {
       name: string
       image: string
