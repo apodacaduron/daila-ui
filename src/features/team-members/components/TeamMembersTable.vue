@@ -11,6 +11,7 @@ import { useWorkspaceStore } from '../../workspaces'
 import { TeamMember, useTeamMemberService } from '../services'
 import { useTeamMemberStore } from '../stores'
 import { DotsVerticalIcon } from '@heroicons/vue/outline'
+import type { DropdownSettings } from '../../../components/patterns/Dropdown/types'
 
 type DropdownActionKey = keyof typeof dropdownSettings.actions
 
@@ -64,7 +65,7 @@ const tableSettings: TableBuilderSettings = {
     },
   },
 }
-const dropdownSettings = {
+const dropdownSettings: DropdownSettings = {
   actions: {
     view: {
       text: locale.VIEW,
@@ -92,7 +93,7 @@ function dropdownClick(
   action: DropdownActionKey,
   close: any,
 ) {
-  dropdownSettings.actions[action].fn(teamMember)
+  dropdownSettings.actions[action]?.fn(teamMember)
   close()
 }
 </script>

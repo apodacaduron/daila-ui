@@ -1,6 +1,10 @@
 import type { BadgeColor } from "../../ui"
 
-export type TableBuilderColumns = Record<string, { text: string }>
+export type TableBuilderColumns = {
+  [columnName: string]: {
+    text: string
+  }
+}
 export type TableBuilderSettings = {
   ui?: {
     avatar?: {
