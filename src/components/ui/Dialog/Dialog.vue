@@ -73,7 +73,7 @@ defineEmits<{
     @apply fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm dark:bg-opacity-60;
   }
   &__panel {
-    @apply w-full max-w-md transform overflow-hidden rounded-2xl p-6 text-left align-middle shadow-xl transition-all;
+    @apply w-full max-w-md transform overflow-hidden rounded-xl p-6 text-left align-middle shadow-xl transition-all;
     @apply bg-white dark:bg-slate-800;
     &__footer {
       @apply mt-4 flex gap-3 justify-end;
