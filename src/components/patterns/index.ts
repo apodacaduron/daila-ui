@@ -1,1 +1,2 @@
-export { default as TableBuilder } from './TableBuilder.vue'
+export * from './TableBuilder'
+export * from './Dropdown'
