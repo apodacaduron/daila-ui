@@ -1,4 +1,5 @@
 import type { DocumentData, QueryDocumentSnapshot, SnapshotOptions } from "firebase/firestore"
+import type { MemberRole, MemberStatus } from "../services"
 
 class TeamMemberConverter {
   constructor(
@@ -6,7 +7,8 @@ class TeamMemberConverter {
     readonly displayName: string,
     readonly email: string,
     readonly photoURL: string,
-    readonly role: string,
+    readonly role: MemberRole,
+    readonly status: MemberStatus,
     readonly createdAt: Date,
     readonly updatedAt: Date,
   ) { }
@@ -31,6 +33,7 @@ export const teamMemberConverter = {
       data.email,
       data.photoURL,
       data.role,
+      data.status,
       data.createdAt.toDate(),
       data.updatedAt.toDate(),
     )

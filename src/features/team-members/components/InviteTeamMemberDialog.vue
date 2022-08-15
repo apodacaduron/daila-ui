@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import { DDialog, DButton, DLabel, DInput } from '../../../components/ui'
 import { UserAddIcon, XIcon } from '@heroicons/vue/outline'
+import { useInviteTeamMemberForm } from '../composables'
+
+const locale = {
+  INVITE_TEAM_MEMBER: 'Invite team member',
+  INVITE_TEAM_MEMBER_DESCRIPTION:
+    'Invite team member to collaborate on this workspace',
+  CANCEL: 'Cancel',
+  ADD_NOW: 'Add now',
+}
 
 interface Props {
   show: boolean
@@ -9,6 +18,14 @@ defineProps<Props>()
 defineEmits<{
   close: (close: boolean) => void
 }>()
+
+const inviteTeamMemberForm = useInviteTeamMemberForm({
+  handlers: {
+    onSubmitInviteTeamMemberForm() {
+      console.log('Invite team member submitted')
+    },
+  },
+})
 </script>
 
 <template>
@@ -26,12 +43,19 @@ defineEmits<{
 
     <template #default>
       <div class="add-team-member__body">
-        <h3>Add team member</h3>
-        <p>Invite team member to collaborate on this workspace</p>
+        <h3>{{ locale.INVITE_TEAM_MEMBER }}</h3>
+        <p>{{ locale.INVITE_TEAM_MEMBER_DESCRIPTION }}</p>
 
         <div class="add-team-member__body__row">
           <DLabel htmlFor="email">Email</DLabel>
-          <DInput id="email" placeholder="Enter your email" type="email" />
+          <DInput
+            id="email"
+            placeholder="Enter your email"
+            type="email"
+            v-model="inviteTeamMemberForm.email.value"
+            :error="Boolean(inviteTeamMemberForm.email.error)"
+            :hintText="inviteTeamMemberForm.email.error?.message"
+          />
         </div>
       </div>
     </template>
@@ -41,7 +65,9 @@ defineEmits<{
         <DButton variant="outlined" @click="$emit('close', $event)">
           Cancel
         </DButton>
-        <DButton>Add now</DButton>
+        <DButton type="submit" @click="inviteTeamMemberForm.onSubmit()">
+          Add now
+        </DButton>
       </div>
     </template>
   </DDialog>
@@ -52,7 +78,7 @@ defineEmits<{
   &__header {
     @apply flex justify-between;
     &__user-icon {
-      @apply relative flex justify-center items-center;
+      @apply relative flex justify-center items-center ml-4;
       svg {
         @apply w-6 h-6 text-blue-500;
       }

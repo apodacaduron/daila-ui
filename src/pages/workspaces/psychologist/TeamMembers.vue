@@ -2,7 +2,7 @@
 import { DButton, useDialog } from '../../../components/ui'
 import {
   TeamMembersTable,
-  AddTeamMemberDialog,
+  InviteTeamMemberDialog,
 } from '../../../features/team-members'
 import Titlebar from '../../../components/Titlebar.vue'
 
@@ -11,7 +11,7 @@ const [dialogOptions, dialogHandlers] = useDialog()
 
 <template>
   <div class="team-members">
-    <AddTeamMemberDialog
+    <InviteTeamMemberDialog
       :show="dialogOptions.isOpen"
       @close="dialogHandlers.close"
     />
@@ -19,7 +19,7 @@ const [dialogOptions, dialogHandlers] = useDialog()
       <template #title>Team members</template>
       <template #subtitle>Manage your team members</template>
       <template #actions>
-        <DButton @click="dialogHandlers.open">+ Add new team member</DButton>
+        <DButton @click="dialogHandlers.open">+ Invite team member</DButton>
       </template>
     </Titlebar>
     <TeamMembersTable />
