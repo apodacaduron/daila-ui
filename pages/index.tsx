@@ -1,8 +1,11 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import Head from 'next/head';
+import Image from 'next/image';
 
+import { Button } from '@mantine/core';
+
+import styles from '../styles/Home.module.css';
+
+import type { NextPage } from 'next'
 const Home: NextPage = () => {
   return (
     <div className={styles.container}>
@@ -13,6 +16,7 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
+        <Button>Mantine button</Button>
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
