@@ -1,0 +1,14 @@
+.container {
+  @apply text-center;
+}
+.headline {
+  @apply text-9xl tracking-tighter font-medium;
+  span {
+    background: linear-gradient(90deg, #007cf0 -9.38%, #00dfd8 110.26%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+.subtitle {
+  @apply text-2xl;
+}

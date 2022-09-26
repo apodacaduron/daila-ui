@@ -1,10 +1,12 @@
 import type { NextPage } from 'next'
-import { Headline } from '../features/landing';
+import { Headline, Nav } from '../features/landing';
+import styles from '../styles/Home.module.scss';
 
 const Home: NextPage = () => {
   return (
     <div>
-      <section>
+      <Nav />
+      <section className={styles.headline}>
         <Headline />
       </section>
     </div>
