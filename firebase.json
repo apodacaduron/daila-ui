@@ -9,9 +9,6 @@
       "npm --prefix \"$RESOURCE_DIR\" run build"
     ]
   },
-  "storage": {
-    "rules": "storage.rules"
-  },
   "emulators": {
     "auth": {
       "port": 9099
@@ -22,14 +19,8 @@
     "firestore": {
       "port": 8080
     },
-    "storage": {
-      "port": 9199
-    },
     "ui": {
       "enabled": true
     }
-  },
-  "remoteconfig": {
-    "template": "remoteconfig.template.json"
   }
 }

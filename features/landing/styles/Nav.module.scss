@@ -1,0 +1,11 @@
+.nav {
+  @apply h-16 w-full fixed;
+  @apply flex justify-center items-center;
+}
+.container {
+  @apply max-w-7xl w-full mx-6 mt-4;
+  @apply flex justify-between;
+}
+.actions {
+  @apply flex gap-2;
+}
