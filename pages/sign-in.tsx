@@ -1,6 +1,8 @@
 import type { NextPage } from 'next'
 import Link from 'next/link';
-import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import toast from 'react-hot-toast';
 import { FcGoogle } from 'react-icons/fc';
 
@@ -11,6 +13,8 @@ import { auth } from '../lib/firebase';
 import styles from '../styles/Authentication.module.scss';
 
 const SignIn: NextPage = () => {
+  const router = useRouter()
+  const [triedSignIn, setTriedSignIn] = React.useState(false)
   const form = useForm({
     initialValues: {
       email: '',
@@ -18,17 +22,35 @@ const SignIn: NextPage = () => {
     },
   })
 
+  const [authUser, loadingAuth] = useAuthState(auth)
+
+  React.useEffect(() => {
+    if (!loadingAuth && !triedSignIn) {
+      if (authUser) {
+        router.push('/123/dashboard') // go to default protected page
+      }
+    }
+  }, [router, loadingAuth, authUser, triedSignIn])
+
   const [
     signInWithGoogle,
     userCredential,
     loading,
-    error,
+    errorSignInWithGoogle,
   ] = useSignInWithGoogle(auth)
 
   const isLoading = loading
 
-  if (error) {
-    toast.error(error.message)
+  async function logInWithGoogle() {
+    setTriedSignIn(true)
+    await signInWithGoogle()
+  }
+
+  if (errorSignInWithGoogle) {
+    toast.error(errorSignInWithGoogle.message)
+  }
+  if (loadingAuth) {
+    return <h1>App initializing</h1>
   }
   if (userCredential) {
     return (
@@ -81,7 +103,7 @@ const SignIn: NextPage = () => {
             variant="default"
             leftIcon={<FcGoogle size="1.5em" />}
             disabled={isLoading}
-            onClick={() => signInWithGoogle()}
+            onClick={logInWithGoogle}
           >
             Inicia sesión con Google
           </Button>
