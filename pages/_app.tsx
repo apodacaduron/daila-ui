@@ -5,6 +5,8 @@ import Head from 'next/head';
 
 import { createEmotionCache, MantineProvider } from '@mantine/core';
 
+import { defaultMantineTheme } from '../data/mantineTheme';
+
 export default function App(props: AppProps) {
   const { Component, pageProps } = props
 
@@ -28,6 +30,7 @@ export default function App(props: AppProps) {
         withNormalizeCSS
         theme={{
           /** Put your mantine theme override here */
+          ...defaultMantineTheme,
           colorScheme: 'light',
         }}
         emotionCache={emotionCache}
