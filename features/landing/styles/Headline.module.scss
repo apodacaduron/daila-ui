@@ -1,5 +1,6 @@
 .container {
   @apply text-center;
+  @apply flex justify-center items-center flex-col;
 }
 .headline {
   @apply text-9xl tracking-tighter font-medium;
@@ -10,5 +11,8 @@
   }
 }
 .subtitle {
-  @apply text-2xl;
+  @apply text-2xl text-gray-600;
+}
+.brain-bg {
+  @apply absolute;
 }

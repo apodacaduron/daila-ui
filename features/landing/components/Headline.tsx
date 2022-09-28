@@ -10,6 +10,7 @@ const Headline = () => {
       <p className={styles.subtitle}>
         Todo lo que necesitas para administrar a tus pacientes en un solo lugar
       </p>
+      <img src="/assets/brain_bg.svg" className={styles['brain-bg']} />
     </div>
   )
 }

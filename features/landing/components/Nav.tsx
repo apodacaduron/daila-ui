@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { Button } from '@mantine/core';
 
 import styles from '../styles/Nav.module.scss';
@@ -10,8 +12,14 @@ const Nav = () => {
           <img src="/assets/daila.svg" />
         </div>
         <div className={styles.actions}>
-          <Button>Inicia sesion</Button>
-          <Button variant="default">Registrate</Button>
+          <Link href="/sign-in">
+            <Button component="a">Inicia sesión</Button>
+          </Link>
+          <Link href="/sign-up">
+            <Button component="a" variant="default">
+              Regístrate
+            </Button>
+          </Link>
         </div>
       </div>
     </nav>
