@@ -44,7 +44,7 @@ const SignUp: NextPage = () => {
         </div>
         <div className={styles.actions}>
           <Button>Comenzar ahora</Button>
-          <Button variant="default" leftIcon={<FcGoogle size="1.5rem" />}>
+          <Button variant="default" leftIcon={<FcGoogle size="1.5em" />}>
             Registrate con Google
           </Button>
         </div>

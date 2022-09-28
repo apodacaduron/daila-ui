@@ -1,10 +1,13 @@
 import type { NextPage } from 'next'
 import Link from 'next/link';
+import { useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import toast from 'react-hot-toast';
 import { FcGoogle } from 'react-icons/fc';
 
 import { Anchor, Button, Text, TextInput, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 
+import { auth } from '../lib/firebase';
 import styles from '../styles/Authentication.module.scss';
 
 const SignIn: NextPage = () => {
@@ -14,6 +17,26 @@ const SignIn: NextPage = () => {
       password: '',
     },
   })
+
+  const [
+    signInWithGoogle,
+    userCredential,
+    loading,
+    error,
+  ] = useSignInWithGoogle(auth)
+
+  const isLoading = loading
+
+  if (error) {
+    toast.error(error.message)
+  }
+  if (userCredential) {
+    return (
+      <div>
+        <p>Signed In User: {userCredential.user.email}</p>
+      </div>
+    )
+  }
 
   return (
     <div className={styles.container}>
@@ -33,14 +56,18 @@ const SignIn: NextPage = () => {
         </div>
         <div className={styles.form}>
           <TextInput
+            {...form.getInputProps('email')}
             type="email"
             placeholder="Escribe tu correo"
             label="Correo"
+            disabled={isLoading}
           />
           <TextInput
+            {...form.getInputProps('password')}
             type="password"
             placeholder="••••••••"
             label="Contraseña"
+            disabled={isLoading}
           />
         </div>
         <div className={styles.helpers}>
@@ -49,8 +76,13 @@ const SignIn: NextPage = () => {
           </Link>
         </div>
         <div className={styles.actions}>
-          <Button>Iniciar sesión</Button>
-          <Button variant="default" leftIcon={<FcGoogle size="1.5rem" />}>
+          <Button disabled={isLoading}>Iniciar sesión</Button>
+          <Button
+            variant="default"
+            leftIcon={<FcGoogle size="1.5em" />}
+            disabled={isLoading}
+            onClick={() => signInWithGoogle()}
+          >
             Inicia sesión con Google
           </Button>
         </div>
