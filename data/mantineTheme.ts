@@ -8,5 +8,11 @@ export const defaultMantineTheme: MantineThemeOverride = {
         size: 'md',
       },
     },
+    TextInput: {
+      defaultProps: {
+        radius: 'md',
+        size: 'md',
+      },
+    },
   },
 }

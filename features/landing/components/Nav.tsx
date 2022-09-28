@@ -12,10 +12,10 @@ const Nav = () => {
           <img src="/assets/daila.svg" />
         </div>
         <div className={styles.actions}>
-          <Link href="/sign-in">
+          <Link href="/sign-in" passHref>
             <Button component="a">Inicia sesión</Button>
           </Link>
-          <Link href="/sign-up">
+          <Link href="/sign-up" passHref>
             <Button component="a" variant="default">
               Regístrate
             </Button>

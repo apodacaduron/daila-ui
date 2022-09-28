@@ -1,0 +1,25 @@
+.container {
+  @apply min-h-screen;
+  @apply flex justify-center items-center flex-col;
+}
+.content {
+  @apply w-[360px] flex flex-col gap-6;
+}
+.logo {
+  @apply flex justify-center items-center;
+}
+.title {
+  @apply text-center;
+}
+.form {
+  @apply flex flex-col gap-4;
+}
+.helpers {
+  @apply flex justify-end;
+}
+.helpers-2 {
+  @apply text-center;
+}
+.actions {
+  @apply flex flex-col gap-4;
+}
