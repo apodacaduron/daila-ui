@@ -2,6 +2,7 @@ import '../styles/globals.css';
 
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { Toaster } from 'react-hot-toast';
 
 import { createEmotionCache, MantineProvider } from '@mantine/core';
 
@@ -25,6 +26,7 @@ export default function App(props: AppProps) {
         />
       </Head>
 
+      <Toaster />
       <MantineProvider
         withGlobalStyles
         withNormalizeCSS
