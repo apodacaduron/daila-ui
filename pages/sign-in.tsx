@@ -1,16 +1,16 @@
 import type { NextPage } from 'next'
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React from 'react';
-import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth';
-import toast from 'react-hot-toast';
-import { FcGoogle } from 'react-icons/fc';
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React from 'react'
+import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth'
+import toast from 'react-hot-toast'
+import { FcGoogle } from 'react-icons/fc'
 
-import { Anchor, Button, Text, TextInput, Title } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { Anchor, Button, Text, TextInput, Title } from '@mantine/core'
+import { useForm } from '@mantine/form'
 
-import { auth } from '../lib/firebase';
-import styles from '../styles/Authentication.module.scss';
+import { auth } from '../lib/firebase'
+import styles from '../styles/Authentication.module.scss'
 
 const SignIn: NextPage = () => {
   const router = useRouter()
@@ -44,20 +44,17 @@ const SignIn: NextPage = () => {
   async function logInWithGoogle() {
     setTriedSignIn(true)
     await signInWithGoogle()
+
+    if (userCredential) {
+      toast.success('Signed in')
+    }
+    if (errorSignInWithGoogle) {
+      toast.error(errorSignInWithGoogle.message)
+    }
   }
 
-  if (errorSignInWithGoogle) {
-    toast.error(errorSignInWithGoogle.message)
-  }
   if (loadingAuth) {
     return <h1>App initializing</h1>
-  }
-  if (userCredential) {
-    return (
-      <div>
-        <p>Signed In User: {userCredential.user.email}</p>
-      </div>
-    )
   }
 
   return (

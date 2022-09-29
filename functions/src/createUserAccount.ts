@@ -1,17 +1,14 @@
-import * as admin from 'firebase-admin';
-import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin'
+import * as functions from 'firebase-functions'
+
+import { mustBeSignedIn } from './utils'
 
 const env = functions.config()
 
 export const createUserAccountCF = functions.https.onCall(
   async (data, context) => {
     // Check if user is authenticated
-    if (!context.auth) {
-      throw new functions.https.HttpsError(
-        'failed-precondition',
-        'The function must be called while authenticated.',
-      )
-    }
+    mustBeSignedIn(context.auth)
 
     const usersRef = admin.firestore().collection('users')
     const userEmail = context.auth.token.email
@@ -29,7 +26,7 @@ export const createUserAccountCF = functions.https.onCall(
       email: currentAuthUser.email ?? null,
       photoURL: currentAuthUser.photoURL ?? null,
       phoneNumber: currentAuthUser.phoneNumber ?? null,
-      currentWorkspaceId: null,
+      currentTeamId: null,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     })
