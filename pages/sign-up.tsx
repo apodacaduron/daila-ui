@@ -1,11 +1,12 @@
 import type { NextPage } from 'next'
-import Link from 'next/link';
-import { FcGoogle } from 'react-icons/fc';
+import Link from 'next/link'
+import { FcGoogle } from 'react-icons/fc'
 
-import { Anchor, Button, Text, TextInput, Title } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { Anchor, Button, Text, TextInput, Title } from '@mantine/core'
+import { useForm } from '@mantine/form'
 
-import styles from '../styles/Authentication.module.scss';
+import { routes } from '../data/routesMap'
+import styles from '../styles/Authentication.module.scss'
 
 const SignUp: NextPage = () => {
   const form = useForm({
@@ -19,7 +20,7 @@ const SignUp: NextPage = () => {
     <div className={styles.container}>
       <div className={styles.content}>
         <div className={styles.logo}>
-          <Link href="/">
+          <Link href={routes.HOME}>
             <a>
               <img src="/assets/daila.svg" />
             </a>
@@ -51,7 +52,7 @@ const SignUp: NextPage = () => {
         <div className={styles['helpers-2']}>
           <Text color="dimmed">
             Ya tienes una cuenta?{' '}
-            <Link href="/sign-in" passHref>
+            <Link href={routes.SIGN_IN} passHref>
               <Anchor component="a">Inicia sesion</Anchor>
             </Link>
           </Text>

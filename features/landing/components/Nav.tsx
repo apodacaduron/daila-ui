@@ -1,8 +1,9 @@
-import Link from 'next/link';
+import Link from 'next/link'
 
-import { Button } from '@mantine/core';
+import { Button } from '@mantine/core'
 
-import styles from '../styles/Nav.module.scss';
+import { routes } from '../../../data/routesMap'
+import styles from '../styles/Nav.module.scss'
 
 const Nav = () => {
   return (
@@ -12,10 +13,10 @@ const Nav = () => {
           <img src="/assets/daila.svg" />
         </div>
         <div className={styles.actions}>
-          <Link href="/sign-in" passHref>
+          <Link href={routes.SIGN_IN} passHref>
             <Button component="a">Inicia sesión</Button>
           </Link>
-          <Link href="/sign-up" passHref>
+          <Link href={routes.SIGN_UP} passHref>
             <Button component="a" variant="default">
               Regístrate
             </Button>

@@ -8,6 +8,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { Anchor, Button, Text, TextInput, Title } from '@mantine/core'
 import { useForm } from '@mantine/form'
 
+import { routes } from '../data/routesMap'
 import { useAuthentication } from '../features/authentication'
 import { useTeams } from '../features/teams'
 import { useUsers } from '../features/users'
@@ -30,7 +31,7 @@ const SignIn: NextPage = () => {
   React.useEffect(() => {
     if (!authHook.authState.loading && !triedSignIn) {
       if (authHook.authState.user) {
-        router.push('/123/dashboard') // go to default protected page
+        router.push(routes.TEAM_DASHBOARD('123')) // go to default protected page
       }
     }
   }, [router, authHook.authState.user, authHook.authState.loading, triedSignIn])
@@ -53,7 +54,7 @@ const SignIn: NextPage = () => {
     }
     if (authHook.authState.user && teamId) {
       toast.success('Signed in')
-      router.push(`/${teamId}/dashboard`)
+      router.push(routes.TEAM_DASHBOARD(teamId))
     }
   }
 
@@ -65,7 +66,7 @@ const SignIn: NextPage = () => {
     <div className={styles.container}>
       <div className={styles.content}>
         <div className={styles.logo}>
-          <Link href="/">
+          <Link href={routes.HOME}>
             <a>
               <img src="/assets/daila.svg" />
             </a>
@@ -94,7 +95,7 @@ const SignIn: NextPage = () => {
           />
         </div>
         <div className={styles.helpers}>
-          <Link href="/forgot-password" passHref>
+          <Link href={routes.FORGOT_PASSWORD} passHref>
             <Anchor component="a">Olvidaste tu contraseña?</Anchor>
           </Link>
         </div>
@@ -112,7 +113,7 @@ const SignIn: NextPage = () => {
         <div className={styles['helpers-2']}>
           <Text color="dimmed">
             Aun no tienes una cuenta?{' '}
-            <Link href="/sign-up" passHref>
+            <Link href={routes.SIGN_UP} passHref>
               <Anchor component="a">Registrate</Anchor>
             </Link>
           </Text>
