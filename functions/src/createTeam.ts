@@ -10,20 +10,23 @@ export const createTeamCF = functions.https.onCall(async (data, context) => {
   mustBeSignedIn(context.auth)
 
   const userRef = admin.firestore().collection('users').doc(context.auth.uid)
+  const userSnapshot = await userRef.get()
+  const userData = userSnapshot.data()
+  const hasTeam = Boolean(userData?.currentTeamId)
+
+  if (hasTeam) return
+
   const teamsRef = admin.firestore().collection('teams')
 
   const teamPayload = {
     name: data?.name ?? 'Espacio personal',
     type: 'PSYCHOlOGIST',
     memberCount: 1,
-    createdAt: admin.firestore.FieldValue.serverTimestamp(),
-    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    // createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    // updatedAt: admin.firestore.FieldValue.serverTimestamp(),
   }
 
   const teamRef = await teamsRef.add(teamPayload)
-
-  const userSnapshot = await userRef.get()
-  const userData = userSnapshot.data()
 
   const memberRef = admin
     .firestore()
@@ -42,7 +45,7 @@ export const createTeamCF = functions.https.onCall(async (data, context) => {
   const userEmail = context.auth.token.email
   const isAdmin = userEmail === env.role.admin
 
-  if (isAdmin && userData?.currentTeamId === null) {
+  if (isAdmin) {
     const adminTeamPayload = {
       ...teamPayload,
       name: 'Admin',

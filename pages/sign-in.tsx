@@ -2,14 +2,15 @@ import type { NextPage } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { useAuthState, useSignInWithGoogle } from 'react-firebase-hooks/auth'
 import toast from 'react-hot-toast'
 import { FcGoogle } from 'react-icons/fc'
 
 import { Anchor, Button, Text, TextInput, Title } from '@mantine/core'
 import { useForm } from '@mantine/form'
 
-import { auth } from '../lib/firebase'
+import { useAuthentication } from '../features/authentication'
+import { useTeams } from '../features/teams'
+import { useUsers } from '../features/users'
 import styles from '../styles/Authentication.module.scss'
 
 const SignIn: NextPage = () => {
@@ -22,38 +23,41 @@ const SignIn: NextPage = () => {
     },
   })
 
-  const [authUser, loadingAuth] = useAuthState(auth)
+  const authHook = useAuthentication()
+  const usersHook = useUsers()
+  const teamsHook = useTeams()
 
   React.useEffect(() => {
-    if (!loadingAuth && !triedSignIn) {
-      if (authUser) {
+    if (!authHook.authState.loading && !triedSignIn) {
+      if (authHook.authState.user) {
         router.push('/123/dashboard') // go to default protected page
       }
     }
-  }, [router, loadingAuth, authUser, triedSignIn])
+  }, [router, authHook.authState.user, authHook.authState.loading, triedSignIn])
 
-  const [
-    signInWithGoogle,
-    userCredential,
-    loading,
-    errorSignInWithGoogle,
-  ] = useSignInWithGoogle(auth)
-
-  const isLoading = loading
+  const isLoading = authHook.signInWithGoogle.loading
 
   async function logInWithGoogle() {
     setTriedSignIn(true)
-    await signInWithGoogle()
+    await authHook.signInWithGoogle.execute()
+    await usersHook.createUserAccount.execute()
+    const response = await teamsHook.createTeam.execute()
+    const teamId = response?.data as string | undefined
 
-    if (userCredential) {
-      toast.success('Signed in')
+    redirectToWorkspace(teamId)
+  }
+
+  function redirectToWorkspace(teamId: string | undefined) {
+    if (authHook.signInWithGoogle.error) {
+      toast.error(authHook.signInWithGoogle.error.message)
     }
-    if (errorSignInWithGoogle) {
-      toast.error(errorSignInWithGoogle.message)
+    if (authHook.authState.user && teamId) {
+      toast.success('Signed in')
+      router.push(`/${teamId}/dashboard`)
     }
   }
 
-  if (loadingAuth) {
+  if (authHook.authState.loading) {
     return <h1>App initializing</h1>
   }
 

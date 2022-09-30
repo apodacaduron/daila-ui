@@ -27,8 +27,8 @@ export const createUserAccountCF = functions.https.onCall(
       photoURL: currentAuthUser.photoURL ?? null,
       phoneNumber: currentAuthUser.phoneNumber ?? null,
       currentTeamId: null,
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
-      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+      // createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      // updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     })
   },
 )
