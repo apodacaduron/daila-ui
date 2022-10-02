@@ -10,6 +10,17 @@ export const createUserAccountCF = functions.https.onCall(
     // Check if user is authenticated
       mustBeSignedIn(context.auth);
 
+      const userExistsRef = admin.firestore().collection("users")
+          .doc(context.auth.uid);
+      const userExistsSnapshot = await userExistsRef.get();
+
+      if (userExistsSnapshot.exists) {
+        throw new functions.https.HttpsError(
+            "already-exists",
+            "This user already exists",
+        );
+      }
+
       const usersRef = admin.firestore().collection("users");
       const userEmail = context.auth.token.email;
       const userRole = userEmail === env.role.admin ? "ADMIN" : "USER";
