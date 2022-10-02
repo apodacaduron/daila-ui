@@ -1,0 +1,11 @@
+.team-switcher {
+  @apply w-full p-4;
+  @apply flex justify-between rounded-lg;
+  @apply bg-[#E2E9F1];
+}
+.team-switcher-left {
+  @apply flex items-center gap-2 text-left;
+}
+.team-switcher-right {
+  @apply flex items-center justify-center;
+}

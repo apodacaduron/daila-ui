@@ -8,9 +8,21 @@ import { createEmotionCache, MantineProvider } from '@mantine/core';
 
 import { defaultMantineTheme } from '../data/mantineTheme';
 import ContextWrapper from '../context/ContextWrapper';
+import { ReactElement, ReactNode } from 'react';
+import { NextPage } from 'next';
 
-export default function App(props: AppProps) {
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode
+}
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
+
+export default function App(props: AppPropsWithLayout) {
   const { Component, pageProps } = props
+
+  const getLayout = Component.getLayout ?? ((page) => page)
 
   const emotionCache = createEmotionCache({
     key: 'mantine',
@@ -39,7 +51,7 @@ export default function App(props: AppProps) {
         emotionCache={emotionCache}
       >
         <ContextWrapper>
-          <Component {...pageProps} />
+          {getLayout(<Component {...pageProps} />)}
         </ContextWrapper>
       </MantineProvider>
     </>

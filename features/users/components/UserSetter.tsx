@@ -13,7 +13,7 @@ function UserSetter(props: Props) {
   const userContext = React.useContext(UserContext)
 
   const getCurrentUser = useCallback(async () => {
-    if (authHook.authState.user?.uid) {
+    if (authHook.authState.user?.uid && !userContext.user) {
       const currentUser = await usersHook.getCurrentUser(authHook.authState.user.uid)
       userContext.setUser?.(currentUser ?? null)
     }
