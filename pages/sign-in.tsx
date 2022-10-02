@@ -46,7 +46,7 @@ const SignIn: NextPage = () => {
           <div className={styles.logo}>
             <Link href={routes.HOME}>
               <a>
-                <Image src="/assets/daila.svg" alt="Daila logo" />
+                <Image src="/assets/daila.svg" alt="Daila logo" width="100px" height="56px" />
               </a>
             </Link>
           </div>
