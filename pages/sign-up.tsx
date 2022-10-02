@@ -8,6 +8,7 @@ import { useForm } from '@mantine/form';
 import { routes } from '../data/routesMap';
 import { ForVisitorsRouteGuard } from '../features/authentication/route-guards';
 import styles from '../styles/Authentication.module.scss';
+import Image from 'next/image';
 
 const SignUp: NextPage = () => {
   const form = useForm({
@@ -24,7 +25,7 @@ const SignUp: NextPage = () => {
           <div className={styles.logo}>
             <Link href={routes.HOME}>
               <a>
-                <img src="/assets/daila.svg" />
+                <Image src="/assets/daila.svg" alt="Daila logo" />
               </a>
             </Link>
           </div>

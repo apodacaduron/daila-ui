@@ -14,6 +14,7 @@ import { ForVisitorsRouteGuard } from '../features/authentication/route-guards';
 import { useTeams } from '../features/teams';
 import { useUsers } from '../features/users';
 import styles from '../styles/Authentication.module.scss';
+import Image from 'next/image';
 
 const SignIn: NextPage = () => {
   const router = useRouter()
@@ -29,34 +30,16 @@ const SignIn: NextPage = () => {
   const usersHook = useUsers()
   const teamsHook = useTeams()
 
-  // React.useEffect(() => {
-  //   if (!authHook.authState.loading && !triedSignIn) {
-  //     if (authHook.authState.user) {
-  //       router.push(routes.TEAM_DASHBOARD('123')) // go to default protected page
-  //     }
-  //   }
-  // }, [router, authHook.authState.user, authHook.authState.loading, triedSignIn])
-
   const isLoading = authHook.signInWithGoogle.loading
 
   async function logInWithGoogle() {
     setTriedSignIn(true)
     await authHook.signInWithGoogle.execute()
     await usersHook.createUserAccount.execute()
-    const response = await teamsHook.createTeam.execute()
-    const teamId = response?.data as string | undefined
+    await teamsHook.createTeam.execute()
 
     if (authHook.signInWithGoogle.error) {
       return toast.error(authHook.signInWithGoogle.error.message)
-    }
-
-    redirectToWorkspace(teamId)
-  }
-
-  function redirectToWorkspace(teamId: string | undefined) {
-    if (authHook.authState.user && teamId) {
-      toast.success('Signed in')
-      router.push(routes.TEAM_DASHBOARD(teamId))
     }
   }
 
@@ -71,7 +54,7 @@ const SignIn: NextPage = () => {
           <div className={styles.logo}>
             <Link href={routes.HOME}>
               <a>
-                <img src="/assets/daila.svg" />
+                <Image src="/assets/daila.svg" alt="Daila logo" />
               </a>
             </Link>
           </div>
