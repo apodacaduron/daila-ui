@@ -35,11 +35,9 @@ const Nav = () => {
         <Link href={routes.TEAM_DASHBOARD(userContext.user.currentTeamId ?? '')} passHref>
           <Button component="a">Dashboard</Button>
         </Link>
-        <Link href={routes.SIGN_UP} passHref>
-          <Button component="a" variant="default">
+          <Button onClick={authHook.logout} variant="default">
             Sign out
           </Button>
-        </Link>
       </>
       }
     } else if (!authHook.authState.user && !authHook.authState.loading) {
