@@ -17,8 +17,6 @@ import styles from '../styles/Authentication.module.scss';
 import Image from 'next/image';
 
 const SignIn: NextPage = () => {
-  const router = useRouter()
-  const [triedSignIn, setTriedSignIn] = React.useState(false)
   const form = useForm({
     initialValues: {
       email: '',
@@ -33,7 +31,6 @@ const SignIn: NextPage = () => {
   const isLoading = authHook.signInWithGoogle.loading
 
   async function logInWithGoogle() {
-    setTriedSignIn(true)
     await authHook.signInWithGoogle.execute()
     await usersHook.createUserAccount.execute()
     await teamsHook.createTeam.execute()
@@ -41,10 +38,6 @@ const SignIn: NextPage = () => {
     if (authHook.signInWithGoogle.error) {
       return toast.error(authHook.signInWithGoogle.error.message)
     }
-  }
-
-  if (authHook.authState.loading) {
-    return <h1>App initializing</h1>
   }
 
   return (
