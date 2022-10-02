@@ -33,10 +33,6 @@ const SignIn: NextPage = () => {
     await authHook.signInWithGoogle.execute()
     await usersHook.createUserAccount.execute()
     await teamsHook.createTeam.execute()
-
-    if (authHook.signInWithGoogle.error) {
-      return toast.error(authHook.signInWithGoogle.error.message)
-    }
   }
 
   return (

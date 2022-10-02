@@ -9,6 +9,9 @@ import { routes } from '../data/routesMap';
 import { ForVisitorsRouteGuard } from '../features/authentication/route-guards';
 import styles from '../styles/Authentication.module.scss';
 import Image from 'next/image';
+import { useAuthentication } from '../features/authentication';
+import { useUsers } from '../features/users';
+import { useTeams } from '../features/teams';
 
 const SignUp: NextPage = () => {
   const form = useForm({
@@ -17,6 +20,18 @@ const SignUp: NextPage = () => {
       password: '',
     },
   })
+
+  const authHook = useAuthentication()
+  const usersHook = useUsers()
+  const teamsHook = useTeams()
+
+  const isLoading = authHook.signInWithGoogle.loading
+
+  async function logInWithGoogle() {
+    await authHook.signInWithGoogle.execute()
+    await usersHook.createUserAccount.execute()
+    await teamsHook.createTeam.execute()
+  }
 
   return (
     <ForVisitorsRouteGuard>
@@ -39,16 +54,18 @@ const SignUp: NextPage = () => {
               type="email"
               placeholder="Escribe tu correo"
               label="Correo"
+              disabled={isLoading}
             />
             <TextInput
               type="password"
               placeholder="••••••••"
               label="Crea una contraseña"
+              disabled={isLoading}
             />
           </div>
           <div className={styles.actions}>
-            <Button>Comenzar ahora</Button>
-            <Button variant="default" leftIcon={<FcGoogle size="1.5em" />}>
+            <Button disabled={isLoading}>Comenzar ahora</Button>
+            <Button disabled={isLoading} onClick={logInWithGoogle} variant="default" leftIcon={<FcGoogle size="1.5em" />}>
               Registrate con Google
             </Button>
           </div>
