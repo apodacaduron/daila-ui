@@ -7,6 +7,7 @@ import { Toaster } from 'react-hot-toast';
 import { createEmotionCache, MantineProvider } from '@mantine/core';
 
 import { defaultMantineTheme } from '../data/mantineTheme';
+import ContextWrapper from '../context/ContextWrapper';
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props
@@ -37,7 +38,9 @@ export default function App(props: AppProps) {
         }}
         emotionCache={emotionCache}
       >
-        <Component {...pageProps} />
+        <ContextWrapper>
+          <Component {...pageProps} />
+        </ContextWrapper>
       </MantineProvider>
     </>
   )
