@@ -1,5 +1,6 @@
 import React from 'react'
-import {User, UserContext} from '../features/users'
+import { Member, TeamsContext } from '../features/teams'
+import { User, UserContext } from '../features/users'
 
 interface Props {
   children: React.ReactNode
@@ -7,11 +8,30 @@ interface Props {
 
 function ContextWrapper(props: Props) {
   const [user, setUser] = React.useState<User | null>(null)
-  const userContextProviderValue = React.useMemo(() => ({
-    user, setUser,
-  }), [user]);
+  const userContextProviderValue = React.useMemo(
+    () => ({
+      user,
+      setUser,
+    }),
+    [user],
+  )
 
-  return <UserContext.Provider value={userContextProviderValue}>{props.children}</UserContext.Provider>
+  const [teams, setTeams] = React.useState<Member[] | null>(null)
+  const teamContextProviderValue = React.useMemo(
+    () => ({
+      teams,
+      setTeams,
+    }),
+    [teams],
+  )
+
+  return (
+    <UserContext.Provider value={userContextProviderValue}>
+    <TeamsContext.Provider value={teamContextProviderValue}>
+      {props.children}
+    </TeamsContext.Provider>
+    </UserContext.Provider>
+  )
 }
 
 export default ContextWrapper

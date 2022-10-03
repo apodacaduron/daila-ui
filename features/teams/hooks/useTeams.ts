@@ -1,9 +1,30 @@
+import { collectionGroup, getDocs, query, where } from 'firebase/firestore'
 import { useHttpsCallable } from 'react-firebase-hooks/functions'
 
-import { functions } from '../../../lib/firebase'
+import { firestore, functions } from '../../../lib/firebase'
+import { memberConverter } from '../converters'
+import { Member } from '../types'
 
 export function useTeams() {
   const createTeam = useHttpsCallable(functions, 'createTeamCF')
+
+  async function getUserTeams(id: string) {
+    const members: Member[] = []
+
+    const membersQuery = query(
+      collectionGroup(firestore, 'members'),
+      where('userId', '==', id),
+    ).withConverter(memberConverter)
+    
+    const membersSnapshot = await getDocs(membersQuery)
+    membersSnapshot.forEach((doc) => {
+      if (doc.exists()) {
+        members.push(doc.data())
+      }
+    })
+
+    return members
+  }
 
   return {
     createTeam: {
@@ -11,5 +32,6 @@ export function useTeams() {
       loading: createTeam[1],
       error: createTeam[2],
     },
+    getUserTeams,
   }
 }
