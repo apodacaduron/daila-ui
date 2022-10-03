@@ -37,7 +37,7 @@ export const createTeamCF = functions.https.onCall(async (data, context) => {
 
   memberRef.set({
     ...userData,
-    teamData: teamPayload,
+    teamData: {...teamPayload, id: teamRef.id},
     userId: context.auth.uid,
     role: "OWNER",
   });
@@ -63,7 +63,7 @@ export const createTeamCF = functions.https.onCall(async (data, context) => {
 
     adminMemberRef.set({
       ...userData,
-      teamData: adminTeamPayload,
+      teamData: {...adminTeamPayload, id: adminTeamRef.id},
       userId: context.auth.uid,
       role: "OWNER",
     });
