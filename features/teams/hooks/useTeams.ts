@@ -3,27 +3,40 @@ import { useHttpsCallable } from 'react-firebase-hooks/functions'
 
 import { firestore, functions } from '../../../lib/firebase'
 import { memberConverter } from '../converters'
-import { Member } from '../types'
+import {
+  Member,
+  NormalizedMemberTeamDataMap,
+} from '../types'
 
 export function useTeams() {
   const createTeam = useHttpsCallable(functions, 'createTeamCF')
 
   async function getUserTeams(id: string) {
-    const members: Member[] = []
+    const teamsMap: NormalizedMemberTeamDataMap = {}
 
     const membersQuery = query(
       collectionGroup(firestore, 'members'),
       where('userId', '==', id),
     ).withConverter(memberConverter)
-    
+
     const membersSnapshot = await getDocs(membersQuery)
     membersSnapshot.forEach((doc) => {
       if (doc.exists()) {
-        members.push(doc.data())
+        const { teamData, ...userData } = doc.data()
+        teamsMap[teamData.id] = { ...teamData, userData }
       }
     })
 
-    return members
+    return teamsMap
+  }
+
+  function normalizeMembersToTeamData(
+    members: Member[],
+  ) {
+    return members.reduce<NormalizedMemberTeamDataMap>((map, member) => {
+      const { teamData, ...userData } = member
+      return { ...map, [member.teamData.id]: { ...member.teamData, userData } }
+    }, {})
   }
 
   return {

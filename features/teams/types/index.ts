@@ -7,3 +7,6 @@ export type Team = {
   type: 'PSYCHOLOGIST' | 'ADMIN',
 }
 export type Member = User & {teamData: Team}
+
+export type NormalizedMemberTeamData = Team & { userData: User }
+export type NormalizedMemberTeamDataMap = { [teamId: string]: NormalizedMemberTeamData }

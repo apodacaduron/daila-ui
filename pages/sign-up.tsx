@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { useAuthentication } from '../features/authentication';
 import { useUsers } from '../features/users';
 import { useTeams } from '../features/teams';
+import { errorHandler } from '../utils/errorHandler';
 
 const SignUp: NextPage = () => {
   const form = useForm({
@@ -28,9 +29,13 @@ const SignUp: NextPage = () => {
   const isLoading = authHook.signInWithGoogle.loading
 
   async function logInWithGoogle() {
-    await authHook.signInWithGoogle.execute()
-    await usersHook.createUserAccount.execute()
-    await teamsHook.createTeam.execute()
+    try {
+      await authHook.signInWithGoogle.execute()
+      await usersHook.createUserAccount.execute()
+      await teamsHook.createTeam.execute()
+    } catch (err) {
+      errorHandler(err)
+    }
   }
 
   return (

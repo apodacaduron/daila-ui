@@ -1,8 +1,12 @@
 import { Avatar, Menu, Text } from '@mantine/core'
 import styles from '../styles/TeamSwitcher.module.scss'
 import { BsChevronExpand } from 'react-icons/bs'
+import React from 'react'
+import { TeamsContext } from '../context'
 
 function TeamSwitcher() {
+  const teamsContext = React.useContext(TeamsContext)
+  
   return (
     <Menu width="target">
       <Menu.Target>
@@ -15,10 +19,10 @@ function TeamSwitcher() {
             </div>
             <div className="team-name">
               <Text size="md" weight={500}>
-                Default text
+                {teamsContext.currentTeam?.name}
               </Text>
               <Text size="xs" color="dimmed">
-                Default text
+                Team
               </Text>
             </div>
           </div>
@@ -32,8 +36,9 @@ function TeamSwitcher() {
 
       <Menu.Dropdown>
         <Menu.Label>Your teams</Menu.Label>
-        <Menu.Item>One team</Menu.Item>
-        <Menu.Item>Two team</Menu.Item>
+        {teamsContext.teamsList.map(team => {
+          return <Menu.Item key={team.id}>{team.name}</Menu.Item>
+        })}
       </Menu.Dropdown>
     </Menu>
   )
