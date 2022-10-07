@@ -30,15 +30,6 @@ export function useTeams() {
     return teamsMap
   }
 
-  function normalizeMembersToTeamData(
-    members: Member[],
-  ) {
-    return members.reduce<NormalizedMemberTeamDataMap>((map, member) => {
-      const { teamData, ...userData } = member
-      return { ...map, [member.teamData.id]: { ...member.teamData, userData } }
-    }, {})
-  }
-
   return {
     createTeam: {
       execute: createTeam[0],

@@ -20,7 +20,7 @@ export const createTeamCF = functions.https.onCall(async (data, context) => {
 
   const teamPayload = {
     name: data?.name ?? "Espacio personal",
-    type: "PSYCHOlOGIST",
+    type: "PSYCHOLOGIST",
     memberCount: 1,
     // createdAt: admin.firestore.FieldValue.serverTimestamp(),
     // updatedAt: admin.firestore.FieldValue.serverTimestamp(),
