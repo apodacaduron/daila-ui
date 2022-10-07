@@ -5,6 +5,7 @@ import { NormalizedMemberTeamData, NormalizedMemberTeamDataMap } from "../types"
 interface ITeamsContext {
   teams: NormalizedMemberTeamDataMap | null;
   setTeams?: React.Dispatch<React.SetStateAction<NormalizedMemberTeamDataMap | null>>
+  setCurrentTeam?: React.Dispatch<React.SetStateAction<NormalizedMemberTeamData | null>>
   currentTeam: NormalizedMemberTeamData | null
   teamsList: NormalizedMemberTeamData[]
 }

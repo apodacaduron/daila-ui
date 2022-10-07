@@ -1,11 +1,23 @@
 import { Avatar, Menu, Text } from '@mantine/core'
 import styles from '../styles/TeamSwitcher.module.scss'
-import { BsChevronExpand } from 'react-icons/bs'
+import { BsChevronExpand, BsCheck } from 'react-icons/bs'
 import React from 'react'
 import { TeamsContext } from '../context'
 
 function TeamSwitcher() {
   const teamsContext = React.useContext(TeamsContext)
+
+  function onSelectTeam(teamId: string) {
+    const newCurrentTeam = teamsContext.teams?.[teamId]
+    if (!newCurrentTeam) return
+    teamsContext.setCurrentTeam?.(newCurrentTeam)
+  }
+
+  function getCheckedIcon(teamId: string) {
+    if (teamId !== teamsContext.currentTeam?.id) return null
+
+    return <BsCheck size='1.5em' />
+  }
   
   return (
     <Menu width="target">
@@ -14,7 +26,7 @@ function TeamSwitcher() {
           <div className={styles['team-switcher-left']}>
             <div className="avatar">
               <Avatar color="cyan" radius="xl">
-                MK
+               {teamsContext.currentTeam?.name?.charAt(0)}
               </Avatar>
             </div>
             <div className="team-name">
@@ -37,7 +49,7 @@ function TeamSwitcher() {
       <Menu.Dropdown>
         <Menu.Label>Your teams</Menu.Label>
         {teamsContext.teamsList.map(team => {
-          return <Menu.Item key={team.id}>{team.name}</Menu.Item>
+          return <Menu.Item key={team.id} rightSection={getCheckedIcon(team.id)} onClick={() => onSelectTeam(team.id)}>{team.name}</Menu.Item>
         })}
       </Menu.Dropdown>
     </Menu>
