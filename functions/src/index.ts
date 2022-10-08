@@ -1,7 +1,8 @@
-import * as admin from 'firebase-admin'
+import * as admin from "firebase-admin";
 
-admin.initializeApp()
+admin.initializeApp();
 
 // Cloud functions
-export * from './createUserAccount'
-export * from './createTeam'
+export * from "./createUserAccount";
+export * from "./createTeam";
+export * from "./switchCurrentTeam";

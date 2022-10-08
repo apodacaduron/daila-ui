@@ -10,6 +10,7 @@ import {
 
 export function useTeams() {
   const createTeam = useHttpsCallable(functions, 'createTeamCF')
+  const switchCurrentTeam = useHttpsCallable(functions, 'switchCurrentTeamCF')
 
   async function getUserTeams(id: string) {
     const teamsMap: NormalizedMemberTeamDataMap = {}
@@ -35,6 +36,11 @@ export function useTeams() {
       execute: createTeam[0],
       loading: createTeam[1],
       error: createTeam[2],
+    },
+    switchCurrentTeam: {
+      execute: switchCurrentTeam[0],
+      loading: switchCurrentTeam[1],
+      error: switchCurrentTeam[2],
     },
     getUserTeams,
   }
