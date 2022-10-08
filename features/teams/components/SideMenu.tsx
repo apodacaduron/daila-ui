@@ -1,10 +1,11 @@
 import styles from '../styles/SideMenu.module.scss'
 import TeamSwitcher from './TeamSwitcher'
-import { NavLink, Text } from '@mantine/core'
+import { Group, NavLink, Stack, Text } from '@mantine/core'
 import Link from 'next/link'
 import { useNavigation } from '../hooks'
 import React from 'react'
 import { TeamsContext } from '../context'
+import Profile from './Profile'
 
 function SideMenu() {
   const teamsContext = React.useContext(TeamsContext)
@@ -15,25 +16,29 @@ function SideMenu() {
   })
 
   return (
-    <aside className={styles['side-menu']}>
-      <div className={styles['team-switcher']}>
-        <Text size="sm" weight={500} color="dimmed">
-          Team switcher
-        </Text>
-        <TeamSwitcher />
+    <Stack justify="space-between" className={styles['side-menu']}>
+      <div>
+        <div className={styles['team-switcher']}>
+          <Text size="sm" weight={500} color="dimmed">
+            Selector de equipos
+          </Text>
+          <TeamSwitcher />
+        </div>
+        <div className="menu">
+          <Text size="sm" weight={500} color="dimmed" sx={{ marginLeft: '24px' }}>
+            Administrar
+          </Text>
+          {navigation?.map((route, index) => (
+            <Link href={route.path} key={index}>
+              <NavLink component="a" icon={route.icon} label={route.name} sx={{ paddingLeft: '24px' }} />
+            </Link>
+          ))}
+        </div>
       </div>
-      <div className="menu">
-        <Text size="sm" weight={500} color="dimmed" sx={{ marginLeft: '24px' }}>
-          Administrar
-        </Text>
-        {navigation?.map((route, index) => (
-          <Link href={route.path} key={index}>
-            <NavLink component="a" icon={route.icon} label={route.name} sx={{ paddingLeft: '24px' }} />
-          </Link>
-        ))}
+      <div className="profile">
+        <Profile />
       </div>
-      <div className="profile"></div>
-    </aside>
+    </Stack>
   )
 }
 

@@ -1,4 +1,4 @@
-import { Avatar, Menu, Text } from '@mantine/core'
+import { Avatar, Group, Menu, Text } from '@mantine/core'
 import styles from '../styles/TeamSwitcher.module.scss'
 import { BsChevronExpand, BsCheck } from 'react-icons/bs'
 import React from 'react'
@@ -47,8 +47,8 @@ function TeamSwitcher() {
   return (
     <Menu width="target">
       <Menu.Target>
-        <button className={styles['team-switcher']}>
-          <div className={styles['team-switcher-left']}>
+        <Group position='apart' className={styles['team-switcher']}>
+          <Group position='center' spacing='sm'>
             <div className="avatar">
               <Avatar color="cyan" radius="xl">
                {teamsContext.currentTeam?.name?.charAt(0)}
@@ -62,13 +62,13 @@ function TeamSwitcher() {
                 Team
               </Text>
             </div>
-          </div>
-          <div className={styles['team-switcher-right']}>
+          </Group>
+          <div>
             <div className="icon">
               <BsChevronExpand />
             </div>
           </div>
-        </button>
+        </Group>
       </Menu.Target>
 
       <Menu.Dropdown>
