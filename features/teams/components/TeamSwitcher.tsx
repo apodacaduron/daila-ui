@@ -3,14 +3,25 @@ import styles from '../styles/TeamSwitcher.module.scss'
 import { BsChevronExpand, BsCheck } from 'react-icons/bs'
 import React from 'react'
 import { TeamsContext } from '../context'
+import { useRouter } from 'next/router'
+import { routes } from '../../../data/routesMap'
 
 function TeamSwitcher() {
   const teamsContext = React.useContext(TeamsContext)
+  const router = useRouter()
 
   function onSelectTeam(teamId: string) {
     const newCurrentTeam = teamsContext.teams?.[teamId]
     if (!newCurrentTeam) return
     teamsContext.setCurrentTeam?.(newCurrentTeam)
+    switch (newCurrentTeam.type) {
+      case 'ADMIN':
+        router.push(routes.ADMIN.TEAM_DASHBOARD(newCurrentTeam.id))
+        break;
+      default:
+        router.push(routes.TEAM_DASHBOARD(newCurrentTeam.id))
+        break;
+    }
   }
 
   function getCheckedIcon(teamId: string) {

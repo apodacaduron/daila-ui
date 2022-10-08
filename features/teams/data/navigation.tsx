@@ -1,25 +1,26 @@
 import { MdDashboard } from 'react-icons/md'
 import { IoCalendar } from 'react-icons/io5'
+import { routes } from '../../../data/routesMap'
 
 export const TEAM_SLUG = ':teamId'
 
-const sharedRoutes = [
-  {
-    name: 'Dashboard',
-    path: `/${TEAM_SLUG}/dashboard`,
-    icon: <MdDashboard size="1.5em" />
-  }
-]
-
 export const navigation = {
   ADMIN: [
-    ...sharedRoutes
+    {
+      name: 'Dashboard',
+      path: routes.ADMIN.TEAM_DASHBOARD(TEAM_SLUG),
+      icon: <MdDashboard size="1.5em" />
+    }
   ],
   PSYCHOLOGIST: [
-    ...sharedRoutes,
+    {
+      name: 'Dashboard',
+      path: routes.TEAM_DASHBOARD(TEAM_SLUG),
+      icon: <MdDashboard size="1.5em" />
+    },
     {
       name: 'Appointments',
-      path: `/${TEAM_SLUG}/appointments`,
+      path: routes.TEAM_APPOINTMENTS(TEAM_SLUG),
       icon: <IoCalendar size="1.5em" />
     }
   ],

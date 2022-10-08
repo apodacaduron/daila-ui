@@ -1,16 +1,16 @@
 import { Button } from '@mantine/core';
 
-import { useAuthentication } from '../../features/authentication';
+import { useAuthentication } from '../../../features/authentication';
 
-import {MainLayout} from '../../features/teams';
-import { NextPageWithLayout } from '../_app';
+import { MainLayout } from '../../../features/teams';
+import { NextPageWithLayout } from '../../_app';
 
 const Dashboard: NextPageWithLayout = () => {
   const authHook = useAuthentication()
 
   return (
     <div>
-      dashboard
+      admin dashboard
       <Button onClick={authHook.logout}>
         {authHook.authState.user && 'Sign out'}
       </Button>
