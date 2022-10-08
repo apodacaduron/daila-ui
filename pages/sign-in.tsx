@@ -27,7 +27,7 @@ const SignIn: NextPage = () => {
   const usersHook = useUsers()
   const teamsHook = useTeams()
 
-  const isLoading = authHook.signInWithGoogle.loading
+  const isLoading = authHook.signInWithGoogle.loading || usersHook.createUserAccount.loading || teamsHook.createTeam.loading
 
   async function logInWithGoogle() {
     await authHook.signInWithGoogle.execute()
@@ -36,7 +36,7 @@ const SignIn: NextPage = () => {
   }
 
   return (
-    <ForVisitorsRouteGuard>
+    <ForVisitorsRouteGuard isLoading={isLoading}>
       <div className={styles.container}>
         <div className={styles.content}>
           <div className={styles.logo}>
