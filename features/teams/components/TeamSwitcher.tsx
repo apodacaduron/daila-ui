@@ -5,10 +5,24 @@ import React from 'react'
 import { TeamsContext } from '../context'
 import { useRouter } from 'next/router'
 import { routes } from '../../../data/routesMap'
+import { useTeams } from '../hooks'
+import {useDebounce} from 'react-use'
+import { UserContext } from '../../users'
 
 function TeamSwitcher() {
   const teamsContext = React.useContext(TeamsContext)
+  const userContext = React.useContext(UserContext)
   const router = useRouter()
+  const teamsHook = useTeams()
+
+  useDebounce(
+    () => {
+      if (userContext.user?.currentTeamId === teamsContext.currentTeam?.id) return
+      teamsHook.switchCurrentTeam.execute({ currentTeamId: teamsContext.currentTeam?.id })
+    },
+    2000,
+    [teamsContext.currentTeam?.id, userContext.user?.currentTeamId]
+  );
 
   function onSelectTeam(teamId: string) {
     const newCurrentTeam = teamsContext.teams?.[teamId]
