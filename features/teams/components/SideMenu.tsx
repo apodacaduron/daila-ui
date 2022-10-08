@@ -23,12 +23,12 @@ function SideMenu() {
         <TeamSwitcher />
       </div>
       <div className="menu">
-        <Text size="sm" weight={500} color="dimmed">
+        <Text size="sm" weight={500} color="dimmed" sx={{ marginLeft: '24px' }}>
           Administrar
         </Text>
         {navigation?.map((route, index) => (
           <Link href={route.path} key={index}>
-            <NavLink component="a" icon={route.icon} label={route.name} />
+            <NavLink component="a" icon={route.icon} label={route.name} sx={{ paddingLeft: '24px' }} />
           </Link>
         ))}
       </div>
