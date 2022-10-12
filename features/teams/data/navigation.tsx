@@ -1,6 +1,6 @@
 import { MdDashboard } from 'react-icons/md'
 import { IoCalendar } from 'react-icons/io5'
-import { FaUsers } from 'react-icons/fa'
+import { FaUsers, FaUsersCog } from 'react-icons/fa'
 import { routes } from '../../../data/routesMap'
 
 export const TEAM_SLUG = ':teamId'
@@ -37,7 +37,7 @@ export const navigation = {
     {
       name: 'Equipo',
       path: routes.TEAM(TEAM_SLUG),
-      icon: <FaUsers size="1.5em" />
+      icon: <FaUsersCog size="1.5em" />
     }
   ],
 }

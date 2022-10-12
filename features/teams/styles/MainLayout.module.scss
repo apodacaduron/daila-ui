@@ -2,5 +2,11 @@
   @apply flex;
 }
 .side-menu {
-  @apply w-80 h-screen;
+  @apply w-80 h-screen flex-shrink-0;
+}
+.navbar {
+  @apply w-full h-14;
+}
+.content {
+  @apply w-full min-h-screen;
 }

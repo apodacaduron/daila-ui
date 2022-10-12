@@ -1,6 +1,6 @@
 import styles from '../styles/SideMenu.module.scss'
 import TeamSwitcher from './TeamSwitcher'
-import { Group, NavLink, Stack, Text } from '@mantine/core'
+import { NavLink, Stack, Text } from '@mantine/core'
 import Link from 'next/link'
 import { useNavigation } from '../hooks'
 import React from 'react'
