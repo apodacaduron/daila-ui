@@ -72,7 +72,7 @@ function TeamSwitcher() {
       </Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Label>Your teams</Menu.Label>
+        <Menu.Label>Tus equipos</Menu.Label>
         {teamsContext.teamsList.map(team => {
           return <Menu.Item key={team.id} rightSection={getCheckedIcon(team.id)} onClick={() => onSelectTeam(team.id)}>{team.name}</Menu.Item>
         })}
