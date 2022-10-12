@@ -1,22 +1,19 @@
 import { Avatar, Group, Menu, Text } from '@mantine/core'
 import styles from '../styles/Profile.module.scss'
-import { BsChevronExpand } from 'react-icons/bs'
+import { BsThreeDotsVertical } from 'react-icons/bs'
+import { BiLogOutCircle } from 'react-icons/bi'
 import React from 'react'
-import { TeamsContext } from '../context'
-import { useRouter } from 'next/router'
-import { useTeams } from '../hooks'
 import { UserContext } from '../../users'
+import { useAuthentication } from '../../authentication'
 
 function Profile() {
-  const teamsContext = React.useContext(TeamsContext)
+  const authHook = useAuthentication()
   const userContext = React.useContext(UserContext)
-  const router = useRouter()
-  const teamsHook = useTeams()
 
   const userName = userContext.user?.displayName ?? userContext.user?.email
   
   return (
-    <Menu width="target">
+    <Menu position='top-end' width='200px'>
       <Menu.Target>
         <Group position='apart' className={styles['team-switcher']}>
           <Group position='center' spacing='sm'>
@@ -36,7 +33,7 @@ function Profile() {
           </Group>
           <div>
             <div className="icon">
-              <BsChevronExpand />
+              <BsThreeDotsVertical />
             </div>
           </div>
         </Group>
@@ -44,9 +41,7 @@ function Profile() {
 
       <Menu.Dropdown>
         <Menu.Label>Profile options</Menu.Label>
-        {teamsContext.teamsList.map(team => {
-          return <Menu.Item key={team.id}>{team.name}</Menu.Item>
-        })}
+        <Menu.Item onClick={authHook.logout} icon={<BiLogOutCircle />} color='red'>Sign out</Menu.Item>
       </Menu.Dropdown>
     </Menu>
   )
