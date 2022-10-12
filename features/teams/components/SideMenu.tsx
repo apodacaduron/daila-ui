@@ -6,8 +6,10 @@ import { useNavigation } from '../hooks'
 import React from 'react'
 import { TeamsContext } from '../context'
 import Profile from './Profile'
+import { useRouter } from 'next/router'
 
 function SideMenu() {
+  const router = useRouter()
   const teamsContext = React.useContext(TeamsContext)
   const navigation = useNavigation({
     options: {
@@ -30,7 +32,7 @@ function SideMenu() {
           </Text>
           {navigation?.map((route, index) => (
             <Link href={route.path} key={index}>
-              <NavLink component="a" icon={route.icon} label={route.name} sx={{ paddingLeft: '24px' }} />
+              <NavLink active={router.asPath === route.path} component="a" icon={route.icon} label={route.name} sx={{ paddingLeft: '24px' }} />
             </Link>
           ))}
         </div>

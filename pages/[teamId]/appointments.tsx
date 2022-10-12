@@ -1,7 +1,7 @@
 import {MainLayout} from '../../features/teams';
 import { NextPageWithLayout } from '../_app';
 
-const Dashboard: NextPageWithLayout = () => {
+const Appointments: NextPageWithLayout = () => {
   return (
     <div>
       appointments
@@ -9,6 +9,6 @@ const Dashboard: NextPageWithLayout = () => {
   )
 }
 
-Dashboard.getLayout = MainLayout
+Appointments.getLayout = MainLayout
 
-export default Dashboard
+export default Appointments
